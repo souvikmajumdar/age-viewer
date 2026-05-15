@@ -11,6 +11,10 @@ It is graph visualisation tool, for Apache AGE.
 
 This is a sub-project of [the Apache AGE project](https://age.apache.org/#).
 
+> **🚧 Modernization in Progress**
+> This project is undergoing a major stack update. See [the update plan](.kiro/docs/update-plan.md) and [backlog](.kiro/docs/backlog.md) for details.
+> Target stack: Node 24 LTS, React 19, Vite, IBM Carbon, native ESM.
+
 # Recommend Node Version & install module
 
 - Node version - >=24.0.0
