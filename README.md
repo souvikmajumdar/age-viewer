@@ -13,12 +13,12 @@ This is a sub-project of [the Apache AGE project](https://age.apache.org/#).
 
 # Recommend Node Version & install module
 
-- Node version - ^14.16.0
+- Node version - >=24.0.0
 
 - Node Module - pm2 
 
 Install latest **pm2** with :
-``` npm i pm2 ```
+``` npm i -g pm2 ```
 
 
 > [pm2](https://www.npmjs.com/package/pm2) is an NPM module to run the project in production mode, and hence is optional for getting started with setting up development environment for Age-Viewer 

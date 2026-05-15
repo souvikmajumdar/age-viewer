@@ -2,9 +2,9 @@ name: AGEViewer build
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main, development ]
   pull_request:
-    branches: [ main, develop ]
+    branches: [ main, development ]
 
 jobs:
   build:
@@ -12,16 +12,16 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: [24.x]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm install --global yarn
-    - run: cd backend && yarn install --frozen-lockfile && yarn run build
-    - run: cd frontend && yarn install --frozen-lockfile && yarn run build
+    - run: cd backend && npm install && npm run build
+    - run: cd frontend && npm install && npm run build
       env:
         CI: false
+        NODE_OPTIONS: --openssl-legacy-provider

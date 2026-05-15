@@ -1,6 +1,6 @@
-FROM node:14-alpine3.16
+FROM node:24-alpine
 
-RUN npm install pm2
+RUN npm install -g pm2
 
 WORKDIR /src
 
