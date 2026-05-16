@@ -18,7 +18,6 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import uuid from 'react-uuid';
 import CypherResultTab from '../../cytoscape/CypherResultTab';
 
 const CypherResultTable = ({ data, ...props }) => {
@@ -26,7 +25,7 @@ const CypherResultTable = ({ data, ...props }) => {
   const [localRows, setLocalRows] = useState([]);
 
   useEffect(() => {
-    const randKeyName = `key_${uuid()}`;
+    const randKeyName = `key_${crypto.randomUUID()}`;
     let hasKey = false;
     const columnsForFTable = [];
     data.columns.forEach((key) => {
@@ -65,7 +64,7 @@ const CypherResultTable = ({ data, ...props }) => {
           newItem[randKeyName] = newItem.key;
           delete newItem.key;
         }
-        filteredItem.key = uuid();
+        filteredItem.key = crypto.randomUUID();
         return filteredItem;
       }));
     } else {
@@ -77,7 +76,7 @@ const CypherResultTable = ({ data, ...props }) => {
           newItem[randKeyName] = newItem.key;
           delete newItem.key;
         }
-        newItem.key = uuid();
+        newItem.key = crypto.randomUUID();
         return newItem;
       }));
     }

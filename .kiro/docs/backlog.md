@@ -134,11 +134,14 @@
 - [x] Remove `antd/dist/antd.css` and `bootstrap/dist/css/bootstrap.min.css` from App.jsx
 - [x] Final build verification — no antd/bootstrap/fontawesome references remaining
 
-### 3d: Other Frontend Updates
-- [ ] Update `axios` to 1.x
-- [ ] Update CodeMirror to 6.x + `@uiw/react-codemirror` 4.x
-- [ ] Remove `serve` dependency (not needed with Vite)
-- [ ] Remove `webpack-dev-server` dev dependency
+### 3d: Other Frontend Updates ✅ COMPLETE
+- [x] Remove `axios` (dead dependency — never imported)
+- [x] Replace `react-uuid` with native `crypto.randomUUID()` (13 files)
+- [x] Replace `json2csv` with `papaparse` (already installed)
+- [x] Update CodeMirror 5 → 6 + `@uiw/react-codemirror` 3 → 4 (complete rewrite)
+- [x] Replace `react-cookies` with native `document.cookie` helpers
+- [x] Remove `serve` dependency (already removed in 3a)
+- [x] Remove `webpack-dev-server` dev dependency (already removed in 3a)
 
 ---
 

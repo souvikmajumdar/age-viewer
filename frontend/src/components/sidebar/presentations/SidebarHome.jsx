@@ -19,7 +19,6 @@
 
 import React, { useEffect } from 'react';
 
-import uuid from 'react-uuid';
 import { connect, useDispatch } from 'react-redux';
 import { Renew, Close } from '@carbon/icons-react';
 import {
@@ -70,7 +69,7 @@ const NodeList = ({ nodes, setCommand }) => {
   if (nodes) {
     list = nodes.map((item) => (
       <NodeItems
-        key={uuid()}
+        key={crypto.randomUUID()}
         label={item.label}
         cnt={item.cnt}
         setCommand={setCommand}
@@ -117,7 +116,7 @@ const EdgeList = ({ edges, setCommand }) => {
   if (edges) {
     list = edges.map((item) => (
       <EdgeItems
-        key={uuid()}
+        key={crypto.randomUUID()}
         label={item.label}
         cnt={item.cnt}
         setCommand={setCommand}
@@ -162,7 +161,7 @@ const PropertyList = ({ propertyKeys, setCommand }) => {
   if (propertyKeys) {
     list = propertyKeys.map((item) => (
       <PropertyItems
-        key={uuid()}
+        key={crypto.randomUUID()}
         propertyName={item.key}
         keyType={item.key_type}
         setCommand={setCommand}
@@ -205,7 +204,7 @@ const GraphList = ({
   if (graphs) {
     list = graphs.map((item) => (
       <GraphItems
-        key={uuid()}
+        key={crypto.randomUUID()}
         graph={item[0]}
         gid={item[1]}
         currentGraph={currentGraph}
@@ -306,7 +305,7 @@ const SidebarHome = ({
   }, [currentGraph]);
 
   const requestDisconnect = () => {
-    const refKey = uuid();
+    const refKey = crypto.randomUUID();
     dispatch(() => trimFrame('ServerDisconnect'));
     dispatch(() => addFrame(command, 'ServerDisconnect', refKey));
   };

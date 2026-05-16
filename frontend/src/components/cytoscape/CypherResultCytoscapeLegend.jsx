@@ -18,7 +18,6 @@
  */
 
 import React, { Component } from 'react';
-import uuid from 'react-uuid';
 import { ChevronDown, ChevronUp } from '@carbon/icons-react';
 
 class CypherResultCytoscapeLegend extends Component {
@@ -76,7 +75,7 @@ class CypherResultCytoscapeLegend extends Component {
       newNodeBadges.set(label,
         <span
           className="nodeLabel"
-          key={uuid()}
+          key={crypto.randomUUID()}
           style={{
             display: 'inline-block',
             padding: '4px 12px',
@@ -134,7 +133,7 @@ class CypherResultCytoscapeLegend extends Component {
       newEdgeBadges.set(label,
         <span
           className="edgeLabel"
-          key={uuid()}
+          key={crypto.randomUUID()}
           style={{
             display: 'inline-block',
             padding: '4px 12px',

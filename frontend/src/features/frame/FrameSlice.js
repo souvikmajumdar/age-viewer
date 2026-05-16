@@ -19,7 +19,6 @@
 
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
-import uuid from 'react-uuid';
 
 const FrameSlice = createSlice({
   name: 'frames',
@@ -33,7 +32,7 @@ const FrameSlice = createSlice({
 
         const frameProps = {
           reqString,
-          key: action.payload.refKey ? action.payload.refKey : uuid(),
+          key: action.payload.refKey ? action.payload.refKey : crypto.randomUUID(),
         };
 
         if (reqString.startsWith(':play')) {

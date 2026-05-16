@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Modal, Button, TextInput, Checkbox, Loading, InlineNotification } from '@carbon/react';
 import { SubtractAlt } from '@carbon/icons-react';
-import uuid from 'react-uuid';
 import './GraphInit.scss';
 import { useDispatch } from 'react-redux';
 import { addAlert } from '../../../features/alert/AlertSlice';
@@ -29,7 +28,7 @@ const InitGraphModal = ({ show, setShow }) => {
   };
   const handleSelectNodeFiles = (e) => {
     Array.from(e.target.files).forEach((file) => {
-      const key = uuid();
+      const key = crypto.randomUUID();
       nodeFiles[key] = {
         data: file,
         name: '',
@@ -41,7 +40,7 @@ const InitGraphModal = ({ show, setShow }) => {
 
   const handleSelectEdgeFiles = (e) => {
     Array.from(e.target.files).forEach((file) => {
-      const key = uuid();
+      const key = crypto.randomUUID();
       edgeFiles[key] = {
         data: file,
         name: '',
