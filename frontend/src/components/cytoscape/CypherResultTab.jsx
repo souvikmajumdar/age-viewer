@@ -20,8 +20,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTable } from '@fortawesome/free-solid-svg-icons';
+import { Table } from '@carbon/icons-react';
 import IconGraph from '../../icons/IconGraph';
 
 class CypherResultTab extends Component {
@@ -73,7 +72,7 @@ class CypherResultTab extends Component {
           style={{ width: '50%', fontSize: '14px', color: this.currentTab === 'table' ? '#142B80' : '#495057' }}
           onClick={() => { activeTab(this.refKey, 'table'); this.setIsTable(true); }}
         >
-          <FontAwesomeIcon icon={faTable} style={{ fontSize: '25px' }} />
+          <Table size={24} style={{ fontSize: '25px' }} />
           <br />
           <b style={{ fontSize: '14px;' }}>Table</b>
         </button>

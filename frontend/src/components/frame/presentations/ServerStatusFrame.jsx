@@ -19,8 +19,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlayCircle, faQuestionCircle } from '@fortawesome/free-regular-svg-icons';
+import { PlayFilledAlt, Help } from '@carbon/icons-react';
 import { Grid, Column, Row, Button } from '@carbon/react';
 import MetadataCytoscapeChart from '../../cytoscape/MetadataCytoscapeChart';
 import InitGraphModal from '../../initializer/presentation/GraphInitializer';
@@ -81,7 +80,7 @@ const ServerStatusFrame = ({
                 <Column>
                   <p>
                     <Button onClick={() => setShow(!showModal)}>Create Graph</Button>
-                    <FontAwesomeIcon onClick={() => dispatch(openTutorial())} icon={faQuestionCircle} size="lg" style={{ marginLeft: '1rem', cursor: 'pointer' }} />
+                    <Help onClick={() => dispatch(openTutorial())} size={20} style={{ marginLeft: '1rem', cursor: 'pointer' }} />
                   </p>
                 </Column>
               </Row>
@@ -112,10 +111,7 @@ const ServerStatusFrame = ({
               <p>
                 You may run
                 <a href="/#" className="badge badge-light">
-                  <FontAwesomeIcon
-                    icon={faPlayCircle}
-                    size="lg"
-                  />
+                  <PlayFilledAlt size={20} />
                   :server connect
                 </a>
                 {' '}

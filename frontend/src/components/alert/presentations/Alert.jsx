@@ -19,8 +19,7 @@
 
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlayCircle } from '@fortawesome/free-regular-svg-icons';
+import { PlayFilledAlt } from '@carbon/icons-react';
 import { InlineNotification } from '@carbon/react';
 
 const SingleAlert = ({
@@ -63,10 +62,7 @@ const SingleAlert = ({
             {' '}
             <button type="button" className="badge badge-light" onClick={(e) => setAlertConnect(e, ':server connect')}>
 
-              <FontAwesomeIcon
-                icon={faPlayCircle}
-                size="lg"
-              />
+              <PlayFilledAlt size={20} />
               :server connect
             </button>
             {' '}
@@ -88,10 +84,7 @@ const SingleAlert = ({
             Successfully database is connected. You may use
             {' '}
             <a href="/#" className="badge badge-light" onClick={(e) => setAlertConnect(e, ':server status')}>
-              <FontAwesomeIcon
-                icon={faPlayCircle}
-                size="lg"
-              />
+              <PlayFilledAlt size={20} />
               :server status
             </a>
             {' '}
@@ -131,10 +124,7 @@ const SingleAlert = ({
               You haven&apos;t set database connection. You may use
               {' '}
               <a href="/#" className="badge badge-light" onClick={(e) => setAlertConnect(e, ':server connect')}>
-                <FontAwesomeIcon
-                  icon={faPlayCircle}
-                  size="lg"
-                />
+                <PlayFilledAlt size={20} />
                 :server connect
               </a>
               {' '}
@@ -206,10 +196,7 @@ const SingleAlert = ({
               className="badge badge-light"
               onClick={(e) => setAlertConnect(e, ':server disconnect')}
             >
-              <FontAwesomeIcon
-                icon={faPlayCircle}
-                size="lg"
-              />
+              <PlayFilledAlt size={20} />
               :server disconnect
             </a>
             {' '}

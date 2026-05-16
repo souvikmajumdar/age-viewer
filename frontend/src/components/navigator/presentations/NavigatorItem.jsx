@@ -19,10 +19,16 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Home, Settings } from '@carbon/icons-react';
+
+const iconMap = {
+  Home,
+  Settings,
+};
 
 const NavigatorItem = ({ itemInfo, activeMenuName, onClick }) => {
-  const [menuName, fwCode] = itemInfo;
+  const [menuName, iconName] = itemInfo;
+  const IconComponent = iconMap[iconName];
   return (
     <li className="nav-item">
       <a
@@ -36,7 +42,7 @@ const NavigatorItem = ({ itemInfo, activeMenuName, onClick }) => {
         aria-selected="true"
         onClick={() => onClick(menuName)}
       >
-        <FontAwesomeIcon icon={fwCode} />
+        {IconComponent ? <IconComponent size={16} /> : null}
       </a>
     </li>
   );

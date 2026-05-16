@@ -22,7 +22,7 @@ import uuid from 'react-uuid';
 import { saveAs } from 'file-saver';
 import { Parser } from 'json2csv';
 import PropTypes from 'prop-types';
-import { Spinner } from 'react-bootstrap';
+import { Loading } from '@carbon/react';
 import CypherResultCytoscapeContainer from '../../cypherresult/containers/CypherResultCytoscapeContainer';
 import CypherResultTableContainer from '../../cypherresult/containers/CypherResultTableContainer';
 import GraphFilterModal from '../../cypherresult/components/GraphFilterModal';
@@ -236,7 +236,7 @@ const CypherResultFrame = ({
             : (
               <div style={{ alignContent: 'center' }}>
                 <div style={{ marginLeft: '50%', padding: '20px' }} id={`${refKey}-loading`}>
-                  <Spinner animation="border" />
+                  <Loading withOverlay={false} small />
                 </div>
               </div>
             )

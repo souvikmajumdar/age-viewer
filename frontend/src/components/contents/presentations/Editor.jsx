@@ -21,8 +21,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import uuid from 'react-uuid';
 import PropTypes from 'prop-types';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimesCircle, faToggleOff, faToggleOn } from '@fortawesome/free-solid-svg-icons';
+import { CloseOutline, ToggleOff, ToggleOn } from '@carbon/icons-react';
 import store from '../../../app/store';
 import AlertContainers from '../../alert/containers/AlertContainers';
 import CodeMirror from '../../editor/containers/CodeMirrorWapperContainer';
@@ -161,10 +160,7 @@ const Editor = ({
                 />
               </button> */}
               <button className={command ? 'btn show-eraser' : 'btn hide-eraser'} type="button" id="eraser" onDoubleClick={() => clearCommand()} aria-label="Clear Command">
-                <FontAwesomeIcon
-                  icon={faTimesCircle}
-                  size="1x"
-                />
+                <CloseOutline size={16} />
               </button>
               <button
                 className="frame-head-button btn btn-link"
@@ -202,10 +198,7 @@ const Editor = ({
                 title="Run Query"
                 aria-label="Run Query"
               >
-                <FontAwesomeIcon
-                  icon={isLabel ? faToggleOn : faToggleOff}
-                  size="2x"
-                />
+                {isLabel ? <ToggleOn size={24} /> : <ToggleOff size={24} />}
               </button>
             </div>
           </div>

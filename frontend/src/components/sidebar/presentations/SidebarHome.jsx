@@ -21,8 +21,7 @@ import React, { useEffect } from 'react';
 
 import uuid from 'react-uuid';
 import { connect, useDispatch } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRedo, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { Renew, Close } from '@carbon/icons-react';
 import {
   VerticalLine, HorizontalLine, SubLabelLeft, SubLabelRight, GraphSelectDropdown,
 } from './SidebarComponents';
@@ -366,12 +365,7 @@ const SidebarHome = ({
               onClick={() => refreshSidebarHome()}
               aria-label="Refresh Button"
             >
-              <FontAwesomeIcon
-                icon={faRedo}
-                size="1x"
-                color="white"
-                flip="horizontal"
-              />
+              <Renew size={16} style={{ color: 'white' }} />
             </button>
             <br />
             <b>Refresh</b>
@@ -389,11 +383,7 @@ const SidebarHome = ({
               }}
               aria-label="Close Button"
             >
-              <FontAwesomeIcon
-                icon={faTimes}
-                size="1x"
-                color="white"
-              />
+              <Close size={16} style={{ color: 'white' }} />
             </button>
             <br />
             <b>Close Session</b>

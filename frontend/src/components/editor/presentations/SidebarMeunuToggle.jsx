@@ -18,8 +18,7 @@
  */
 
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleUp, faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import { ChevronUp, ChevronDown } from '@carbon/icons-react';
 import PropTypes from 'prop-types';
 
 const SidebarMeunuToggle = ({
@@ -29,16 +28,10 @@ const SidebarMeunuToggle = ({
     {
       isActive === true
         ? (
-          <FontAwesomeIcon
-            icon={faAngleUp}
-            size="3x"
-          />
+          <ChevronUp size={24} />
         )
         : (
-          <FontAwesomeIcon
-            icon={faAngleDown}
-            size="3x"
-          />
+          <ChevronDown size={24} />
         )
     }
   </div>

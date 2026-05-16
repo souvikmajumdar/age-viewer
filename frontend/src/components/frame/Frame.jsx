@@ -18,16 +18,15 @@
  */
 
 import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faAngleDown,
-  faAngleUp,
-  faCompressAlt,
-  faExpandAlt,
-  faSync,
-  faTimes,
-  faClone,
-} from '@fortawesome/free-solid-svg-icons';
+  ChevronDown,
+  ChevronUp,
+  Minimize,
+  Maximize,
+  Renew,
+  Close,
+  Copy,
+} from '@carbon/icons-react';
 import { Button, Popover, PopoverContent } from '@carbon/react';
 import { useDispatch } from 'react-redux';
 import styles from './Frame.module.scss';
@@ -77,11 +76,10 @@ const Frame = ({
           <strong>
             {reqString}
           </strong>
-          <FontAwesomeIcon
+          <Copy
             id={styles.toEditor}
             title="copy to editor"
-            icon={faClone}
-            size="s"
+            size={16}
             onClick={() => dispatch(setCommand(reqString))}
             style={{
               cursor: 'pointer',
@@ -156,10 +154,7 @@ const Frame = ({
             onClick={() => setFullScreen(!isFullScreen)}
             title="Expand"
           >
-            <FontAwesomeIcon
-              icon={isFullScreen ? faCompressAlt : faExpandAlt}
-              size="lg"
-            />
+            {isFullScreen ? <Minimize size={20} /> : <Maximize size={20} />}
           </Button>
           {
             !isTable && onRefresh ? (
@@ -170,10 +165,7 @@ const Frame = ({
                 onClick={() => onRefresh()}
                 title="Refresh"
               >
-                <FontAwesomeIcon
-                  icon={faSync}
-                  size="lg"
-                />
+                <Renew size={20} />
               </Button>
             ) : null
           }
@@ -194,10 +186,7 @@ const Frame = ({
             onClick={() => setExpand(!isExpand)}
             title={isExpand ? 'Hide' : 'Show'}
           >
-            <FontAwesomeIcon
-              icon={isExpand ? faAngleUp : faAngleDown}
-              size="lg"
-            />
+            {isExpand ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
           </Button>
           <Button
             kind="ghost"
@@ -213,7 +202,7 @@ const Frame = ({
             }}
             title="Close Window"
           >
-            <FontAwesomeIcon icon={faTimes} size="lg" />
+            <Close size={20} />
           </Button>
         </div>
       </div>

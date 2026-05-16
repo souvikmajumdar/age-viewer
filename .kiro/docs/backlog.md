@@ -126,13 +126,13 @@
 - [x] Confirm no `didn't resolve at build time` warnings remain in CI
 - [x] Document the workaround in `vite.config.js` with a comment explaining why
 
-#### Sub-phase 3c-vii: Icon Migration + Final Cleanup (16 files)
-- [ ] Replace all `@fortawesome/react-fontawesome` + icon imports with `@carbon/icons-react`
-- [ ] Files: Frame.jsx, ServerStatusFrame.jsx, ServerDisconnectFrame.jsx, Alert.jsx, CypherResultCytoscapeChart.jsx, CypherResultCytoscapeFooter.jsx, CypherResultCytoscapeLegend.jsx, CypherResultTab.jsx, GraphFilterModal.jsx, GraphInitializer.jsx, SidebarHome.jsx, DefaultTemplate.jsx, Editor.jsx, SidebarMeunuToggle.jsx, NavigatorItem.jsx, MenuSlice.js
-- [ ] Remove all `@fortawesome/*` packages from package.json
-- [ ] Remove `antd`, `bootstrap`, `react-bootstrap` from package.json
-- [ ] Remove `antd/dist/antd.css` and `bootstrap/dist/css/bootstrap.min.css` from App.jsx
-- [ ] Final build verification — no antd/bootstrap/fontawesome references remaining
+#### Sub-phase 3c-vii: Icon Migration + Final Cleanup (16 files) ✅ COMPLETE
+- [x] Replace all `@fortawesome/react-fontawesome` + icon imports with `@carbon/icons-react`
+- [x] Files: Frame.jsx, ServerStatusFrame.jsx, ServerDisconnectFrame.jsx, Alert.jsx, CypherResultCytoscapeChart.jsx, CypherResultCytoscapeFooter.jsx, CypherResultCytoscapeLegend.jsx, CypherResultTab.jsx, GraphFilterModal.jsx, GraphInitializer.jsx, SidebarHome.jsx, DefaultTemplate.jsx, Editor.jsx, SidebarMeunuToggle.jsx, NavigatorItem.jsx, MenuSlice.js
+- [x] Remove all `@fortawesome/*` packages from package.json
+- [x] Remove `antd`, `bootstrap`, `react-bootstrap` from package.json
+- [x] Remove `antd/dist/antd.css` and `bootstrap/dist/css/bootstrap.min.css` from App.jsx
+- [x] Final build verification — no antd/bootstrap/fontawesome references remaining
 
 ### 3d: Other Frontend Updates
 - [ ] Update `axios` to 1.x

@@ -20,8 +20,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Button } from '@carbon/react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { Menu } from '@carbon/icons-react';
 import EditorContainer from '../../contents/containers/Editor';
 import Sidebar from '../../sidebar/containers/Sidebar';
 import Contents from '../../contents/containers/Contents';
@@ -113,7 +112,7 @@ const DefaultTemplate = ({
       <div className="content-row">
         <div>
           <Button kind="ghost" onClick={() => setOpen(true)}>
-            <FontAwesomeIcon icon={faBars} />
+            <Menu size={16} />
           </Button>
           <BuilderContainer open={open} setOpen={setOpen} finder={finder} />
         </div>
