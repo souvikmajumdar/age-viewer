@@ -18,8 +18,6 @@
  */
 
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Badge } from 'react-bootstrap';
 import uuid from 'react-uuid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
@@ -77,10 +75,18 @@ class CypherResultCytoscapeLegend extends Component {
       }
 
       newNodeBadges.set(label,
-        <Badge
-          className="nodeLabel px-3 py-2 mx-1 my-2"
-          pill
+        <span
+          className="nodeLabel"
           key={uuid()}
+          style={{
+            display: 'inline-block',
+            padding: '4px 12px',
+            margin: '4px',
+            borderRadius: '12px',
+            cursor: 'pointer',
+            backgroundColor: legend.color,
+            color: legend.fontColor,
+          }}
           onClick={() => nextProps.onLabelClick({
             type: 'labels',
             data: {
@@ -91,10 +97,11 @@ class CypherResultCytoscapeLegend extends Component {
               label,
             },
           })}
-          style={{ backgroundColor: legend.color, color: legend.fontColor }}
+          role="button"
+          tabIndex={0}
         >
           {label}
-        </Badge>);
+        </span>);
     }
 
     for (let i = 0; i < Object.entries(nextProps.legendData.edgeLegend).length; i += 1) {
@@ -126,9 +133,17 @@ class CypherResultCytoscapeLegend extends Component {
         }
       }
       newEdgeBadges.set(label,
-        <Badge
-          className="edgeLabel px-3 py-2 mx-1 my-2"
+        <span
+          className="edgeLabel"
           key={uuid()}
+          style={{
+            display: 'inline-block',
+            padding: '4px 12px',
+            margin: '4px',
+            cursor: 'pointer',
+            backgroundColor: legend.color,
+            color: legend.fontColor,
+          }}
           onClick={() => nextProps.onLabelClick({
             type: 'labels',
             data: {
@@ -139,10 +154,11 @@ class CypherResultCytoscapeLegend extends Component {
               label,
             },
           })}
-          style={{ backgroundColor: legend.color, color: legend.fontColor }}
+          role="button"
+          tabIndex={0}
         >
           {label}
-        </Badge>);
+        </span>);
     }
 
     return {
@@ -209,16 +225,5 @@ class CypherResultCytoscapeLegend extends Component {
     );
   }
 }
-
-CypherResultCytoscapeLegend.propTypes = {
-  legendData: PropTypes.shape({
-    // eslint-disable-next-line react/forbid-prop-types
-    nodeLegend: PropTypes.any,
-    // eslint-disable-next-line react/forbid-prop-types
-    edgeLegend: PropTypes.any,
-  }).isRequired,
-  isReloading: PropTypes.bool.isRequired,
-  onLabelClick: PropTypes.func.isRequired,
-};
 
 export default CypherResultCytoscapeLegend;

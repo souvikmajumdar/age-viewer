@@ -18,8 +18,6 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { Table } from 'antd';
 import uuid from 'react-uuid';
 import CypherResultTab from '../../cytoscape/CypherResultTab';
 
@@ -41,7 +39,6 @@ const CypherResultTable = ({ data, ...props }) => {
         title: key,
         dataIndex: isKey ? randKeyName : key,
         key: isKey ? randKeyName : key,
-        render: (text) => <>{JSON.stringify(text)}</>,
       });
     });
     setLocalColumns(columnsForFTable);
@@ -112,26 +109,22 @@ const CypherResultTable = ({ data, ...props }) => {
         </div>
         <CypherResultTab refKey={refKey} setIsTable={setIsTable} currentTab="table" />
       </div>
-      <Table columns={localColumns} dataSource={localRows} />
+      <table className="cds--data-table">
+        <thead>
+          <tr>
+            {localColumns.map((col) => <th key={col.key}>{col.title}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {localRows.map((row) => (
+            <tr key={row.key}>
+              {localColumns.map((col) => <td key={col.key}>{JSON.stringify(row[col.dataIndex])}</td>)}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
-};
-
-CypherResultTable.propTypes = {
-  data: PropTypes.shape({
-    message: PropTypes.string,
-    command: PropTypes.string,
-    rowCount: PropTypes.number,
-    // eslint-disable-next-line react/forbid-prop-types
-    columns: PropTypes.any,
-    // eslint-disable-next-line react/forbid-prop-types
-    rows: PropTypes.any,
-    statusText: PropTypes.string,
-  }).isRequired,
-  refKey: PropTypes.string.isRequired,
-  setIsTable: PropTypes.func.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  filterTable: PropTypes.any.isRequired,
 };
 
 export default CypherResultTable;

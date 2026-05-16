@@ -104,13 +104,13 @@
 - [x] `SidebarHome.jsx` — antd Modal.confirm → window.confirm, removed all PropTypes
 - [x] `GraphInitializer.jsx` — antd Divider/Checkbox/Input + react-bootstrap Modal/Row/Col/Button/ListGroup/Spinner/Alert → Carbon
 
-#### Sub-phase 3c-iv: Migrate Data Display & Remaining (6 files)
-- [ ] `CypherResultTable.jsx` — antd Table → Carbon DataTable
-- [ ] `BuilderContainer.jsx` — antd Button/Drawer/Select/Space → Carbon Button/SidePanel/Dropdown
-- [ ] `csv/index.jsx` — antd Button/Upload + message → Carbon Button/FileUploader + useNotification
-- [ ] `BuilderSelection.jsx` — react-bootstrap ListGroup/Button → Carbon
-- [ ] `CypherResultCytoscapeLegend.jsx` — react-bootstrap Badge → Carbon Tag
-- [ ] `CypherResultCytoscapeFooter.jsx` — react-bootstrap Badge → Carbon Tag
+#### Sub-phase 3c-iv: Migrate Data Display & Remaining (6 files) ✅ COMPLETE
+- [x] `CypherResultTable.jsx` — antd Table → HTML table with Carbon styling
+- [x] `BuilderContainer.jsx` — antd Drawer/Select/Button → Carbon Dropdown/Button + panel div
+- [x] `csv/index.jsx` — antd Button/Upload + message → Carbon FileUploader + useNotification
+- [x] `BuilderSelection.jsx` — react-bootstrap ListGroup/Button → Carbon Button + ul/li
+- [x] `CypherResultCytoscapeLegend.jsx` — react-bootstrap Badge → styled span
+- [x] `CypherResultCytoscapeFooter.jsx` — react-bootstrap Badge → styled span
 
 #### Sub-phase 3c-v: Migrate Modals & Tutorial (5 files)
 - [ ] `ModalDialog.jsx` — react-bootstrap Button/Modal → Carbon

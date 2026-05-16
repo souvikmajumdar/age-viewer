@@ -1,8 +1,6 @@
-import PropTypes from 'prop-types';
-import { ListGroup, Button } from 'react-bootstrap';
 import React from 'react';
+import { Button } from '@carbon/react';
 import uuid from 'react-uuid';
-import KeyWordFinder from '../../features/query_builder/KeyWordFinder';
 
 const BuilderSelection = ({ finder, setQuery, currentWord }) => {
   const handleClick = (e) => {
@@ -10,29 +8,25 @@ const BuilderSelection = ({ finder, setQuery, currentWord }) => {
     setQuery(selectedVal);
   };
   return (
-    <ListGroup>
+    <ul style={{ listStyle: 'none', padding: 0 }}>
       {
-    finder?.getConnectedNames(currentWord).map(
-      (element) => (
-        <ListGroup.Item key={uuid()}>
-          <Button
-            size="small"
-            onClick={handleClick}
-            data-val={element}
-          >
-            {element}
-          </Button>
-        </ListGroup.Item>
-      ),
-    )
-    }
-    </ListGroup>
+        finder?.getConnectedNames(currentWord).map(
+          (element) => (
+            <li key={uuid()} style={{ marginBottom: '4px' }}>
+              <Button
+                kind="ghost"
+                size="sm"
+                onClick={handleClick}
+                data-val={element}
+              >
+                {element}
+              </Button>
+            </li>
+          ),
+        )
+      }
+    </ul>
   );
 };
 
-BuilderSelection.propTypes = {
-  finder: PropTypes.shape(KeyWordFinder).isRequired,
-  setQuery: PropTypes.func.isRequired,
-  currentWord: PropTypes.string.isRequired,
-};
 export default BuilderSelection;
