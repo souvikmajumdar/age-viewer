@@ -68,16 +68,16 @@
 - [x] Fix local cytoscape-cxtmenu lib (module.exports → export default)
 - [x] Remove babel-eslint, @babel/core, @testing-library/*, webpack-dev-server, serve
 
-### 3b: React 19
-- [ ] Update `react` and `react-dom` to ^19.x
-- [ ] Replace `ReactDOM.render` with `createRoot` API
-- [ ] Update `react-redux` to 9.x
-- [ ] Update `@reduxjs/toolkit` to 2.x
-- [ ] Remove `redux-thunk` (bundled in RTK 2.x)
-- [ ] Remove `redux` direct dependency (bundled in RTK 2.x)
-- [ ] Remove `prop-types` package
-- [ ] Update `react-cytoscapejs` to 2.x
-- [ ] Verify Cytoscape graph rendering works with React 19
+### 3b: React 19 ✅ COMPLETE
+- [x] Update `react` and `react-dom` to ^19.1.0
+- [x] Replace `ReactDOM.render` with `createRoot` API
+- [x] Update `react-redux` to 9.x
+- [x] Update `@reduxjs/toolkit` to 2.x
+- [x] Remove `redux-thunk` (bundled in RTK 2.x)
+- [x] Remove `redux` direct dependency (bundled in RTK 2.x)
+- [x] Remove `prop-types` package
+- [x] Update `react-cytoscapejs` to 2.x
+- [x] Verify build works with React 19
 
 ### 3c: IBM Carbon Design System
 - [ ] Install `@carbon/react` and `@carbon/ibm-products`
