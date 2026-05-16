@@ -149,12 +149,15 @@
 
 > See [testing-and-quality-plan.md](testing-and-quality-plan.md) for full details.
 
-### 4a: Test Infrastructure Setup
-- [ ] Install Vitest + jsdom + React Testing Library + MSW for frontend
-- [ ] Add Vitest to backend (replace Mocha)
-- [ ] Migrate existing backend tests from Mocha → Vitest syntax
-- [ ] Add coverage reporting configuration
-- [ ] Add test commands to CI workflow
+### 4a: Test Infrastructure Setup ✅ COMPLETE
+- [x] Install Vitest + jsdom + React Testing Library + MSW for frontend
+- [x] Add Vitest to backend (replace Mocha)
+- [x] Migrate existing backend tests from Mocha → Vitest syntax
+- [x] Add coverage reporting configuration
+- [x] Add test commands to CI workflow
+- [x] **Defect fix:** RTK 2.x `extraReducers` object notation → builder callback (3 slices: DatabaseSlice, MetadataSlice, CypherSlice)
+- [x] **Defect fix:** `combineReducers` import from `redux` → `@reduxjs/toolkit`
+- [x] Smoke test verifies Redux store initializes correctly
 
 ### 4b: Backend Unit Tests
 - [ ] cypherService — createResult, convertVertex, convertEdge, convertPath

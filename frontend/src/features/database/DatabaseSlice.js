@@ -83,52 +83,53 @@ const DatabaseSlice = createSlice({
       graph: action.payload.graphName,
     }),
   },
-  extraReducers: {
-    [connectToDatabase.fulfilled]: (state, action) => ({
-      host: action.payload.host,
-      port: action.payload.port,
-      user: action.payload.user,
-      password: action.payload.password,
-      database: action.payload.database,
-      graph: action.payload.graph,
-      status: 'connected',
-    }),
-    [connectToDatabase.rejected]: () => ({
-      host: '',
-      port: '',
-      user: '',
-      password: '',
-      database: '',
-      graph: '',
-      status: 'disconnected',
-    }),
-    [disconnectToDatabase.fulfilled]: () => ({
-      host: '',
-      port: '',
-      user: '',
-      password: '',
-      database: '',
-      graph: '',
-      status: 'disconnected',
-    }),
-    [getConnectionStatus.fulfilled]: (state, action) => ({
-      host: action.payload.host,
-      port: action.payload.port,
-      user: action.payload.user,
-      password: action.payload.password,
-      database: action.payload.database,
-      graph: action.payload.graph,
-      status: 'connected',
-    }),
-    [getConnectionStatus.rejected]: () => ({
-      host: '',
-      port: '',
-      user: '',
-      password: '',
-      database: '',
-      graph: '',
-      status: 'disconnected',
-    }),
+  extraReducers: (builder) => {
+    builder
+      .addCase(connectToDatabase.fulfilled, (state, action) => ({
+        host: action.payload.host,
+        port: action.payload.port,
+        user: action.payload.user,
+        password: action.payload.password,
+        database: action.payload.database,
+        graph: action.payload.graph,
+        status: 'connected',
+      }))
+      .addCase(connectToDatabase.rejected, () => ({
+        host: '',
+        port: '',
+        user: '',
+        password: '',
+        database: '',
+        graph: '',
+        status: 'disconnected',
+      }))
+      .addCase(disconnectToDatabase.fulfilled, () => ({
+        host: '',
+        port: '',
+        user: '',
+        password: '',
+        database: '',
+        graph: '',
+        status: 'disconnected',
+      }))
+      .addCase(getConnectionStatus.fulfilled, (state, action) => ({
+        host: action.payload.host,
+        port: action.payload.port,
+        user: action.payload.user,
+        password: action.payload.password,
+        database: action.payload.database,
+        graph: action.payload.graph,
+        status: 'connected',
+      }))
+      .addCase(getConnectionStatus.rejected, () => ({
+        host: '',
+        port: '',
+        user: '',
+        password: '',
+        database: '',
+        graph: '',
+        status: 'disconnected',
+      }));
   },
 });
 export const { changeGraph } = DatabaseSlice.actions;

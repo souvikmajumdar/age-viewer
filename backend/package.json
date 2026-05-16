@@ -11,8 +11,10 @@
     }
   ],
   "scripts": {
-    "test": "mocha --exit --timeout 100000",
-    "test:ageParsing": "mocha --exit --timeout 10000 ./test/ageParsing.test.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:integration": "vitest run ./test/graphCreate.test.js",
+    "test:ageParsing": "vitest run ./test/ageParsing.test.js",
     "start": "node src/bin/www.js",
     "start:dev": "nodemon --watch src/ src/bin/www.js"
   },
@@ -37,10 +39,9 @@
     "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
-    "chai": "^5.2.0",
-    "mocha": "^11.7.5",
     "nodemon": "^3.1.9",
     "supertest": "^7.2.2",
-    "supertest-session": "^5.0.1"
+    "supertest-session": "^5.0.1",
+    "vitest": "^4.1.6"
   }
 }
