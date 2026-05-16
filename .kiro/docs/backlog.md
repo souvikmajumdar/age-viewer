@@ -145,15 +145,71 @@
 
 ---
 
-## Phase 4: Cleanup & Optimization 🔲 PENDING
+## Phase 4: Testing & Quality 🔲 PENDING
 
-- [ ] Update ESLint to 9.x with flat config
-- [ ] Remove `babel-eslint` (use default parser)
-- [ ] Audit and optimize bundle size
-- [ ] Update Docker compose for test environment
-- [ ] Remove unused packages (`react-cookies`, `ascii-table` if unused)
-- [ ] Update README.md with final stack documentation
-- [ ] Clean up any remaining deprecation warnings
+> See [testing-and-quality-plan.md](testing-and-quality-plan.md) for full details.
+
+### 4a: Test Infrastructure Setup
+- [ ] Install Vitest + jsdom + React Testing Library + MSW for frontend
+- [ ] Add Vitest to backend (replace Mocha)
+- [ ] Migrate existing backend tests from Mocha → Vitest syntax
+- [ ] Add coverage reporting configuration
+- [ ] Add test commands to CI workflow
+
+### 4b: Backend Unit Tests
+- [ ] cypherService — createResult, convertVertex, convertEdge, convertPath
+- [ ] databaseService — parseMeta, graphNameInitialize, isConnected
+- [ ] sessionService — put, get
+- [ ] QueryBuilder — query generation
+- [ ] GraphCreator — parseData, createNode, createEdge
+- [ ] SQLFlavorManager — getQuery with different versions
+
+### 4c: Backend Integration Tests (API)
+- [ ] POST /api/v1/db/connect — success, invalid credentials, already connected
+- [ ] GET /api/v1/db — connected/disconnected status
+- [ ] GET /api/v1/db/disconnect — success, not connected
+- [ ] POST /api/v1/db/meta — success, not connected
+- [ ] POST /api/v1/cypher — success, error query, not connected
+- [ ] POST /api/v1/cypher/init — CSV upload
+- [ ] GET /api/v1/miscellaneous — keyword list
+- [ ] Error handler middleware + session isolation
+
+### 4d: Frontend Unit Tests (Redux + Utilities)
+- [ ] FrameSlice — addFrame, removeFrame, pinFrame, trimFrame
+- [ ] CypherSlice — reducers, fulfilled/rejected/pending states
+- [ ] DatabaseSlice — connect/disconnect state transitions
+- [ ] MetadataSlice — getMetaData, changeCurrentGraph
+- [ ] AlertSlice — addAlert, removeAlert
+- [ ] CookieUtil — loadFromCookie, saveToCookie
+- [ ] useNotification hook — success/error/warning/info, auto-dismiss
+
+### 4e: Frontend Component Tests
+- [ ] ServerConnectFrame — form submission, validation
+- [ ] Alert — renders correct notification type
+- [ ] CypherResultTable — renders table, handles filter
+- [ ] Frame — expand/collapse, close, fullscreen
+- [ ] GraphFilterModal — add/remove filters, submit, error
+- [ ] SidebarHome — node/edge/property lists
+- [ ] BuilderContainer — query building, submit
+- [ ] CodeMirrorWrapper — value changes, keyboard shortcuts
+
+### 4f: E2E Tests (Playwright)
+- [ ] Install Playwright + configure
+- [ ] Flow 1: Connect to database → verify status
+- [ ] Flow 2: Execute Cypher query → verify graph
+- [ ] Flow 3: Create graph from CSV → verify notification
+- [ ] Flow 4: Filter graph results → verify updates
+- [ ] Flow 5: Disconnect → verify disconnect frame
+- [ ] Docker Compose for test environment
+- [ ] Add E2E to CI (separate job)
+
+### 4g: Code Quality & Linting
+- [ ] Update ESLint to 9.x with flat config (frontend)
+- [ ] Add ESLint to backend
+- [ ] Add Prettier config
+- [ ] Add lint/format scripts
+- [ ] Add lint check to CI
+- [ ] Add pre-commit hook (lint-staged + husky)
 
 ---
 
