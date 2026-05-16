@@ -17,18 +17,18 @@
  * under the License.
  */
 
-const express = require("express");
-const CypherController = require("../controllers/cypherController");
-const multer = require('multer');
+import express from 'express';
+import CypherController from '../controllers/cypherController.js';
+import multer from 'multer';
+import { wrap } from '../common/Routes.js';
+
 const storage = multer.memoryStorage();
 const upload = multer({storage});
 const router = express.Router();
 const cypherController = new CypherController();
 
-const {wrap} = require('../common/Routes');
-
 // Execute Cypher Query
 router.post("/", wrap(cypherController.executeCypher));
 router.post("/init", upload.fields([{name:"edges"}, {name:"nodes"}]), wrap(cypherController.createGraph));
 
-module.exports = router;
+export default router;

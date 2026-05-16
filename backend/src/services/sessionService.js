@@ -35,4 +35,4 @@ class SessionService {
 }
 const sessionService = new SessionService();
 
-module.exports = sessionService;
+export default sessionService;

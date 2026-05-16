@@ -121,4 +121,4 @@ class CypherService {
     }
 }
 
-module.exports = CypherService;
+export default CypherService;

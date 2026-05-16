@@ -18,10 +18,9 @@
  */
 
 import antlr4 from 'antlr4';
-import { cli } from 'winston/lib/winston/config';
-import AgtypeLexer from './AgtypeLexer';
-import AgtypeParser from './AgtypeParser';
-import CustomAgTypeListener from './CustomAgTypeListener';
+import AgtypeLexer from './AgtypeLexer.js';
+import AgtypeParser from './AgtypeParser.js';
+import CustomAgTypeListener from './CustomAgTypeListener.js';
 
 function AGTypeParse(input) {
     const chars = new antlr4.InputStream(input);

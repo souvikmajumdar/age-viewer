@@ -17,9 +17,9 @@
  * under the License.
  */
 
-const CypherService = require("../services/cypherService");
-const sessionService = require("../services/sessionService");
-const GraphCreator = require("../models/GraphCreator");
+import CypherService from "../services/cypherService.js";
+import sessionService from "../services/sessionService.js";
+import GraphCreator from "../models/GraphCreator.js";
 
 class CypherController {
     async executeCypher(req, res) {
@@ -87,4 +87,4 @@ class CypherController {
     }
 }
 
-module.exports = CypherController;
+export default CypherController;

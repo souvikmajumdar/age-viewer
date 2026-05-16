@@ -17,11 +17,9 @@
  * under the License.
  */
 
-import { getQuery } from "../tools/SQLFlavorManager";
-import * as util from "util";
-import GraphRepository from '../models/GraphRepository';
-import { start } from "repl";
-import { get } from "http";
+import { getQuery } from '../tools/SQLFlavorManager.js';
+import * as util from 'node:util';
+import GraphRepository from '../models/GraphRepository.js';
 
 class DatabaseService {
     constructor() {
@@ -227,4 +225,4 @@ class DatabaseService {
     }
 }
 
-module.exports = DatabaseService;
+export default DatabaseService;

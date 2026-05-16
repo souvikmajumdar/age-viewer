@@ -16,27 +16,32 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-const express = require('express');
-const cors = require('cors');
-const session = require('express-session');
-const uuid = require('uuid');
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
-const {stream} = require('./config/winston');
-const cypherRouter = require('./routes/cypherRouter');
-const databaseRouter = require('./routes/databaseRouter');
-const sessionRouter = require('./routes/sessionRouter');
-const miscellaneousRouter = require('./routes/miscellaneous');
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
+import express from 'express';
+import cors from 'cors';
+import session from 'express-session';
+import { v4 as uuidv4 } from 'uuid';
+import cookieParser from 'cookie-parser';
+import logger from 'morgan';
+import { stream } from './config/winston.js';
+import cypherRouter from './routes/cypherRouter.js';
+import databaseRouter from './routes/databaseRouter.js';
+import sessionRouter from './routes/sessionRouter.js';
+import miscellaneousRouter from './routes/miscellaneous.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 const app = express();
 
 app.use(cors({
     origin: true,
     credentials: true
 }))
-app.use(express.static(path.join(__dirname, '../../frontend/build')));
+app.use(express.static(join(__dirname, '../../frontend/build')));
 app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname, '../../frontend/build', 'index.html'));
+    res.sendFile(join(__dirname, '../../frontend/build', 'index.html'));
 });
 
 app.use(
@@ -47,7 +52,7 @@ app.use(
         saveUninitialized: true,
         proxy: true,
         genid: (req) => {
-            return uuid.v4();
+            return uuidv4();
         },
     })
 );
@@ -78,4 +83,4 @@ process.on('uncaughtException', function (exception) {
     console.log(exception);
 });
 
-module.exports = app;
+export default app;

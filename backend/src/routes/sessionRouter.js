@@ -17,8 +17,8 @@
  * under the License.
  */
 
-const DatabaseService = require('../services/databaseService');
-const sessionService = require('../services/sessionService');
+import DatabaseService from '../services/databaseService.js';
+import sessionService from '../services/sessionService.js';
 
 function sessionRouter(req, res, next) {
     if (sessionService.get(req.sessionID) == null) {
@@ -27,4 +27,4 @@ function sessionRouter(req, res, next) {
     next();
 }
 
-module.exports = sessionRouter;
+export default sessionRouter;

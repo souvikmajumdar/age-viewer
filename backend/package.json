@@ -1,7 +1,8 @@
 {
   "name": "ag-viewer-backend",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "private": true,
+  "type": "module",
   "license": "Apache-2.0",
   "licenses": [
     {
@@ -10,46 +11,36 @@
     }
   ],
   "scripts": {
-    "test": "mocha -r @babel/register --exit --timeout 100000",
-    "test:ageParsing": "mocha -r @babel/register --exit --timeout 10000 ./test/ageParsing.test.js",
-    "start": "babel-node src/bin/www",
-    "start:dev": "nodemon --watch src/app.js --watch src/ --exec 'babel-node' src/bin/www",
-    "build": "babel -d ./build ./src -s",
-    "start:production": "node ./build/bin/www.js"
+    "test": "mocha --exit --timeout 100000",
+    "test:ageParsing": "mocha --exit --timeout 10000 ./test/ageParsing.test.js",
+    "start": "node src/bin/www.js",
+    "start:dev": "nodemon --watch src/ src/bin/www.js"
   },
   "dependencies": {
-    "@babel/runtime": "^7.27.1",
     "antlr4": "4.9.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
-    "csv": "^5.5.3",
+    "csv": "^6.5.1",
     "debug": "^4.4.3",
     "ejs": "^3.1.10",
     "express": "^4.21.2",
     "express-session": "^1.19.0",
-    "http-status": "^1.8.1",
+    "http-status": "^2.1.0",
     "morgan": "^1.10.1",
-    "multer": "^1.4.5-lts.2",
+    "multer": "^2.1.1",
     "papaparse": "^5.5.3",
     "peggy": "^4.2.0",
     "pg": "^8.20.0",
     "pg-types": "^2.2.0",
-    "uuid": "^8.3.2",
+    "uuid": "^11.1.1",
     "winston": "^3.19.0",
-    "winston-daily-rotate-file": "^4.7.1"
+    "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.27.2",
-    "@babel/core": "^7.27.1",
-    "@babel/node": "^7.27.1",
-    "@babel/plugin-transform-class-properties": "^7.27.1",
-    "@babel/plugin-transform-runtime": "^7.27.1",
-    "@babel/preset-env": "^7.27.2",
-    "@babel/register": "^7.27.1",
-    "chai": "^4.5.0",
-    "mocha": "^8.2.1",
-    "nodemon": "^2.0.7",
-    "supertest": "^6.0.1",
-    "supertest-session": "^4.1.0"
+    "chai": "^5.2.0",
+    "mocha": "^11.7.5",
+    "nodemon": "^3.1.9",
+    "supertest": "^7.2.2",
+    "supertest-session": "^5.0.1"
   }
 }

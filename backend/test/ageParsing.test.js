@@ -17,8 +17,8 @@
  * under the License.
  */
 
-import {AGTypeParse}  from "../src/tools/AGEParser";
-const assert = require('assert').strict;
+import { AGTypeParse } from '../src/tools/AGEParser.js';
+import assert from 'node:assert/strict';
 
 describe('Test Connector Api', () => {
     it('Object Circulating', (done) => {

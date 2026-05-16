@@ -20,8 +20,10 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
-    - run: cd backend && npm install && npm run build
-    - run: cd frontend && npm install && npm run build
+    - name: Backend install and test
+      run: cd backend && npm install && npm run test:ageParsing
+    - name: Frontend install and build
+      run: cd frontend && npm install && npm run build
       env:
         CI: false
         NODE_OPTIONS: --openssl-legacy-provider

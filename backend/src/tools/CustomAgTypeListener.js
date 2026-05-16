@@ -17,7 +17,7 @@
  * under the License.
  */
 
-import AgtypeListener from "./AgtypeListener";
+import AgtypeListener from "./AgtypeListener.js";
 
 class CustomAgTypeListener extends AgtypeListener {
     rootObject = null;

@@ -1,9 +1,14 @@
-const app = require('../src/app');
-const { queries } = require('./test-queries/queries');
-const { connectionForm } = require('./testDB');
-const pathCreate = require('path');
-const request = require('supertest');
-const expect = require('chai').expect;
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
+import app from '../src/app.js';
+import { queries } from './test-queries/queries.js';
+import { connectionForm } from './testDB.js';
+import request from 'supertest';
+import { expect } from 'chai';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 const agent = request.agent(app);
 request.Test.prototype.attachMultiple = function(files, key){
     files.forEach(([name, path])=>{
@@ -70,5 +75,5 @@ describe('Graph Creation', ()=>{
 
 function getPathForFile(fname){
     const dataPath = 'test-data'
-    return pathCreate.join(__dirname, dataPath, fname); 
+    return join(__dirname, dataPath, fname); 
 }

@@ -1,9 +1,9 @@
-const express = require('express');
-const { wrap } = require('../common/Routes');
-const getQueryList = require('../services/queryList');
-const router = express.Router();
+import express from 'express';
+import { wrap } from '../common/Routes.js';
+import getQueryList from '../services/queryList.js';
 
+const router = express.Router();
 
 router.get('/', wrap(getQueryList));
 
-module.exports = router;
+export default router;

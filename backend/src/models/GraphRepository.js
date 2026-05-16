@@ -16,12 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import PgConfig from '../config/Pg'
-
+import PgConfig from '../config/Pg.js';
 import pg from 'pg';
 import types from 'pg-types';
-import {setAGETypes, onConnectQueries} from '../tools/AGEParser';
-import { getQuery } from '../tools/SQLFlavorManager';
+import { setAGETypes, onConnectQueries } from '../tools/AGEParser.js';
+import { getQuery } from '../tools/SQLFlavorManager.js';
 
 
 class GraphRepository {
@@ -175,4 +174,4 @@ class GraphRepository {
     }
 }
 
-module.exports = GraphRepository;
+export default GraphRepository;
