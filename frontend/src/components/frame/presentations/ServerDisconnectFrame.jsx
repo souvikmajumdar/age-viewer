@@ -18,11 +18,10 @@
  */
 
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlayCircle } from '@fortawesome/free-regular-svg-icons';
-import { Col, Row } from 'antd';
+import { Grid, Column, Row } from '@carbon/react';
 import Frame from '../Frame';
 
 const ServerDisconnectFrame = ({
@@ -53,39 +52,30 @@ const ServerDisconnectFrame = ({
       isPinned={isPinned}
       refKey={refKey}
     >
-      <Row>
-        <Col span={6}>
-          <h3>Disconnected Succesfully</h3>
-          <p>You are successfully disconnected from Database.</p>
-        </Col>
-        <Col span={18}>
-          <p>
-            You may run
-            <a href="/#" className="badge badge-light" onClick={() => { setCommand(':server connect'); }}>
-              <FontAwesomeIcon
-                icon={faPlayCircle}
-                size="lg"
-              />
-              :server connection
-            </a>
-            {' '}
-            to establish new connection
-          </p>
-        </Col>
-      </Row>
+      <Grid>
+        <Row>
+          <Column lg={4}>
+            <h3>Disconnected Succesfully</h3>
+            <p>You are successfully disconnected from Database.</p>
+          </Column>
+          <Column lg={12}>
+            <p>
+              You may run
+              <a href="/#" className="badge badge-light" onClick={() => { setCommand(':server connect'); }}>
+                <FontAwesomeIcon
+                  icon={faPlayCircle}
+                  size="lg"
+                />
+                :server connection
+              </a>
+              {' '}
+              to establish new connection
+            </p>
+          </Column>
+        </Row>
+      </Grid>
     </Frame>
   );
-};
-
-ServerDisconnectFrame.propTypes = {
-  refKey: PropTypes.string.isRequired,
-  isPinned: PropTypes.bool.isRequired,
-  reqString: PropTypes.string.isRequired,
-  disconnectToDatabase: PropTypes.func.isRequired,
-  addFrame: PropTypes.func.isRequired,
-  addAlert: PropTypes.func.isRequired,
-  setCommand: PropTypes.func.isRequired,
-  resetMetaData: PropTypes.func.isRequired,
 };
 
 export default ServerDisconnectFrame;

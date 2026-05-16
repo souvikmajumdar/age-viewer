@@ -18,44 +18,35 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Col, Row } from 'antd';
+import { Grid, Column, Row } from '@carbon/react';
 
 const CypherResultMeta = ({ database, query, data }) => (
   <>
-    <Row>
-      <Col span={6}>
-        <b>Server Version</b>
-      </Col>
-      <Col span={18}>TBD</Col>
-    </Row>
-    <Row>
-      <Col span={6}><b>Database URI</b></Col>
-      <Col span={18}>
-        {database.host}
-        :
-        {database.port}
-      </Col>
-    </Row>
-    <Row>
-      <Col span={6}><b>Executed Query</b></Col>
-      <Col span={18}>{query}</Col>
-    </Row>
-    <Row>
-      <Col span={6}><b>Data</b></Col>
-      <Col span={18}><pre>{JSON.stringify(data, null, 2)}</pre></Col>
-    </Row>
+    <Grid>
+      <Row>
+        <Column lg={4}>
+          <b>Server Version</b>
+        </Column>
+        <Column lg={12}>TBD</Column>
+      </Row>
+      <Row>
+        <Column lg={4}><b>Database URI</b></Column>
+        <Column lg={12}>
+          {database.host}
+          :
+          {database.port}
+        </Column>
+      </Row>
+      <Row>
+        <Column lg={4}><b>Executed Query</b></Column>
+        <Column lg={12}>{query}</Column>
+      </Row>
+      <Row>
+        <Column lg={4}><b>Data</b></Column>
+        <Column lg={12}><pre>{JSON.stringify(data, null, 2)}</pre></Column>
+      </Row>
+    </Grid>
   </>
 );
-
-CypherResultMeta.propTypes = {
-  database: PropTypes.shape({
-    host: PropTypes.string.isRequired,
-    port: PropTypes.string.isRequired,
-  }).isRequired,
-  query: PropTypes.string.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  data: PropTypes.any.isRequired,
-};
 
 export default CypherResultMeta;

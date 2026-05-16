@@ -28,8 +28,7 @@ import {
   faTimes,
   faClone,
 } from '@fortawesome/free-solid-svg-icons';
-import { Button, Popover } from 'antd';
-import PropTypes from 'prop-types';
+import { Button, Popover, PopoverContent } from '@carbon/react';
 import { useDispatch } from 'react-redux';
 import styles from './Frame.module.scss';
 import { removeFrame } from '../../features/frame/FrameSlice';
@@ -43,17 +42,18 @@ const Frame = ({
   reqString,
   children,
   refKey,
-  onSearch,
-  onSearchCancel,
-  onRefresh,
-  onThick,
-  thicnessMenu,
-  bodyNoPadding,
+  onSearch = null,
+  onSearchCancel = null,
+  onRefresh = null,
+  onThick = null,
+  thicnessMenu = null,
+  bodyNoPadding = false,
   isTable,
 }) => {
   const dispatch = useDispatch();
   const [isFullScreen, setFullScreen] = useState(false);
   const [isExpand, setExpand] = useState(true);
+  const [popoverOpen, setPopoverOpen] = useState(false);
 
   // const downloadMenu = () => (
   //   <Menu onClick={(e) => onDownload(e)}>
@@ -90,22 +90,25 @@ const Frame = ({
         </div>
         <div className={styles.ButtonArea}>
           {!isTable && onThick ? (
-            <Popover placement="bottomLeft" content={thicnessMenu} trigger="click">
+            <Popover open={popoverOpen}>
               <Button
-                size="large"
-                type="link"
+                kind="ghost"
+                size="lg"
                 className={styles.FrameButton}
                 title="Edge Weight"
-                onClick={() => onThick()}
+                onClick={() => { onThick(); setPopoverOpen(!popoverOpen); }}
               >
                 <EdgeWeight />
               </Button>
+              <PopoverContent>
+                {thicnessMenu}
+              </PopoverContent>
             </Popover>
           ) : null}
           {onSearchCancel ? (
             <Button
-              size="large"
-              type="link"
+              kind="ghost"
+              size="lg"
               className={styles.FrameButton}
               onClick={() => onSearchCancel()}
               title="Cancel Search"
@@ -115,8 +118,8 @@ const Frame = ({
           ) : null}
           {onSearch ? (
             <Button
-              size="large"
-              type="link"
+              kind="ghost"
+              size="lg"
               className={styles.FrameButton}
               onClick={() => onSearch()}
               title="Filter/Search"
@@ -131,8 +134,8 @@ const Frame = ({
           {/*    overlay={downloadMenu} */}
           {/*  > */}
           {/*    <Button */}
-          {/*      size="large" */}
-          {/*      type="link" */}
+          {/*      kind="ghost" */}
+          {/*      size="lg" */}
           {/*      className={styles.FrameButton} */}
           {/*    > */}
           {/*      <FontAwesomeIcon */}
@@ -145,8 +148,8 @@ const Frame = ({
           {/* ) */}
           {/*  : null} */}
           <Button
-            size="large"
-            type="link"
+            kind="ghost"
+            size="lg"
             className={`${styles.FrameButton} ${
               isFullScreen ? styles.activate : ''
             }`}
@@ -161,8 +164,8 @@ const Frame = ({
           {
             !isTable && onRefresh ? (
               <Button
-                size="large"
-                type="link"
+                kind="ghost"
+                size="lg"
                 className={`${styles.FrameButton}`}
                 onClick={() => onRefresh()}
                 title="Refresh"
@@ -175,8 +178,8 @@ const Frame = ({
             ) : null
           }
           {/* <Button
-            size="large"
-            type="link"
+            kind="ghost"
+            size="lg"
             className={`${styles.FrameButton} ${isPinned ? styles.activate : ''}`}
             onClick={() => pinFrame(refKey)}
           >
@@ -185,8 +188,8 @@ const Frame = ({
             />
           </Button> */}
           <Button
-            size="large"
-            type="link"
+            kind="ghost"
+            size="lg"
             className={`${styles.FrameButton}`}
             onClick={() => setExpand(!isExpand)}
             title={isExpand ? 'Hide' : 'Show'}
@@ -197,8 +200,8 @@ const Frame = ({
             />
           </Button>
           <Button
-            size="large"
-            type="link"
+            kind="ghost"
+            size="lg"
             className={`${styles.FrameButton}`}
             onClick={() => {
               if (window.confirm('Are you sure you want to close this window?')) {
@@ -223,28 +226,6 @@ const Frame = ({
       </div>
     </div>
   );
-};
-
-Frame.defaultProps = {
-  onSearch: null,
-  onThick: null,
-  onSearchCancel: null,
-  thicnessMenu: null,
-  onRefresh: null,
-  bodyNoPadding: false,
-};
-
-Frame.propTypes = {
-  reqString: PropTypes.string.isRequired,
-  children: PropTypes.element.isRequired,
-  refKey: PropTypes.string.isRequired,
-  onSearch: PropTypes.func,
-  onThick: PropTypes.func,
-  thicnessMenu: PropTypes.func,
-  onSearchCancel: PropTypes.func,
-  onRefresh: PropTypes.func,
-  bodyNoPadding: PropTypes.bool,
-  isTable: PropTypes.bool.isRequired,
 };
 
 export default Frame;

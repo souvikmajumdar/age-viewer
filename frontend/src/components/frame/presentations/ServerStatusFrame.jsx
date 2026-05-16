@@ -19,11 +19,9 @@
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlayCircle, faQuestionCircle } from '@fortawesome/free-regular-svg-icons';
-import { Col, Row } from 'antd';
-import { Button } from 'react-bootstrap';
+import { Grid, Column, Row, Button } from '@carbon/react';
 import MetadataCytoscapeChart from '../../cytoscape/MetadataCytoscapeChart';
 import InitGraphModal from '../../initializer/presentation/GraphInitializer';
 import Frame from '../Frame';
@@ -54,38 +52,40 @@ const ServerStatusFrame = ({
           { isTutorial && <Tutorial />}
           <div className={FrameStyles.FlexContentWrapper}>
             <InitGraphModal show={showModal} setShow={setShow} />
-            <Row>
-              <Col span={6}>
-                <h3>Connection Status</h3>
-                <p>This is your current connection information.</p>
-              </Col>
-              <Col span={18}>
-                <p>
-                  You are connected as user&nbsp;
-                  <strong>{user}</strong>
-                </p>
-                <p>
-                  to&nbsp;
-                  <strong>
-                    {host}
-                    :
-                    {port}
-                    /
-                    {database}
-                  </strong>
-                </p>
-                <p>
-                  Graph path has been set to&nbsp;
-                  <strong>{graph}</strong>
-                </p>
-              </Col>
-              <Col>
-                <p>
-                  <Button onClick={() => setShow(!showModal)}>Create Graph</Button>
-                  <FontAwesomeIcon onClick={() => dispatch(openTutorial())} icon={faQuestionCircle} size="lg" style={{ marginLeft: '1rem', cursor: 'pointer' }} />
-                </p>
-              </Col>
-            </Row>
+            <Grid>
+              <Row>
+                <Column lg={4}>
+                  <h3>Connection Status</h3>
+                  <p>This is your current connection information.</p>
+                </Column>
+                <Column lg={12}>
+                  <p>
+                    You are connected as user&nbsp;
+                    <strong>{user}</strong>
+                  </p>
+                  <p>
+                    to&nbsp;
+                    <strong>
+                      {host}
+                      :
+                      {port}
+                      /
+                      {database}
+                    </strong>
+                  </p>
+                  <p>
+                    Graph path has been set to&nbsp;
+                    <strong>{graph}</strong>
+                  </p>
+                </Column>
+                <Column>
+                  <p>
+                    <Button onClick={() => setShow(!showModal)}>Create Graph</Button>
+                    <FontAwesomeIcon onClick={() => dispatch(openTutorial())} icon={faQuestionCircle} size="lg" style={{ marginLeft: '1rem', cursor: 'pointer' }} />
+                  </p>
+                </Column>
+              </Row>
+            </Grid>
 
             <hr style={{
               color: 'rgba(0,0,0,.125)',
@@ -102,13 +102,13 @@ const ServerStatusFrame = ({
     }
     if (status === 'disconnected') {
       return (
-        <>
+        <Grid>
           <Row>
-            <Col span={6}>
+            <Column lg={4}>
               <h3>Connection Status</h3>
               <p>You are currently not connected to Database</p>
-            </Col>
-            <Col span={18}>
+            </Column>
+            <Column lg={12}>
               <p>
                 You may run
                 <a href="/#" className="badge badge-light">
@@ -121,9 +121,9 @@ const ServerStatusFrame = ({
                 {' '}
                 to access to Database.
               </p>
-            </Col>
+            </Column>
           </Row>
-        </>
+        </Grid>
       );
     }
     return null;
@@ -137,23 +137,6 @@ const ServerStatusFrame = ({
       {setContent()}
     </Frame>
   );
-};
-
-ServerStatusFrame.propTypes = {
-  refKey: PropTypes.string.isRequired,
-  isPinned: PropTypes.bool.isRequired,
-  reqString: PropTypes.string.isRequired,
-  serverInfo: PropTypes.shape({
-    host: PropTypes.string,
-    port: PropTypes.string,
-    user: PropTypes.string,
-    database: PropTypes.string,
-    graph: PropTypes.string,
-    status: PropTypes.string,
-  }).isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  data: PropTypes.any.isRequired,
-  isTutorial: PropTypes.bool.isRequired,
 };
 
 export default ServerStatusFrame;

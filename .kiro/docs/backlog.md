@@ -88,14 +88,14 @@
 - [x] Wrap app in `<NotificationProvider>` in `App.jsx`
 - [x] Verify build works with Carbon installed alongside antd (coexistence during migration)
 
-#### Sub-phase 3c-ii: Migrate Layout & Simple Components (7 files)
-- [ ] `ServerDisconnectFrame.jsx` — antd Row/Col → Carbon Grid/Column
-- [ ] `ServerStatusFrame.jsx` — antd Row/Col + react-bootstrap Button → Carbon
-- [ ] `CypherResultMeta.jsx` — antd Row/Col → Carbon Grid/Column
-- [ ] `Alert.jsx` — antd Alert → Carbon InlineNotification
-- [ ] `SidebarComponents.jsx` — antd Select + react-bootstrap Col → Carbon Dropdown
-- [ ] `Frame.jsx` — antd Button/Popover → Carbon Button/Popover
-- [ ] `DefaultTemplate.jsx` — react-bootstrap Row/Button → Carbon
+#### Sub-phase 3c-ii: Migrate Layout & Simple Components (7 files) ✅ COMPLETE
+- [x] `ServerDisconnectFrame.jsx` — antd Row/Col → Carbon Grid/Column
+- [x] `ServerStatusFrame.jsx` — antd Row/Col + react-bootstrap Button → Carbon
+- [x] `CypherResultMeta.jsx` — antd Row/Col → Carbon Grid/Column
+- [x] `Alert.jsx` — antd Alert → Carbon InlineNotification
+- [x] `SidebarComponents.jsx` — antd Select + react-bootstrap Col → Carbon Dropdown
+- [x] `Frame.jsx` — antd Button/Popover → Carbon Button/Popover
+- [x] `DefaultTemplate.jsx` — react-bootstrap Row/Button → Carbon
 
 #### Sub-phase 3c-iii: Migrate Forms & Modals (5 files)
 - [ ] `ServerConnectFrame.jsx` — antd Form/Input/InputNumber/Button/Row/Col → Carbon Form/TextInput/NumberInput/Button/Grid

@@ -18,9 +18,7 @@
  */
 
 import React from 'react';
-import { Select } from 'antd';
-import { Col } from 'react-bootstrap';
-import PropTypes from 'prop-types';
+import { Dropdown } from '@carbon/react';
 import './Components.scss';
 
 const StyleTextRight = {
@@ -67,29 +65,14 @@ export const HorizontalLine = () => (
 const SubLabelRight = ({ label, classes }) => (
   <div className={classes} style={StyleTextRight}>{label}</div>
 );
-SubLabelRight.propTypes = {
-  classes: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-};
 
 const SubLabelLeft = ({ label, classes }) => (
   <div className={classes} style={StyleTextLeft}>{label}</div>
 );
-SubLabelLeft.propTypes = {
-  classes: PropTypes.string.isRequired,
-  label: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element,
-  ]).isRequired,
-};
 
 const SubLabelLeftWithLink = ({ label, classes }) => (
   <div className={classes} style={StyleTextLeft}><pre>{label}</pre></div>
 );
-SubLabelLeftWithLink.propTypes = {
-  classes: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-};
 
 const GraphSelectDropdown = ({
   currentGraph, graphs, changeCurrentGraph, changeGraphDB,
@@ -98,34 +81,24 @@ const GraphSelectDropdown = ({
     marginTop: '1rem',
     display: 'block',
   };
-  const handleGraphClick = (_, e) => {
-    changeCurrentGraph({ id: e['data-gid'] });
-    changeGraphDB({ graphName: e.value });
-  };
 
-  const options = (
-    graphs.map(([gname, graphId]) => (
-      <Select.Option value={gname} data-gid={graphId}>{gname}</Select.Option>
-    ))
-  );
   return (
-    <Col id="graphSelectionContainer">
-      <Select onChange={handleGraphClick} placeholder="Select Graph" style={selectStyle} value={currentGraph}>
-        {options}
-      </Select>
+    <div id="graphSelectionContainer">
+      <Dropdown
+        id="graph-selection"
+        items={graphs.map(([gname, graphId]) => ({ id: graphId, label: gname }))}
+        itemToString={(item) => item?.label || ''}
+        onChange={({ selectedItem }) => { changeCurrentGraph({ id: selectedItem.id }); changeGraphDB({ graphName: selectedItem.label }); }}
+        label="Select Graph"
+        selectedItem={graphs.find(([gname]) => gname === currentGraph) ? { id: graphs.find(([gname]) => gname === currentGraph)[1], label: currentGraph } : null}
+        style={selectStyle}
+      />
       <br />
       <b>
         Current Graph
       </b>
-    </Col>
+    </div>
   );
-};
-
-GraphSelectDropdown.propTypes = {
-  currentGraph: PropTypes.string.isRequired,
-  graphs: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
-  changeCurrentGraph: PropTypes.func.isRequired,
-  changeGraphDB: PropTypes.func.isRequired,
 };
 
 export {
