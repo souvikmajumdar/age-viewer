@@ -119,7 +119,14 @@
 - [ ] `TutorialBody.jsx` — react-bootstrap Modal/Image → Carbon
 - [ ] `TutorialFooter.jsx` — react-bootstrap Modal/Button → Carbon
 
-#### Sub-phase 3c-vi: Icon Migration + Cleanup (16 files)
+#### Sub-phase 3c-vi: Fix Carbon IBM Plex Font Resolution
+> **Discovered during 3c-iii CI build.** Carbon's Sass uses Webpack's `~package-name` syntax to reference IBM Plex fonts. Vite/Rollup doesn't resolve `~` aliases by default, so font references end up as `~@ibm/plex/...` in the built CSS — which the browser cannot resolve, resulting in fallback fonts in production.
+- [ ] Add Vite alias resolution for `~@ibm/plex` → `node_modules/@ibm/plex` in `vite.config.js`
+- [ ] Verify fonts are bundled and loaded correctly in production build
+- [ ] Confirm no `didn't resolve at build time` warnings remain in CI
+- [ ] Document the workaround in `vite.config.js` with a comment explaining why
+
+#### Sub-phase 3c-vii: Icon Migration + Final Cleanup (16 files)
 - [ ] Replace all `@fortawesome/react-fontawesome` + icon imports with `@carbon/icons-react`
 - [ ] Files: Frame.jsx, ServerStatusFrame.jsx, ServerDisconnectFrame.jsx, Alert.jsx, CypherResultCytoscapeChart.jsx, CypherResultCytoscapeFooter.jsx, CypherResultCytoscapeLegend.jsx, CypherResultTab.jsx, GraphFilterModal.jsx, GraphInitializer.jsx, SidebarHome.jsx, DefaultTemplate.jsx, Editor.jsx, SidebarMeunuToggle.jsx, NavigatorItem.jsx, MenuSlice.js
 - [ ] Remove all `@fortawesome/*` packages from package.json
