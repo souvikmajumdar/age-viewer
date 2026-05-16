@@ -28,9 +28,15 @@ description: Technical stack decisions, git workflow, and project context for AG
 ## Project Context
 
 - Apache AGE Viewer — a graph visualization tool for PostgreSQL with AGE extension
-- Modernization effort in progress (Phases 1, 2, 3a, 3b complete)
+- Modernization complete (Phases 1-3 done, v1.0.0 released)
 - IBM-aligned: Carbon design system, enterprise standards
-- Next up: Phase 3c (IBM Carbon migration), Phase 3d (axios, CodeMirror updates)
+- Current: Phase 4 (Testing & Quality)
+- Next: Phase 5 (TypeScript)
+
+## Documentation & Diagrams
+
+- **Architecture diagrams:** Mermaid (preferred). DrawIO as fallback if Mermaid is not feasible.
+- **Documentation format:** Markdown in `.kiro/docs/`
 
 ## Design Decisions
 

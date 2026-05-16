@@ -202,14 +202,26 @@
 **Result:** 79 frontend tests passing. Note: Carbon Modal (portal-based) components deferred to E2E testing.
 
 ### 4f: E2E Tests (Playwright)
-- [ ] Install Playwright + configure
-- [ ] Flow 1: Connect to database → verify status
-- [ ] Flow 2: Execute Cypher query → verify graph
-- [ ] Flow 3: Create graph from CSV → verify notification
-- [ ] Flow 4: Filter graph results → verify updates
+### 4f: E2E Tests (Playwright)
+
+#### 4f-i: E2E Infrastructure Setup
+- [ ] Create `scripts/e2e-run.sh` — orchestrator (calls check → setup if needed → test)
+- [ ] Create `scripts/e2e-check-env.sh` — validates Docker/Podman, container running, DB accessible
+- [ ] Create `scripts/e2e-setup-env.sh` — pulls `apache/age` image, starts container, configures RBAC
+- [ ] Create `scripts/e2e-test.sh` — starts backend + frontend, runs Playwright
+- [ ] Update `docker-compose.yml` for test environment (replace old Postgres 11 setup)
+- [ ] Install Playwright as dev dependency
+- [ ] Create `playwright.config.js`
+- [ ] Add `e2e` script to root package.json
+- [ ] Add E2E CI workflow (separate file, PRs to `development` only)
+- [ ] Document the setup
+
+#### 4f-ii: E2E Test Scenarios
+- [ ] Flow 1: Connect to database → verify status frame
+- [ ] Flow 2: Execute Cypher query → verify graph visualization
+- [ ] Flow 3: Create graph from CSV → verify success notification
+- [ ] Flow 4: Filter graph results → verify table/graph updates
 - [ ] Flow 5: Disconnect → verify disconnect frame
-- [ ] Docker Compose for test environment
-- [ ] Add E2E to CI (separate job)
 
 ### 4g: Code Quality & Linting
 - [ ] Update ESLint to 9.x with flat config (frontend)
