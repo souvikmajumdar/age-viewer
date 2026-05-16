@@ -112,12 +112,12 @@
 - [x] `CypherResultCytoscapeLegend.jsx` — react-bootstrap Badge → styled span
 - [x] `CypherResultCytoscapeFooter.jsx` — react-bootstrap Badge → styled span
 
-#### Sub-phase 3c-v: Migrate Modals & Tutorial (5 files)
-- [ ] `ModalDialog.jsx` — react-bootstrap Button/Modal → Carbon
-- [ ] `TutorialDialog.jsx` — react-bootstrap Modal → Carbon
-- [ ] `TutorialHeader.jsx` — react-bootstrap Modal → Carbon
-- [ ] `TutorialBody.jsx` — react-bootstrap Modal/Image → Carbon
-- [ ] `TutorialFooter.jsx` — react-bootstrap Modal/Button → Carbon
+#### Sub-phase 3c-v: Migrate Modals & Tutorial (5 files) ✅ COMPLETE
+- [x] `ModalDialog.jsx` — react-bootstrap Button/Modal → Carbon Modal (danger)
+- [x] `TutorialDialog.jsx` — react-bootstrap Modal → Carbon Modal (passiveModal)
+- [x] `TutorialHeader.jsx` — react-bootstrap Modal.Header → plain styled div
+- [x] `TutorialBody.jsx` — react-bootstrap Modal.Body/Image → div + img
+- [x] `TutorialFooter.jsx` — react-bootstrap Modal.Footer/Button → Carbon Button + div
 
 #### Sub-phase 3c-vi: Fix Carbon IBM Plex Font Resolution
 > **Discovered during 3c-iii CI build.** Carbon's Sass uses Webpack's `~package-name` syntax to reference IBM Plex fonts. Vite/Rollup doesn't resolve `~` aliases by default, so font references end up as `~@ibm/plex/...` in the built CSS — which the browser cannot resolve, resulting in fallback fonts in production.
