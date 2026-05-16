@@ -18,15 +18,19 @@
  */
 
 import React from 'react';
+import './styles/carbon.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'antd/dist/antd.css';
 import './static/style.css';
 import './static/navbar-fixed-left.css';
+import { NotificationProvider } from './hooks/useNotification';
 import MainPage from './pages/Main/MainPage';
 
 const App = () => (
   <React.StrictMode>
-    <MainPage />
+    <NotificationProvider>
+      <MainPage />
+    </NotificationProvider>
   </React.StrictMode>
 );
 
