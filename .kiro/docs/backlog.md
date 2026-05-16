@@ -97,12 +97,12 @@
 - [x] `Frame.jsx` — antd Button/Popover → Carbon Button/Popover
 - [x] `DefaultTemplate.jsx` — react-bootstrap Row/Button → Carbon
 
-#### Sub-phase 3c-iii: Migrate Forms & Modals (5 files)
-- [ ] `ServerConnectFrame.jsx` — antd Form/Input/InputNumber/Button/Row/Col → Carbon Form/TextInput/NumberInput/Button/Grid
-- [ ] `GraphFilterModal.jsx` — antd Modal/Input/Select/Button + message → Carbon Modal/TextInput/Dropdown/Button + useNotification
-- [ ] `EdgeThicknessMenu.jsx` — antd Modal/Select/Input/Button → Carbon Modal/Dropdown/TextInput/Button
-- [ ] `SidebarHome.jsx` — antd Modal → Carbon Modal
-- [ ] `GraphInitializer.jsx` — antd Divider/Checkbox/Input + react-bootstrap Modal/Row/Col/Button/ListGroup/Spinner/Alert → Carbon
+#### Sub-phase 3c-iii: Migrate Forms & Modals (5 files) ✅ COMPLETE
+- [x] `ServerConnectFrame.jsx` — antd Form/Input/InputNumber/Button/Row/Col → Carbon Form/TextInput/NumberInput/Button/Grid
+- [x] `GraphFilterModal.jsx` — antd Modal/Input/Select/Button + message → Carbon Modal/TextInput/Dropdown/Button + useNotification
+- [x] `EdgeThicknessMenu.jsx` — removed dead antd import (already uses native HTML)
+- [x] `SidebarHome.jsx` — antd Modal.confirm → window.confirm, removed all PropTypes
+- [x] `GraphInitializer.jsx` — antd Divider/Checkbox/Input + react-bootstrap Modal/Row/Col/Button/ListGroup/Spinner/Alert → Carbon
 
 #### Sub-phase 3c-iv: Migrate Data Display & Remaining (6 files)
 - [ ] `CypherResultTable.jsx` — antd Table → Carbon DataTable

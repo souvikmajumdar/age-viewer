@@ -18,9 +18,7 @@
  */
 
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
 
-import { Modal } from 'antd';
 import uuid from 'react-uuid';
 import { connect, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -95,13 +93,6 @@ const NodeList = ({ nodes, setCommand }) => {
 
   return null;
 };
-NodeList.propTypes = {
-  nodes: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string,
-    cnt: PropTypes.number,
-  })).isRequired,
-  setCommand: PropTypes.func.isRequired,
-};
 
 const NodeItems = connect((state) => ({
   database: state.database,
@@ -121,14 +112,6 @@ const NodeItems = connect((state) => ({
     </button>
   ),
 );
-NodeItems.propTypes = {
-  database: PropTypes.shape({
-    graph: PropTypes.string,
-  }).isRequired,
-  label: PropTypes.string.isRequired,
-  cnt: PropTypes.number.isRequired,
-  setCommand: PropTypes.func.isRequired,
-};
 
 const EdgeList = ({ edges, setCommand }) => {
   let list;
@@ -157,13 +140,6 @@ const EdgeList = ({ edges, setCommand }) => {
 
   return null;
 };
-EdgeList.propTypes = {
-  edges: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string,
-    cnt: PropTypes.number,
-  })).isRequired,
-  setCommand: PropTypes.func.isRequired,
-};
 
 const EdgeItems = connect((state) => ({
   database: state.database,
@@ -181,14 +157,6 @@ const EdgeItems = connect((state) => ({
     )
   </button>
 ));
-EdgeItems.propTypes = {
-  database: PropTypes.shape({
-    graph: PropTypes.string,
-  }).isRequired,
-  label: PropTypes.string.isRequired,
-  cnt: PropTypes.number.isRequired,
-  setCommand: PropTypes.func.isRequired,
-};
 
 const PropertyList = ({ propertyKeys, setCommand }) => {
   let list;
@@ -217,13 +185,6 @@ const PropertyList = ({ propertyKeys, setCommand }) => {
 
   return null;
 };
-PropertyList.propTypes = {
-  propertyKeys: PropTypes.arrayOf(PropTypes.shape({
-    key: PropTypes.string,
-    key_type: PropTypes.string,
-  })).isRequired,
-  setCommand: PropTypes.func.isRequired,
-};
 
 const PropertyItems = ({ propertyName, keyType, setCommand }) => (
   <button
@@ -234,11 +195,6 @@ const PropertyItems = ({ propertyName, keyType, setCommand }) => (
     {propertyName}
   </button>
 );
-PropertyItems.propTypes = {
-  propertyName: PropTypes.string.isRequired,
-  keyType: PropTypes.string.isRequired,
-  setCommand: PropTypes.func.isRequired,
-};
 
 const GraphList = ({
   graphs,
@@ -274,12 +230,6 @@ const GraphList = ({
 
   return null;
 };
-GraphList.propTypes = {
-  graphs: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
-  currentGraph: PropTypes.string.isRequired,
-  changeCurrentGraph: PropTypes.func.isRequired,
-  changeGraph: PropTypes.func.isRequired,
-};
 
 const GraphItems = ({
   graph,
@@ -296,13 +246,6 @@ const GraphItems = ({
     {graph}
   </button>
 );
-GraphItems.propTypes = {
-  graph: PropTypes.string.isRequired,
-  gid: PropTypes.string.isRequired,
-  currentGraph: PropTypes.string.isRequired,
-  changeCurrentGraph: PropTypes.func.isRequired,
-  changeGraph: PropTypes.func.isRequired,
-};
 
 const ConnectedText = ({ userName, roleName }) => (
   <div>
@@ -318,10 +261,6 @@ const ConnectedText = ({ userName, roleName }) => (
     </h6>
   </div>
 );
-ConnectedText.propTypes = {
-  userName: PropTypes.string.isRequired,
-  roleName: PropTypes.string.isRequired,
-};
 
 const DBMSText = ({ dbname, graph }) => (
   <div>
@@ -345,10 +284,6 @@ const DBMSText = ({ dbname, graph }) => (
     </h6>
   </div>
 );
-DBMSText.propTypes = {
-  dbname: PropTypes.string.isRequired,
-  graph: PropTypes.string.isRequired,
-};
 
 const SidebarHome = ({
   edges,
@@ -366,7 +301,6 @@ const SidebarHome = ({
   isLabel,
 }) => {
   const dispatch = useDispatch();
-  const { confirm } = Modal;
 
   useEffect(() => {
     dispatch(() => getMetaData({ currentGraph }));
@@ -448,15 +382,11 @@ const SidebarHome = ({
               className="frame-head-button close_session btn btn-link"
               type="button"
               color="#142B80"
-              onClick={() => confirm({
-                title: 'Are you sure you want to close this window?',
-                onOk() {
+              onClick={() => {
+                if (window.confirm('Are you sure you want to close this window?')) {
                   requestDisconnect();
-                },
-                onCancel() {
-                  return false;
-                },
-              })}
+                }
+              }}
               aria-label="Close Button"
             >
               <FontAwesomeIcon
@@ -485,31 +415,6 @@ const SidebarHome = ({
       </div>
     </div>
   );
-};
-
-SidebarHome.propTypes = {
-  edges: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string,
-    cnt: PropTypes.number,
-  })).isRequired,
-  nodes: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string,
-    cnt: PropTypes.number,
-  })).isRequired,
-  propertyKeys: PropTypes.arrayOf(PropTypes.shape({
-    key: PropTypes.string,
-    key_type: PropTypes.string,
-  })).isRequired,
-  setCommand: PropTypes.func.isRequired,
-  command: PropTypes.string.isRequired,
-  trimFrame: PropTypes.func.isRequired,
-  addFrame: PropTypes.func.isRequired,
-  getMetaData: PropTypes.func.isRequired,
-  changeCurrentGraph: PropTypes.func.isRequired,
-  currentGraph: PropTypes.string.isRequired,
-  graphs: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
-  changeGraph: PropTypes.func.isRequired,
-  isLabel: PropTypes.bool.isRequired,
 };
 
 export default SidebarHome;

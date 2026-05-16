@@ -18,10 +18,9 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import {
-  Button, Col, Form, Input, InputNumber, Row,
-} from 'antd';
+  Grid, Row, Column, TextInput, NumberInput, Button, PasswordInput,
+} from '@carbon/react';
 import { useDispatch } from 'react-redux';
 import Frame from '../Frame';
 
@@ -30,15 +29,6 @@ import { connectToDatabase as connectToDatabaseApi, changeGraph } from '../../..
 import { addAlert } from '../../../features/alert/AlertSlice';
 import { addFrame, trimFrame } from '../../../features/frame/FrameSlice';
 import { /* getMetaChartData, */ getMetaData } from '../../../features/database/MetadataSlice';
-
-const FormInitialValue = {
-  database: '',
-  graph: '',
-  host: '',
-  password: '',
-  port: null,
-  user: '',
-};
 
 const ServerConnectFrame = ({
   refKey,
@@ -75,49 +65,28 @@ const ServerConnectFrame = ({
       isPinned={isPinned}
       refKey={refKey}
     >
-      <Row>
-        <Col span={6}>
-          <h3>Connect to Database</h3>
-          <p>Database access might require an authenticated connection.</p>
-        </Col>
-        <Col span={18}>
-          <div className={styles.FrameWrapper}>
-            <Form
-              initialValues={FormInitialValue}
-              layout="vertical"
-              onFinish={connectToDatabase}
-            >
-              <Form.Item name="host" label="Connect URL" rules={[{ required: true }]}>
-                <Input placeholder="192.168.0.1" />
-              </Form.Item>
-              <Form.Item name="port" label="Connect Port" rules={[{ required: true }]}>
-                <InputNumber placeholder="5432" className={styles.FullWidth} />
-              </Form.Item>
-              <Form.Item name="database" label="Database Name" rules={[{ required: true }]}>
-                <Input placeholder="postgres" />
-              </Form.Item>
-              <Form.Item name="user" label="User Name" rules={[{ required: true }]}>
-                <Input placeholder="postgres" />
-              </Form.Item>
-              <Form.Item name="password" label="Password" rules={[{ required: true }]}>
-                <Input.Password placeholder="postgres" />
-              </Form.Item>
-              <Form.Item>
-                <Button type="primary" htmlType="submit">Connect</Button>
-              </Form.Item>
-            </Form>
-          </div>
-        </Col>
-      </Row>
+      <Grid>
+        <Row>
+          <Column lg={4}>
+            <h3>Connect to Database</h3>
+            <p>Database access might require an authenticated connection.</p>
+          </Column>
+          <Column lg={12}>
+            <div className={styles.FrameWrapper}>
+              <form onSubmit={(e) => { e.preventDefault(); const formData = new FormData(e.target); connectToDatabase(Object.fromEntries(formData)); }}>
+                <TextInput id="host" name="host" labelText="Connect URL" placeholder="192.168.0.1" required />
+                <NumberInput id="port" name="port" label="Connect Port" placeholder="5432" min={1} max={65535} required className={styles.FullWidth} />
+                <TextInput id="database" name="database" labelText="Database Name" placeholder="postgres" required />
+                <TextInput id="user" name="user" labelText="User Name" placeholder="postgres" required />
+                <PasswordInput id="password" name="password" labelText="Password" placeholder="postgres" required />
+                <Button type="submit">Connect</Button>
+              </form>
+            </div>
+          </Column>
+        </Row>
+      </Grid>
     </Frame>
   );
-};
-
-ServerConnectFrame.propTypes = {
-  refKey: PropTypes.string.isRequired,
-  isPinned: PropTypes.bool.isRequired,
-  reqString: PropTypes.string.isRequired,
-  currentGraph: PropTypes.string.isRequired,
 };
 
 export default ServerConnectFrame;
