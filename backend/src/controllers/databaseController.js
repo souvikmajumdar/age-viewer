@@ -16,8 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-const sessionService = require('../services/sessionService');
-const winston = require('winston');
+import sessionService from '../services/sessionService.js';
 
 class DatabaseController {
 
@@ -91,4 +90,4 @@ class DatabaseController {
     }*/
 }
 
-module.exports = DatabaseController;
+export default DatabaseController;

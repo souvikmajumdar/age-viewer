@@ -16,9 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-const fs = require('fs');
-const winston = require('winston');
-const winstonDaily = require('winston-daily-rotate-file');
+import fs from 'node:fs';
+import winston from 'winston';
+import winstonDaily from 'winston-daily-rotate-file';
 
 const logDir = process.env.LOG_DIR || 'logs';
 const { combine, timestamp, printf } = winston.format;
@@ -73,4 +73,4 @@ if (process.env.NODE_ENV !== 'production') {
     );
 }
 
-module.exports = { logger, stream };
+export { logger, stream };

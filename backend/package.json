@@ -2,6 +2,7 @@
   "name": "ag-viewer-backend",
   "version": "0.5.0",
   "private": true,
+  "type": "module",
   "license": "Apache-2.0",
   "licenses": [
     {
@@ -10,15 +11,12 @@
     }
   ],
   "scripts": {
-    "test": "mocha -r @babel/register --exit --timeout 100000",
-    "test:ageParsing": "mocha -r @babel/register --exit --timeout 10000 ./test/ageParsing.test.js",
-    "start": "babel-node src/bin/www",
-    "start:dev": "nodemon --watch src/app.js --watch src/ --exec 'babel-node' src/bin/www",
-    "build": "babel -d ./build ./src -s",
-    "start:production": "node ./build/bin/www.js"
+    "test": "mocha --exit --timeout 100000",
+    "test:ageParsing": "mocha --exit --timeout 10000 ./test/ageParsing.test.js",
+    "start": "node src/bin/www.js",
+    "start:dev": "nodemon --watch src/ src/bin/www.js"
   },
   "dependencies": {
-    "@babel/runtime": "^7.27.1",
     "antlr4": "4.9.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
@@ -39,13 +37,6 @@
     "winston-daily-rotate-file": "^4.7.1"
   },
   "devDependencies": {
-    "@babel/cli": "^7.27.2",
-    "@babel/core": "^7.27.1",
-    "@babel/node": "^7.27.1",
-    "@babel/plugin-transform-class-properties": "^7.27.1",
-    "@babel/plugin-transform-runtime": "^7.27.1",
-    "@babel/preset-env": "^7.27.2",
-    "@babel/register": "^7.27.1",
     "chai": "^4.5.0",
     "mocha": "^8.2.1",
     "nodemon": "^2.0.7",

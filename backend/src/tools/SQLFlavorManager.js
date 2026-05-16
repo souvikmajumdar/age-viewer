@@ -16,14 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import * as path from "path";
-import fs from 'fs'
+import fs from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
 
-const sqlBasePath = path.join(__dirname, '../../sql');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const sqlBasePath = join(__dirname, '../../sql');
 
 // todo: util.format -> ejs
 function getQuery(name, version='') {
-    const sqlPath = path.join(sqlBasePath, version, `${name}.sql`);
+    const sqlPath = join(sqlBasePath, version, `${name}.sql`);
     if (!fs.existsSync(sqlPath)) {
         throw new Error(`SQL does not exist, name = ${name}`);
     }

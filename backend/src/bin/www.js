@@ -22,9 +22,11 @@
 /**
  * Module dependencies.
  */
-const app = require('../app');
-const debug = require('debug')('ag-viewer:server');
-const http = require('http');
+import app from '../app.js';
+import debug from 'debug';
+import http from 'node:http';
+
+const debugLog = debug('ag-viewer:server');
 
 /**
  * Get port from environment and store in Express.
@@ -102,5 +104,5 @@ function onListening() {
   const bind = typeof addr === 'string'
       ? 'pipe ' + addr
       : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+  debugLog('Listening on ' + bind);
 }

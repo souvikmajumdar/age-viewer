@@ -13,7 +13,4 @@ const toAgeProps = (data, empty=false)=>{
     return `{${props.join(', ')}}`;
 }
 
-module.exports = {
-    getDelete,
-    toAgeProps
-}
+export { getDelete, toAgeProps };

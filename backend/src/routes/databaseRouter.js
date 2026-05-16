@@ -16,16 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-const express = require("express");
-const DatabaseController = require('../controllers/databaseController')
+import express from 'express';
+import DatabaseController from '../controllers/databaseController.js';
+import { wrap } from '../common/Routes.js';
+
 const router = express.Router();
 const databaseController = new DatabaseController();
 
-const {wrap} = require('../common/Routes');
 // Get connection status
 router.get("/", wrap(databaseController.getStatus));
 router.post("/connect", wrap(databaseController.connectDatabase));
 router.get("/disconnect", wrap(databaseController.disconnectDatabase));
 router.post("/meta", wrap(databaseController.getMetadata));
 router.get("/metaChart", wrap(databaseController.getMetaChart));
-module.exports = router;
+
+export default router;

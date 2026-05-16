@@ -1,6 +1,6 @@
-const Papa = require('papaparse');
-const { getDelete, toAgeProps } = require('../util/ObjectExtras');
-const QueryBuilder = require('./QueryBuilder');
+import Papa from 'papaparse';
+import { getDelete, toAgeProps } from '../util/ObjectExtras.js';
+import QueryBuilder from './QueryBuilder.js';
 
 class GraphCreator {
     constructor({nodes, edges, graphName, dropGraph}={}){
@@ -117,4 +117,4 @@ class GraphCreator {
     }
 };
 
-module.exports = GraphCreator;
+export default GraphCreator;

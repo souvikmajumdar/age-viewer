@@ -1,10 +1,13 @@
-const fs = require('fs').promises;
-const papa = require('papaparse');
-const path = require('path');
+import fs from 'node:fs/promises';
+import Papa from 'papaparse';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const readCSV = (file, resolve, reject)=>{
-    return papa.parse(file, {
+    return Papa.parse(file, {
         skipEmptyLines:true,
         transform:(val, col)=>{
             if (col !== 0) return val;
@@ -19,7 +22,7 @@ const readCSV = (file, resolve, reject)=>{
     });
 }
 const getQueryList = async (req, res, next)=>{
-    const p = path.join(__dirname, "../../misc/graph_kw.csv");
+    const p = join(__dirname, "../../misc/graph_kw.csv");
     const file = await fs.readFile(p, {
         encoding: 'utf-8'
     });
@@ -35,4 +38,5 @@ const getQueryList = async (req, res, next)=>{
     res.status(200).json(kwResults).end();
 
 }
-module.exports = getQueryList;
+
+export default getQueryList;
