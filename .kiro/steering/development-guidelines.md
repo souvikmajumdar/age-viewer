@@ -24,6 +24,7 @@ description: Technical stack decisions, git workflow, and project context for AG
 - **Commits:** Meaningful commit messages. Stage specific files, not `git add .`
 - **Never push directly to `main` or `development`** — always go through feature branch → PR.
 - **Documentation:** Update backlog and relevant docs in the same commit as code changes. Do not create separate PRs for doc updates.
+- **Testing approach:** Always validate locally first (with Docker/Podman), then adapt for CI. Never push CI-only changes without local verification.
 
 ## Project Context
 
@@ -47,3 +48,4 @@ description: Technical stack decisions, git workflow, and project context for AG
 - **Node 24 over 20/22** — Active LTS with support through Apr 2028; 20 is EOL, 22 is maintenance-only
 - **RTK 2.x** — redux and redux-thunk are bundled, no separate packages needed
 - **No prop-types** — React 19 doesn't enforce them; use TypeScript in Phase 5 instead
+- **Environment variables** — All secrets/credentials via `.env` at project root (never hardcoded, never in subdirectories). `.env.example` documents required vars without values.

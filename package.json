@@ -14,7 +14,11 @@
     "build-back": "cd backend  && npm install && npm run build",
     "backend": "cd backend && npm run start",
     "deploy": "npm-run-all build-front backend",
-    "start": "npm-run-all --parallel backend front"
+    "start": "npm-run-all --parallel backend front",
+    "e2e": "./scripts/e2e-run.sh",
+    "e2e:setup": "./scripts/e2e-setup-env.sh",
+    "e2e:check": "./scripts/e2e-check-env.sh",
+    "e2e:test": "./scripts/e2e-test.sh"
   },
   "dependencies": {
     "npm-run-all2": "^7.0.2"
@@ -25,5 +29,8 @@
       "type": "Apache-2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0"
     }
-  ]
+  ],
+  "devDependencies": {
+    "@playwright/test": "^1.60.0"
+  }
 }

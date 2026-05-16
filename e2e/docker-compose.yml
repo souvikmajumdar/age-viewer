@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: apache/age:latest
+    container_name: ageviewer-e2e-db
+    env_file:
+      - ../.env
+    ports:
+      - "${E2E_DB_PORT:-5455}:5432"
+    environment:
+      POSTGRES_USER: ${E2E_DB_USER:-ageviewer_e2e}
+      POSTGRES_PASSWORD: ${E2E_DB_PASSWORD:?Set E2E_DB_PASSWORD in .env file at project root}
+      POSTGRES_DB: ${E2E_DB_NAME:-ageviewer_e2e}
+    volumes:
+      - ./init-db:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${E2E_DB_USER:-ageviewer_e2e} -d ${E2E_DB_NAME:-ageviewer_e2e}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
