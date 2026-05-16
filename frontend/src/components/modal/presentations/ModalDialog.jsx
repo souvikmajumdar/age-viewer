@@ -18,9 +18,8 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { Button, Modal } from 'react-bootstrap';
+import { Modal } from '@carbon/react';
 
 const ModalDialog = ({
   closeModal,
@@ -55,42 +54,21 @@ const ModalDialog = ({
   };
 
   return (
-    <div className="modal-container">
-      <div
-        style={{ display: 'block', position: 'initial' }}
-      >
-        <Modal.Dialog>
-          <Modal.Header closeButton onClick={() => { dispatch(closeModal()); }}>
-            <Modal.Title>Delete Confirmation</Modal.Title>
-          </Modal.Header>
-
-          <Modal.Body>
-            <p>
-              After clicking on confirm,
-              the node and related edge will be deleted from the database.
-            </p>
-          </Modal.Body>
-
-          <Modal.Footer>
-            <Button variant="secondary" onClick={() => { dispatch(closeModal()); }}>Cancel</Button>
-            <Button variant="primary" onClick={() => { removeNode(); }}>Confirm</Button>
-          </Modal.Footer>
-        </Modal.Dialog>
-      </div>
-    </div>
+    <Modal
+      open
+      modalHeading="Delete Confirmation"
+      primaryButtonText="Confirm"
+      secondaryButtonText="Cancel"
+      onRequestClose={() => dispatch(closeModal())}
+      onRequestSubmit={() => removeNode()}
+      danger
+    >
+      <p>
+        After clicking on confirm,
+        the node and related edge will be deleted from the database.
+      </p>
+    </Modal>
   );
-};
-
-ModalDialog.propTypes = {
-  closeModal: PropTypes.func.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  graphHistory: PropTypes.any.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  elementHistory: PropTypes.any.isRequired,
-  removeGraphHistory: PropTypes.func.isRequired,
-  removeElementHistory: PropTypes.func.isRequired,
-  getMetaData: PropTypes.func.isRequired,
-  currentGraph: PropTypes.string.isRequired,
 };
 
 export default ModalDialog;

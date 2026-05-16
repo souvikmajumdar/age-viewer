@@ -18,8 +18,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { Modal, Button } from 'react-bootstrap';
+import { Button } from '@carbon/react';
 
 const TutorialFooter = ({ page, setPage, closeTutorial }) => {
   const [curPage, setCurPage] = useState();
@@ -29,22 +28,16 @@ const TutorialFooter = ({ page, setPage, closeTutorial }) => {
   }, [page]);
 
   return (
-    <Modal.Footer>
+    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem' }}>
       <div>
-        <Button onClick={() => closeTutorial()} className="tutorial-button" variant="secondary">Close</Button>
+        <Button onClick={() => closeTutorial()} className="tutorial-button" kind="secondary">Close</Button>
       </div>
       <div>
-        <Button className="tutorial-button" variant={curPage === 1 ? 'outline-secondary' : 'secondary'} style={{ marginRight: '1rem' }} onClick={() => { setPage(curPage > 1 ? curPage - 1 : curPage); }}>Previous Tip</Button>
-        <Button className="tutorial-button" variant={curPage === 5 ? 'outline-primary' : 'primary'} onClick={() => { setPage(curPage < 5 ? curPage + 1 : curPage); }}>Next Tip</Button>
+        <Button className="tutorial-button" kind={curPage === 1 ? 'ghost' : 'secondary'} disabled={curPage === 1} style={{ marginRight: '1rem' }} onClick={() => { setPage(curPage > 1 ? curPage - 1 : curPage); }}>Previous Tip</Button>
+        <Button className="tutorial-button" kind={curPage === 5 ? 'ghost' : 'primary'} disabled={curPage === 5} onClick={() => { setPage(curPage < 5 ? curPage + 1 : curPage); }}>Next Tip</Button>
       </div>
-    </Modal.Footer>
+    </div>
   );
-};
-
-TutorialFooter.propTypes = {
-  page: PropTypes.number.isRequired,
-  setPage: PropTypes.func.isRequired,
-  closeTutorial: PropTypes.func.isRequired,
 };
 
 export default TutorialFooter;

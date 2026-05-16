@@ -17,32 +17,14 @@
  * under the License.
  */
 
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { Modal } from 'react-bootstrap';
+import React from 'react';
 
-const TutorialHeader = ({ page }) => {
-  const [curPage, setCurPage] = useState();
-
-  useEffect(() => {
-    setCurPage(page);
-  }, [page]);
-
-  return (
-    <Modal.Header
-      style={{
-        padding: '0.3rem 0.5rem 0 0.5rem', borderBottom: '1px solid black', margin: '0', background: '#A9A9A9',
-      }}
-    >
-      <Modal.Title style={{ fontSize: '0.88rem', paddingBottom: '0px', color: '#F0FFF0' }}>
-        {`Tip of AGE Viewer -${curPage}`}
-      </Modal.Title>
-    </Modal.Header>
-  );
-};
-
-TutorialHeader.propTypes = {
-  page: PropTypes.string.isRequired,
-};
+const TutorialHeader = ({ page }) => (
+  <div style={{ padding: '0.3rem 0.5rem', borderBottom: '1px solid black', background: '#A9A9A9' }}>
+    <h5 style={{ fontSize: '0.88rem', color: '#F0FFF0', margin: 0 }}>
+      {`Tip of AGE Viewer - ${page}`}
+    </h5>
+  </div>
+);
 
 export default TutorialHeader;

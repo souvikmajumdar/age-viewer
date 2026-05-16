@@ -18,8 +18,6 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { Modal, Image } from 'react-bootstrap';
 import Agce from '../../../images/agce.gif';
 import Query from '../../../images/queryEditor.png';
 import Copy from '../../../images/copy.png';
@@ -49,11 +47,11 @@ const TutorialBody = ({ page, text, addiText }) => {
   }, [page]);
 
   return (
-    <Modal.Body style={{ height: '16rem', display: 'border-box', overflowY: 'scroll' }}>
+    <div style={{ height: '16rem', display: 'border-box', overflowY: 'scroll' }}>
       <p>
         {text}
       </p>
-      <Image className="tutorial-img" src={curImg} fluid />
+      <img className="tutorial-img" src={curImg} alt="" style={{ maxWidth: '100%', height: 'auto' }} />
       <br />
       <br />
       { page === 3
@@ -71,17 +69,11 @@ const TutorialBody = ({ page, text, addiText }) => {
             <p>
               {addiText}
             </p>
-            <Image className="tutorial-img" src={addiImg} fluid />
+            <img className="tutorial-img" src={addiImg} alt="" style={{ maxWidth: '100%', height: 'auto' }} />
           </div>
         ) : (<></>)}
-    </Modal.Body>
+    </div>
   );
-};
-
-TutorialBody.propTypes = {
-  page: PropTypes.number.isRequired,
-  text: PropTypes.string.isRequired,
-  addiText: PropTypes.string.isRequired,
 };
 
 export default TutorialBody;
