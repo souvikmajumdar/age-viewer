@@ -19,8 +19,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Modal, TextInput, Dropdown, Button } from '@carbon/react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { Subtract, Add } from '@carbon/icons-react';
 import uuid from 'react-uuid';
 import { useNotification } from '../../../hooks/useNotification';
 
@@ -119,11 +118,11 @@ const GraphFilterModal = ({
             }}
           />
           <Button kind="ghost" onClick={() => onFilterAdd(index)}>
-            <FontAwesomeIcon icon={faPlus} />
+            <Add size={16} />
           </Button>
           {filterListLength > 1 ? (
             <Button kind="ghost" onClick={() => onFilterDelete(index)}>
-              <FontAwesomeIcon icon={faMinus} />
+              <Subtract size={16} />
             </Button>
           ) : null}
         </div>

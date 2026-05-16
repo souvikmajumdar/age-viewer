@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Modal, Button, TextInput, Checkbox, Loading, InlineNotification } from '@carbon/react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinusCircle } from '@fortawesome/free-solid-svg-icons';
+import { SubtractAlt } from '@carbon/icons-react';
 import uuid from 'react-uuid';
 import './GraphInit.scss';
 import { useDispatch } from 'react-redux';
@@ -166,11 +165,11 @@ const InitGraphModal = ({ show, setShow }) => {
                   </div>
                   <div className="modalRow" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <span>{file.name}</span>
-                    <FontAwesomeIcon
+                    <SubtractAlt
                       id="removeFile"
                       data-id={k}
                       onClick={() => removeNodeFile(k)}
-                      icon={faMinusCircle}
+                      size={16}
                     />
                   </div>
                 </li>
@@ -199,11 +198,11 @@ const InitGraphModal = ({ show, setShow }) => {
                   </div>
                   <div className="modalRow" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <span>{file.name}</span>
-                    <FontAwesomeIcon
+                    <SubtractAlt
                       id="removeFile"
                       data-id={k}
                       onClick={() => removeEdgeFile(k)}
-                      icon={faMinusCircle}
+                      size={16}
                     />
                   </div>
                 </li>

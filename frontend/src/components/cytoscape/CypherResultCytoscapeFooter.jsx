@@ -19,8 +19,7 @@
 
 import React, { useState } from 'react';
 import uuid from 'react-uuid';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
+import { ChevronDown, ChevronUp } from '@carbon/icons-react';
 import {
   updateEdgeLabelSize,
   updateLabelCaption,
@@ -96,9 +95,7 @@ const CypherResultCytoscapeFooter = ({
             onClick={() => setFooterExpanded(!footerExpanded)}
             aria-label="Set Footer Expanded"
           >
-            <FontAwesomeIcon
-              icon={footerExpanded ? faAngleUp : faAngleDown}
-            />
+            {footerExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
           </button>
           Layout :&nbsp;
           <select
@@ -302,9 +299,7 @@ const CypherResultCytoscapeFooter = ({
             onClick={() => setFooterExpanded(!footerExpanded)}
             aria-label="Set Footer Expanded"
           >
-            <FontAwesomeIcon
-              icon={footerExpanded ? faAngleUp : faAngleDown}
-            />
+            {footerExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
           </button>
           Layout :&nbsp;
           <select

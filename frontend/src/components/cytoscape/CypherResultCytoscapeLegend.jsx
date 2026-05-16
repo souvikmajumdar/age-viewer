@@ -19,8 +19,7 @@
 
 import React, { Component } from 'react';
 import uuid from 'react-uuid';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
+import { ChevronDown, ChevronUp } from '@carbon/icons-react';
 
 class CypherResultCytoscapeLegend extends Component {
   constructor(props) {
@@ -199,9 +198,7 @@ class CypherResultCytoscapeLegend extends Component {
             onClick={() => this.setState({ nodeLegendExpanded: !nodeLegendExpanded })}
             aria-label="Node Legend"
           >
-            <FontAwesomeIcon
-              icon={nodeLegendExpanded ? faAngleUp : faAngleDown}
-            />
+            {nodeLegendExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
           </button>
         </div>
         <div className="d-flex edgeLegend">
@@ -215,9 +212,7 @@ class CypherResultCytoscapeLegend extends Component {
             onClick={() => this.setState({ edgeLegendExpanded: !edgeLegendExpanded })}
             aria-label="Edge Legend"
           >
-            <FontAwesomeIcon
-              icon={edgeLegendExpanded ? faAngleUp : faAngleDown}
-            />
+            {edgeLegendExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
           </button>
         </div>
 

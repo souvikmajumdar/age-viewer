@@ -29,14 +29,13 @@ import avsdf from 'cytoscape-avsdf';
 import spread from 'cytoscape-spread';
 import { useDispatch } from 'react-redux';
 import CytoscapeComponent from 'react-cytoscapejs';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faEyeSlash,
-  faLockOpen,
-  faProjectDiagram,
-  faTrash,
-  faThumbtack,
-} from '@fortawesome/free-solid-svg-icons';
+  ViewOff,
+  Unlocked,
+  DataConnected,
+  TrashCan,
+  Pin,
+} from '@carbon/icons-react';
 import uuid from 'react-uuid';
 import cxtmenu from '../../lib/cytoscape-cxtmenu';
 import { initLocation, seletableLayouts } from './CytoscapeLayouts';
@@ -183,7 +182,7 @@ const CypherResultCytoscapeCharts = ({
         commands: [
           {
             content: ReactDOMServer.renderToString(
-              <FontAwesomeIcon icon={faLockOpen} size="lg" />,
+              <Unlocked size={20} />,
             ),
             select(ele) {
               ele.animate({ position: initLocation[ele.id()] });
@@ -191,7 +190,7 @@ const CypherResultCytoscapeCharts = ({
           },
           {
             content: ReactDOMServer.renderToString(
-              <FontAwesomeIcon icon={faProjectDiagram} size="lg" />,
+              <DataConnected size={20} />,
             ),
             select(ele) {
               const elAnimate = ele.animation({
@@ -228,7 +227,7 @@ const CypherResultCytoscapeCharts = ({
           },
           {
             content: ReactDOMServer.renderToString(
-              <FontAwesomeIcon icon={faEyeSlash} size="lg" />,
+              <ViewOff size={20} />,
             ),
             select(ele) {
               ele.remove();
@@ -236,7 +235,7 @@ const CypherResultCytoscapeCharts = ({
           },
           {
             content: ReactDOMServer.renderToString(
-              <FontAwesomeIcon icon={faTrash} size="lg" />,
+              <TrashCan size={20} />,
             ),
             select(ele) {
               dispatch(openModal());
@@ -246,7 +245,7 @@ const CypherResultCytoscapeCharts = ({
           },
           {
             content: ReactDOMServer.renderToString(
-              <FontAwesomeIcon icon={faThumbtack} size="lg" />,
+              <Pin size={20} />,
             ),
             select(ele) {
               if (!ele.locked()) {

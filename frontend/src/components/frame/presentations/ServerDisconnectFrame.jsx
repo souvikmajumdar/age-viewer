@@ -19,8 +19,7 @@
 
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlayCircle } from '@fortawesome/free-regular-svg-icons';
+import { PlayFilledAlt } from '@carbon/icons-react';
 import { Grid, Column, Row } from '@carbon/react';
 import Frame from '../Frame';
 
@@ -62,10 +61,7 @@ const ServerDisconnectFrame = ({
             <p>
               You may run
               <a href="/#" className="badge badge-light" onClick={() => { setCommand(':server connect'); }}>
-                <FontAwesomeIcon
-                  icon={faPlayCircle}
-                  size="lg"
-                />
+                <PlayFilledAlt size={20} />
                 :server connection
               </a>
               {' '}
