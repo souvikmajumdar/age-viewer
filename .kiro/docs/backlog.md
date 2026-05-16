@@ -1,6 +1,6 @@
 # Modernization Backlog
 
-**Last updated:** May 15, 2026
+**Last updated:** May 16, 2026
 
 ---
 
@@ -23,32 +23,34 @@
 
 ---
 
-## Phase 2: Backend — Native ESM 🔲 PENDING
+## Phase 2: Backend — Native ESM ✅ COMPLETE
 
-- [ ] Add `"type": "module"` to backend `package.json`
-- [ ] Convert all `require()` → `import` statements across backend source
-- [ ] Remove all `@babel/*` dev dependencies
-- [ ] Remove `.babelrc`
-- [ ] Update scripts: `babel-node` → `node`, remove `babel` build step
-- [ ] Update Express to 5.x
-  - [ ] Review middleware compatibility
-  - [ ] Update error handling patterns (async error propagation)
-- [ ] Update `antlr4` to 4.13.x
-  - [ ] Regenerate parser from `Agtype.g4`
-  - [ ] Update `CustomAgTypeListener.js` for API changes
-- [ ] Update test stack
-  - [ ] `mocha` → latest or migrate to `vitest`
-  - [ ] `chai` → 5.x (ESM-only)
-  - [ ] `supertest` → 7.x
-- [ ] Update remaining backend deps to latest major
-  - [ ] `uuid` 8.x → 11.x (CommonJS-compatible) or latest
-  - [ ] `multer` 1.x → 2.x
-  - [ ] `ejs` 3.x → 5.x
-  - [ ] `csv` 5.x → 6.x
-  - [ ] `http-status` 1.x → 2.x
-  - [ ] `winston-daily-rotate-file` 4.x → 5.x
-- [ ] Verify all tests pass
-- [ ] Verify build/start works without Babel
+> Released as [v0.6.0](https://github.com/souvikmajumdar/age-viewer/releases/tag/v0.6.0)
+
+- [x] Add `"type": "module"` to backend `package.json`
+- [x] Convert all `require()` → `import` statements across backend source
+- [x] Remove all `@babel/*` dev dependencies
+- [x] Remove `.babelrc`
+- [x] Update scripts: `babel-node` → `node`, remove `babel` build step
+- [x] Update remaining backend deps to latest major
+  - [x] `multer` 1.x → 2.x (fixes 3 HIGH CVEs)
+  - [x] `uuid` 8.x → 11.x
+  - [x] `csv` 5.x → 6.x
+  - [x] `http-status` 1.x → 2.x
+  - [x] `winston-daily-rotate-file` 4.x → 5.x
+- [x] Update test stack
+  - [x] `mocha` 8.x → 11.x
+  - [x] `chai` 4.x → 5.x (ESM-only)
+  - [x] `supertest` 6.x → 7.x
+  - [x] `nodemon` 2.x → 3.x
+- [x] Verify all unit tests pass
+- [x] Verify server starts without Babel
+- [x] Update CI workflow (remove build step, run tests)
+
+### Deferred from Phase 2
+- Express 5.x — larger migration, current 4.21.2 is secure
+- antlr4 4.13.x — parser works correctly, regeneration is risky
+- ejs 5.x — breaking template changes, low priority
 
 ---
 

@@ -24,6 +24,3 @@ jobs:
       run: cd backend && npm install && npm run test:ageParsing
     - name: Frontend install and build
       run: cd frontend && npm install && npm run build
-      env:
-        CI: false
-        NODE_OPTIONS: --openssl-legacy-provider

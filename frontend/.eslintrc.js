@@ -34,7 +34,7 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: 'module',
   },
-  plugins: ['babel', 'react', 'import', 'react-hooks'],
+  plugins: ['react', 'import', 'react-hooks'],
   rules: {
     'linebreak-style': 0, // fow winodw user
   },
