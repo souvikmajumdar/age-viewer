@@ -80,28 +80,52 @@
 - [x] Verify build works with React 19
 
 ### 3c: IBM Carbon Design System
-- [ ] Install `@carbon/react` and `@carbon/ibm-products`
-- [ ] Set up Carbon Sass tokens and global styles
-- [ ] Build `NotificationProvider` + `useNotification` hook (toast replacement)
-- [ ] Migrate components (14 files):
-  - [ ] `ServerConnectFrame.jsx` — Form, Input, InputNumber, Button, Row, Col
-  - [ ] `ServerDisconnectFrame.jsx` — Row, Col
-  - [ ] `ServerStatusFrame.jsx` — Row, Col
-  - [ ] `CypherResultTable.jsx` — Table
-  - [ ] `CypherResultMeta.jsx` — Row, Col
-  - [ ] `GraphFilterModal.jsx` — Modal, Input, Select, Button, message
-  - [ ] `EdgeThicknessMenu.jsx` — Modal, Select, Input, Button
-  - [ ] `Frame.jsx` — Button, Popover
-  - [ ] `BuilderContainer.jsx` — Button, Drawer, Select, Space
-  - [ ] `csv/index.jsx` — Button, Upload, message
-  - [ ] `Alert.jsx` — Alert
-  - [ ] `GraphInitializer.jsx` — Divider, Checkbox, Input
-  - [ ] `SidebarComponents.jsx` — Select
-  - [ ] `SidebarHome.jsx` — Modal
-- [ ] Remove `antd`, `bootstrap`, `react-bootstrap` dependencies
-- [ ] Remove `antd/dist/antd.css` and `bootstrap/dist/css/bootstrap.min.css` imports
-- [ ] Replace Font Awesome with `@carbon/icons-react`
-- [ ] Remove all `@fortawesome/*` packages
+
+#### Sub-phase 3c-i: Carbon Setup + Notification System
+- [ ] Install `@carbon/react`, `@carbon/icons-react`
+- [ ] Set up Carbon Sass tokens and global styles (replace antd/bootstrap CSS imports in `App.jsx`)
+- [ ] Build `NotificationProvider` context + `useNotification` hook
+- [ ] Wrap app in `<NotificationProvider>` in `src/index.jsx`
+- [ ] Verify build works with Carbon installed alongside antd (coexistence during migration)
+
+#### Sub-phase 3c-ii: Migrate Layout & Simple Components (7 files)
+- [ ] `ServerDisconnectFrame.jsx` — antd Row/Col → Carbon Grid/Column
+- [ ] `ServerStatusFrame.jsx` — antd Row/Col + react-bootstrap Button → Carbon
+- [ ] `CypherResultMeta.jsx` — antd Row/Col → Carbon Grid/Column
+- [ ] `Alert.jsx` — antd Alert → Carbon InlineNotification
+- [ ] `SidebarComponents.jsx` — antd Select + react-bootstrap Col → Carbon Dropdown
+- [ ] `Frame.jsx` — antd Button/Popover → Carbon Button/Popover
+- [ ] `DefaultTemplate.jsx` — react-bootstrap Row/Button → Carbon
+
+#### Sub-phase 3c-iii: Migrate Forms & Modals (5 files)
+- [ ] `ServerConnectFrame.jsx` — antd Form/Input/InputNumber/Button/Row/Col → Carbon Form/TextInput/NumberInput/Button/Grid
+- [ ] `GraphFilterModal.jsx` — antd Modal/Input/Select/Button + message → Carbon Modal/TextInput/Dropdown/Button + useNotification
+- [ ] `EdgeThicknessMenu.jsx` — antd Modal/Select/Input/Button → Carbon Modal/Dropdown/TextInput/Button
+- [ ] `SidebarHome.jsx` — antd Modal → Carbon Modal
+- [ ] `GraphInitializer.jsx` — antd Divider/Checkbox/Input + react-bootstrap Modal/Row/Col/Button/ListGroup/Spinner/Alert → Carbon
+
+#### Sub-phase 3c-iv: Migrate Data Display & Remaining (6 files)
+- [ ] `CypherResultTable.jsx` — antd Table → Carbon DataTable
+- [ ] `BuilderContainer.jsx` — antd Button/Drawer/Select/Space → Carbon Button/SidePanel/Dropdown
+- [ ] `csv/index.jsx` — antd Button/Upload + message → Carbon Button/FileUploader + useNotification
+- [ ] `BuilderSelection.jsx` — react-bootstrap ListGroup/Button → Carbon
+- [ ] `CypherResultCytoscapeLegend.jsx` — react-bootstrap Badge → Carbon Tag
+- [ ] `CypherResultCytoscapeFooter.jsx` — react-bootstrap Badge → Carbon Tag
+
+#### Sub-phase 3c-v: Migrate Modals & Tutorial (5 files)
+- [ ] `ModalDialog.jsx` — react-bootstrap Button/Modal → Carbon
+- [ ] `TutorialDialog.jsx` — react-bootstrap Modal → Carbon
+- [ ] `TutorialHeader.jsx` — react-bootstrap Modal → Carbon
+- [ ] `TutorialBody.jsx` — react-bootstrap Modal/Image → Carbon
+- [ ] `TutorialFooter.jsx` — react-bootstrap Modal/Button → Carbon
+
+#### Sub-phase 3c-vi: Icon Migration + Cleanup (16 files)
+- [ ] Replace all `@fortawesome/react-fontawesome` + icon imports with `@carbon/icons-react`
+- [ ] Files: Frame.jsx, ServerStatusFrame.jsx, ServerDisconnectFrame.jsx, Alert.jsx, CypherResultCytoscapeChart.jsx, CypherResultCytoscapeFooter.jsx, CypherResultCytoscapeLegend.jsx, CypherResultTab.jsx, GraphFilterModal.jsx, GraphInitializer.jsx, SidebarHome.jsx, DefaultTemplate.jsx, Editor.jsx, SidebarMeunuToggle.jsx, NavigatorItem.jsx, MenuSlice.js
+- [ ] Remove all `@fortawesome/*` packages from package.json
+- [ ] Remove `antd`, `bootstrap`, `react-bootstrap` from package.json
+- [ ] Remove `antd/dist/antd.css` and `bootstrap/dist/css/bootstrap.min.css` from App.jsx
+- [ ] Final build verification — no antd/bootstrap/fontawesome references remaining
 
 ### 3d: Other Frontend Updates
 - [ ] Update `axios` to 1.x
