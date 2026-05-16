@@ -159,13 +159,16 @@
 - [x] **Defect fix:** `combineReducers` import from `redux` → `@reduxjs/toolkit`
 - [x] Smoke test verifies Redux store initializes correctly
 
-### 4b: Backend Unit Tests
-- [ ] cypherService — createResult, convertVertex, convertEdge, convertPath
-- [ ] databaseService — parseMeta, graphNameInitialize, isConnected
-- [ ] sessionService — put, get
-- [ ] QueryBuilder — query generation
-- [ ] GraphCreator — parseData, createNode, createEdge
-- [ ] SQLFlavorManager — getQuery with different versions
+### 4b: Backend Unit Tests ✅ COMPLETE
+- [x] cypherService — createResult, convertVertex, convertEdge, convertPath
+- [x] databaseService — parseMeta, graphNameInitialize, isConnected, connectDatabase, disconnectDatabase, getConnectionStatus, getConnectionInfo
+- [x] sessionService — put, get
+- [x] QueryBuilder — query generation, custom start/end, multiple inserts
+- [x] GraphCreator — parseData, createNode, createEdge, createGraph
+- [x] SQLFlavorManager — getQuery with different versions
+- [x] ObjectExtras — getDelete, toAgeProps
+
+**Result:** 71 tests passing (up from 6). Backend coverage: ~38% statements (services well-covered, routes/controllers deferred to 4c)
 
 ### 4c: Backend Integration Tests (API)
 - [ ] POST /api/v1/db/connect — success, invalid credentials, already connected
