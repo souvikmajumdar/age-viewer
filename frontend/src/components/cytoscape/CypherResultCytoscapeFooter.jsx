@@ -18,8 +18,6 @@
  */
 
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { Badge } from 'react-bootstrap';
 import uuid from 'react-uuid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
@@ -39,7 +37,7 @@ const CypherResultCytoscapeFooter = ({
   colorChange,
   sizeChange,
   captionChange,
-  selectedCaption,
+  selectedCaption = null,
   captions,
   setCytoscapeLayout,
   cytoscapeLayout,
@@ -73,16 +71,18 @@ const CypherResultCytoscapeFooter = ({
       return (
         <div className="d-flex pl-3">
           <div className={`graphFrameFooter ${footerExpanded ? 'expandedGraphFrameFooter' : ''}`}>
-            <Badge
-              className="px-3 py-1"
-              pill={isEdge === false}
+            <span
+              className="label-badge"
               style={{
+                display: 'inline-block',
+                padding: '2px 12px',
+                borderRadius: isEdge ? '4px' : '12px',
                 backgroundColor: footerData.data.backgroundColor,
                 color: footerData.data.fontColor,
               }}
             >
               {footerData.data.label}
-            </Badge>
+            </span>
             <span className="label">
               <strong className="pl-3">&lt;gid&gt; : </strong>
               {' '}
@@ -243,16 +243,18 @@ const CypherResultCytoscapeFooter = ({
       return (
         <div className="d-flex pl-3">
           <div className={`graphFrameFooter ${footerExpanded ? 'expandedGraphFrameFooter' : ''}`}>
-            <Badge
-              className="px-3 py-1"
-              pill={isEdge === false}
+            <span
+              className="label-badge"
               style={{
+                display: 'inline-block',
+                padding: '2px 12px',
+                borderRadius: isEdge ? '4px' : '12px',
                 backgroundColor: footerData.data.backgroundColor,
                 color: footerData.data.fontColor,
               }}
             >
               {footerData.data.label}
-            </Badge>
+            </span>
             <span className="label">
               <span className="pl-3">Color : </span>
               {generateColors()}
@@ -359,50 +361,6 @@ const CypherResultCytoscapeFooter = ({
       {displayFooterData()}
     </div>
   );
-};
-
-CypherResultCytoscapeFooter.defaultProps = {
-  selectedCaption: null,
-};
-
-CypherResultCytoscapeFooter.propTypes = {
-  // eslint-disable-next-line react/forbid-prop-types
-  footerData: PropTypes.any.isRequired,
-  edgeLabelColors: PropTypes.arrayOf(PropTypes.shape({
-    color: PropTypes.string,
-    borderColor: PropTypes.string,
-    fontColor: PropTypes.string,
-    // eslint-disable-next-line react/forbid-prop-types
-    edgeLabels: PropTypes.any,
-    index: PropTypes.number,
-  })).isRequired,
-  nodeLabelColors: PropTypes.arrayOf(PropTypes.shape({
-    color: PropTypes.string,
-    borderColor: PropTypes.string,
-    fontColor: PropTypes.string,
-    // eslint-disable-next-line react/forbid-prop-types
-    nodeLabels: PropTypes.any,
-    index: PropTypes.number,
-  })).isRequired,
-  nodeLabelSizes: PropTypes.arrayOf(PropTypes.shape({
-    size: PropTypes.number,
-    // eslint-disable-next-line react/forbid-prop-types
-    labels: PropTypes.any,
-    index: PropTypes.number,
-  })).isRequired,
-  edgeLabelSizes: PropTypes.arrayOf(PropTypes.shape({
-    size: PropTypes.number,
-    // eslint-disable-next-line react/forbid-prop-types
-    labels: PropTypes.any,
-    index: PropTypes.number,
-  })).isRequired,
-  colorChange: PropTypes.func.isRequired,
-  sizeChange: PropTypes.func.isRequired,
-  captionChange: PropTypes.func.isRequired,
-  setCytoscapeLayout: PropTypes.func.isRequired,
-  cytoscapeLayout: PropTypes.string.isRequired,
-  selectedCaption: PropTypes.string,
-  captions: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default CypherResultCytoscapeFooter;
