@@ -54,16 +54,19 @@
 
 ---
 
-## Phase 3: Frontend Modernization 🔲 PENDING
+## Phase 3: Frontend Modernization 🔄 IN PROGRESS
 
-### 3a: CRA → Vite
-- [ ] Remove `react-scripts` dependency
-- [ ] Add `vite` + `@vitejs/plugin-react`
-- [ ] Create `vite.config.js` with Sass and proxy config
-- [ ] Move `public/index.html` → `index.html` (Vite convention)
-- [ ] Update scripts: `vite` for dev, `vite build` for production
-- [ ] Remove `NODE_OPTIONS=--openssl-legacy-provider` workaround
-- [ ] Verify dev server and production build work
+### 3a: CRA → Vite ✅ COMPLETE
+
+- [x] Remove `react-scripts` dependency
+- [x] Add `vite` + `@vitejs/plugin-react`
+- [x] Create `vite.config.js` with Sass and proxy config
+- [x] Move `public/index.html` → `index.html` (Vite convention)
+- [x] Update scripts: `vite` for dev, `vite build` for production
+- [x] Remove `NODE_OPTIONS=--openssl-legacy-provider` workaround
+- [x] Verify dev server and production build work
+- [x] Fix local cytoscape-cxtmenu lib (module.exports → export default)
+- [x] Remove babel-eslint, @babel/core, @testing-library/*, webpack-dev-server, serve
 
 ### 3b: React 19
 - [ ] Update `react` and `react-dom` to ^19.x
