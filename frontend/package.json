@@ -10,6 +10,8 @@
     }
   ],
   "dependencies": {
+    "@carbon/icons-react": "^11.80.0",
+    "@carbon/react": "^1.107.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-brands-svg-icons": "^5.15.4",
     "@fortawesome/free-regular-svg-icons": "^5.15.4",

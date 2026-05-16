@@ -81,12 +81,12 @@
 
 ### 3c: IBM Carbon Design System
 
-#### Sub-phase 3c-i: Carbon Setup + Notification System
-- [ ] Install `@carbon/react`, `@carbon/icons-react`
-- [ ] Set up Carbon Sass tokens and global styles (replace antd/bootstrap CSS imports in `App.jsx`)
-- [ ] Build `NotificationProvider` context + `useNotification` hook
-- [ ] Wrap app in `<NotificationProvider>` in `src/index.jsx`
-- [ ] Verify build works with Carbon installed alongside antd (coexistence during migration)
+#### Sub-phase 3c-i: Carbon Setup + Notification System ✅ COMPLETE
+- [x] Install `@carbon/react`, `@carbon/icons-react`
+- [x] Set up Carbon Sass tokens and global styles (replace antd/bootstrap CSS imports in `App.jsx`)
+- [x] Build `NotificationProvider` context + `useNotification` hook
+- [x] Wrap app in `<NotificationProvider>` in `App.jsx`
+- [x] Verify build works with Carbon installed alongside antd (coexistence during migration)
 
 #### Sub-phase 3c-ii: Migrate Layout & Simple Components (7 files)
 - [ ] `ServerDisconnectFrame.jsx` — antd Row/Col → Carbon Grid/Column
