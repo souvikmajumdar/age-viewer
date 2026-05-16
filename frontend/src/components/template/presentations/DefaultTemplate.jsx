@@ -18,9 +18,8 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { Row, Button } from 'react-bootstrap';
+import { Button } from '@carbon/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import EditorContainer from '../../contents/containers/Editor';
@@ -111,9 +110,9 @@ const DefaultTemplate = ({
         checked={theme === 'dark'}
         readOnly
       />
-      <Row className="content-row">
+      <div className="content-row">
         <div>
-          <Button onClick={() => setOpen(true)}>
+          <Button kind="ghost" onClick={() => setOpen(true)}>
             <FontAwesomeIcon icon={faBars} />
           </Button>
           <BuilderContainer open={open} setOpen={setOpen} finder={finder} />
@@ -126,20 +125,10 @@ const DefaultTemplate = ({
 
         </div>
 
-      </Row>
+      </div>
 
     </div>
   );
-};
-
-DefaultTemplate.propTypes = {
-  theme: PropTypes.string.isRequired,
-  maxNumOfFrames: PropTypes.number.isRequired,
-  maxNumOfHistories: PropTypes.number.isRequired,
-  maxDataOfGraph: PropTypes.number.isRequired,
-  maxDataOfTable: PropTypes.number.isRequired,
-  changeSettings: PropTypes.func.isRequired,
-  isOpen: PropTypes.bool.isRequired,
 };
 
 export default DefaultTemplate;

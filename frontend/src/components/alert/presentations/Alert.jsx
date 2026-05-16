@@ -19,10 +19,9 @@
 
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlayCircle } from '@fortawesome/free-regular-svg-icons';
-import { Alert } from 'antd';
+import { InlineNotification } from '@carbon/react';
 
 const SingleAlert = ({
   alertKey,
@@ -55,13 +54,10 @@ const SingleAlert = ({
 
   if (alertName === 'NoticeServerDisconnected') {
     return (
-      <Alert
-        variant="warning"
-        afterClose={() => clearAlert()}
-        showIcon
-        closable
-        message="Database Disconnected"
-        description={(
+      <InlineNotification
+        kind="warning"
+        title="Database Disconnected"
+        subtitle={(
           <p>
             Database is Disconnected. You may use
             {' '}
@@ -78,18 +74,16 @@ const SingleAlert = ({
             establish connection. There&apos;s a graph waiting for you.
           </p>
         )}
+        onClose={() => { clearAlert(); return false; }}
       />
     );
   }
   if (alertName === 'NoticeServerConnected') {
     return (
-      <Alert
-        type="success"
-        afterClose={() => clearAlert()}
-        showIcon
-        closable
-        message="Database Connected"
-        description={(
+      <InlineNotification
+        kind="success"
+        title="Database Connected"
+        subtitle={(
           <p>
             Successfully database is connected. You may use
             {' '}
@@ -105,18 +99,16 @@ const SingleAlert = ({
             confirm connected database information.
           </p>
         )}
+        onClose={() => { clearAlert(); return false; }}
       />
     );
   }
   if (alertName === 'ErrorServerConnectFail') {
     return (
-      <Alert
-        type="error"
-        afterClose={() => clearAlert()}
-        showIcon
-        closable
-        message="Database Connection Failed"
-        description={(
+      <InlineNotification
+        kind="error"
+        title="Database Connection Failed"
+        subtitle={(
           <>
             <p>
               Failed to connect to the database. Are you sure the database is running on the server?
@@ -124,19 +116,16 @@ const SingleAlert = ({
             {errorMessage}
           </>
         )}
+        onClose={() => { clearAlert(); return false; }}
       />
     );
   }
   if (alertName === 'ErrorNoDatabaseConnected') {
     return (
-      <Alert
-        type="error"
-        showIcon
-        closable
-        afterClose={() => clearAlert()}
-        message="No Database Connected"
-        description={
-        (
+      <InlineNotification
+        kind="error"
+        title="No Database Connected"
+        subtitle={(
           <>
             <p>
               You haven&apos;t set database connection. You may use
@@ -154,70 +143,61 @@ const SingleAlert = ({
             </p>
             {errorMessage}
           </>
-        )
-      }
+        )}
+        onClose={() => { clearAlert(); return false; }}
       />
     );
   }
   if (alertName === 'ErrorMetaFail') {
     return (
-      <Alert
-        type="error"
-        afterClose={() => clearAlert()}
-        message="Metadata Load Error"
-        showIcon
-        closable
-        description={(
+      <InlineNotification
+        kind="error"
+        title="Metadata Load Error"
+        subtitle={(
           <p>
             Unexpectedly error occurred while getting metadata.
           </p>
         )}
+        onClose={() => { clearAlert(); return false; }}
       />
     );
   }
   if (alertName === 'ErrorCypherQuery') {
     return (
-      <Alert
-        type="error"
-        afterClose={() => clearAlert()}
-        showIcon
-        closable
-        message="Query Error"
-        description={(
+      <InlineNotification
+        kind="error"
+        title="Query Error"
+        subtitle={(
           <p>
             Your query was not executed properly. Refer the below error message.
           </p>
         )}
+        onClose={() => { clearAlert(); return false; }}
       />
     );
   }
   if (alertName === 'ErrorPlayLoadFail') {
     return (
-      <Alert
-        type="error"
-        afterClose={() => clearAlert()}
-        showIcon
-        closable
-        message="Failed to Load Play Target"
-        description={(
+      <InlineNotification
+        kind="error"
+        title="Failed to Load Play Target"
+        subtitle={(
           <p>
             &apos;
             {errorMessage}
             &apos; does not exists.
           </p>
         )}
+        onClose={() => { clearAlert(); return false; }}
       />
     );
   }
   if (alertName === 'NoticeAlreadyConnected') {
     return (
-      <Alert
-        type="info"
-        afterClose={() => clearAlert()}
-        showIcon
-        closable
-        message="Already Connected to Database"
-        description={(
+      <InlineNotification
+        kind="info"
+        title="Already Connected to Database"
+        subtitle={(
           <p>
             You are currently connected to a database.
             If you want to access to another database, you may execute
@@ -236,22 +216,21 @@ const SingleAlert = ({
             to disconnect from current database first.
           </p>
         )}
+        onClose={() => { clearAlert(); return false; }}
       />
     );
   }
   if (alertName === 'CreateGraphSuccess') {
     return (
-      <Alert type="success" message="Graph Created" description="Successfully created new graph" />
+      <InlineNotification
+        kind="success"
+        title="Graph Created"
+        subtitle="Successfully created new graph"
+        onClose={() => { clearAlert(); return false; }}
+      />
     );
   }
   return (<></>);
-};
-SingleAlert.propTypes = {
-  alertKey: PropTypes.string.isRequired,
-  alertName: PropTypes.string.isRequired,
-  errorMessage: PropTypes.string.isRequired,
-  setCommand: PropTypes.func.isRequired,
-  removeAlert: PropTypes.func.isRequired,
 };
 
 export default SingleAlert;
