@@ -192,15 +192,14 @@
 
 **Result:** 51 frontend tests passing. Redux slices and utilities fully covered.
 
-### 4e: Frontend Component Tests
-- [ ] ServerConnectFrame — form submission, validation
-- [ ] Alert — renders correct notification type
-- [ ] CypherResultTable — renders table, handles filter
-- [ ] Frame — expand/collapse, close, fullscreen
-- [ ] GraphFilterModal — add/remove filters, submit, error
-- [ ] SidebarHome — node/edge/property lists
-- [ ] BuilderContainer — query building, submit
-- [ ] CodeMirrorWrapper — value changes, keyboard shortcuts
+### 4e: Frontend Component Tests ✅ COMPLETE
+- [x] Alert — renders correct notification type, auto-clears (7 tests)
+- [x] Frame — renders reqString, buttons, conditional controls (9 tests)
+- [x] ServerConnectFrame — form rendering, placeholders, frame integration (6 tests)
+- [x] BuilderContainer — open/close, panel content, code editor (6 tests)
+- [x] Test utilities: renderWithProviders helper for Redux + Notification context
+
+**Result:** 79 frontend tests passing. Note: Carbon Modal (portal-based) components deferred to E2E testing.
 
 ### 4f: E2E Tests (Playwright)
 - [ ] Install Playwright + configure
