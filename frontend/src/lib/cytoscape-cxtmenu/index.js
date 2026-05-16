@@ -34,4 +34,4 @@ if (typeof cytoscape !== 'undefined') { // expose to global cytoscape (i.e. wind
   register(cytoscape);
 }
 
-module.exports = register;
+export default register;

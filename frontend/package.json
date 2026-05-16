@@ -1,6 +1,6 @@
 {
   "name": "ag-viewer-frontend",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "license": "Apache-2.0",
   "licenses": [
@@ -43,46 +43,25 @@
     "react-cytoscapejs": "^1.2.1",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.9",
-    "react-scripts": "^4.0.3",
     "react-uuid": "^1.0.3",
     "redux": "^4.2.1",
-    "redux-thunk": "^2.4.2",
-    "serve": "^11.3.2"
+    "redux-thunk": "^2.4.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "NODE_OPTIONS=--openssl-legacy-provider react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "proxy": "http://localhost:3001",
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "devDependencies": {
-    "@babel/core": "^7.27.1",
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^12.1.5",
-    "@testing-library/user-event": "^13.5.0",
-    "babel-eslint": "^10.1.0",
+    "@vitejs/plugin-react": "^4.4.1",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-import-resolver-alias": "^1.1.2",
-    "eslint-plugin-babel": "^5.3.1",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^4.6.2",
     "sass": "^1.87.0",
-    "webpack-dev-server": "3.11.1"
+    "vite": "^6.3.5"
   }
 }
