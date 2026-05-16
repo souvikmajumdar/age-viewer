@@ -1,5 +1,6 @@
 ---
 inclusion: auto
+description: Technical stack decisions, git workflow, and project context for AGE Viewer modernization.
 ---
 
 # Development Guidelines

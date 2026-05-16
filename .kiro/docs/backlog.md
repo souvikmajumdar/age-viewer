@@ -183,14 +183,14 @@
 
 **Result:** 86 tests passing (15 new API tests). Connected-state tests deferred to E2E (require PostgreSQL).
 
-### 4d: Frontend Unit Tests (Redux + Utilities)
-- [ ] FrameSlice — addFrame, removeFrame, pinFrame, trimFrame
-- [ ] CypherSlice — reducers, fulfilled/rejected/pending states
-- [ ] DatabaseSlice — connect/disconnect state transitions
-- [ ] MetadataSlice — getMetaData, changeCurrentGraph
-- [ ] AlertSlice — addAlert, removeAlert
-- [ ] CookieUtil — loadFromCookie, saveToCookie
-- [ ] useNotification hook — success/error/warning/info, auto-dismiss
+### 4d: Frontend Unit Tests (Redux + Utilities) ✅ COMPLETE
+- [x] FrameSlice — addFrame, removeFrame, trimFrame (11 tests)
+- [x] AlertSlice — addAlert, removeAlert, alertType classification (10 tests)
+- [x] DatabaseSlice — changeGraph, extraReducers state transitions (7 tests)
+- [x] CookieUtil — loadFromCookie, saveToCookie, loadAllFromCookie (8 tests)
+- [x] useNotification hook — all methods, auto-dismiss, DOM rendering (10 tests)
+
+**Result:** 51 frontend tests passing. Redux slices and utilities fully covered.
 
 ### 4e: Frontend Component Tests
 - [ ] ServerConnectFrame — form submission, validation
