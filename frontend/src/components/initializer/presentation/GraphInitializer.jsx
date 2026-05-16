@@ -1,13 +1,9 @@
 import React, { useState, useRef } from 'react';
-import {
-  /* Form, */ Modal, Row, Col, Button, ListGroup, Spinner, Alert,
-} from 'react-bootstrap';
+import { Modal, Button, TextInput, Checkbox, Loading, InlineNotification } from '@carbon/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinusCircle } from '@fortawesome/free-solid-svg-icons';
 import uuid from 'react-uuid';
-import PropTypes from 'prop-types';
 import './GraphInit.scss';
-import { Divider, Checkbox, Input } from 'antd';
 import { useDispatch } from 'react-redux';
 import { addAlert } from '../../../features/alert/AlertSlice';
 import { changeGraph } from '../../../features/database/DatabaseSlice';
@@ -116,30 +112,29 @@ const InitGraphModal = ({ show, setShow }) => {
 
   const modalInputBody = () => (
     <>
-      <Col className="graphInputCol">
-        <Row id="graphInputRow">
-          <Input
+      <div className="graphInputCol">
+        <div id="graphInputRow">
+          <TextInput
             id="graphNameInput"
+            labelText="Graph Name"
             type="text"
             placeholder="graph name"
-            defaultValue={graphName}
             value={graphName}
             onChange={(e) => setGraphName(e.target.value)}
             required
           />
-        </Row>
-        <Row id="graphInputRow">
+        </div>
+        <div id="graphInputRow">
           <Checkbox
-            onChange={(e) => setDropGraph(e.target.checked)}
-            defaultChecked={dropGraph}
+            id="dropGraphCheckbox"
+            labelText="DROP graph if exists"
+            onChange={(_, { checked }) => setDropGraph(checked)}
             checked={dropGraph}
-          >
-            DROP graph if exists
-          </Checkbox>
-        </Row>
-      </Col>
-      <Divider />
-      <Row className="modalRow">
+          />
+        </div>
+      </div>
+      <hr />
+      <div className="modalRow" style={{ display: 'flex', gap: '8px' }}>
         <Button onClick={() => nodeInputRef.current.click()}>
           Upload Nodes
           <input type="file" ref={nodeInputRef} onChange={handleSelectNodeFiles} accept=".csv" multiple hidden />
@@ -148,16 +143,18 @@ const InitGraphModal = ({ show, setShow }) => {
           Upload Edges
           <input type="file" ref={edgeInputRef} onChange={handleSelectEdgeFiles} accept=".csv" multiple hidden />
         </Button>
-      </Row>
-      <Row className="modalRow">
-        <Col>
-          <ListGroup className="readyFiles">
+      </div>
+      <div className="modalRow" style={{ display: 'flex', gap: '16px' }}>
+        <div>
+          <ul className="readyFiles" style={{ listStyle: 'none', padding: 0 }}>
             {
               Object.entries(nodeFiles).map(([k, { data: file, name }]) => (
-                <ListGroup.Item key={k}>
-                  <Row className="modalRow">
-                    <Input
-                      id="graphNameInput"
+                <li key={k} style={{ marginBottom: '8px' }}>
+                  <div className="modalRow">
+                    <TextInput
+                      id={`nodeLabel-${k}`}
+                      labelText=""
+                      hideLabel
                       placeholder="label name"
                       data-key={k}
                       defaultValue={name}
@@ -166,8 +163,8 @@ const InitGraphModal = ({ show, setShow }) => {
                       }}
                       required
                     />
-                  </Row>
-                  <Row className="modalRow">
+                  </div>
+                  <div className="modalRow" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <span>{file.name}</span>
                     <FontAwesomeIcon
                       id="removeFile"
@@ -175,20 +172,22 @@ const InitGraphModal = ({ show, setShow }) => {
                       onClick={() => removeNodeFile(k)}
                       icon={faMinusCircle}
                     />
-                  </Row>
-                </ListGroup.Item>
+                  </div>
+                </li>
               ))
           }
-          </ListGroup>
-        </Col>
-        <Col>
-          <ListGroup className="readyFiles">
+          </ul>
+        </div>
+        <div>
+          <ul className="readyFiles" style={{ listStyle: 'none', padding: 0 }}>
             {
               Object.entries(edgeFiles).map(([k, { data: file, name }]) => (
-                <ListGroup.Item key={k}>
-                  <Row className="modalRow">
-                    <Input
-                      id="graphNameInput"
+                <li key={k} style={{ marginBottom: '8px' }}>
+                  <div className="modalRow">
+                    <TextInput
+                      id={`edgeLabel-${k}`}
+                      labelText=""
+                      hideLabel
                       data-key={k}
                       onChange={(e) => {
                         setName(e.target.value, k, 'edge');
@@ -197,8 +196,8 @@ const InitGraphModal = ({ show, setShow }) => {
                       defaultValue={name}
                       required
                     />
-                  </Row>
-                  <Row className="modalRow">
+                  </div>
+                  <div className="modalRow" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <span>{file.name}</span>
                     <FontAwesomeIcon
                       id="removeFile"
@@ -206,31 +205,26 @@ const InitGraphModal = ({ show, setShow }) => {
                       onClick={() => removeEdgeFile(k)}
                       icon={faMinusCircle}
                     />
-                  </Row>
-                </ListGroup.Item>
+                  </div>
+                </li>
               ))
           }
-          </ListGroup>
-        </Col>
-      </Row>
+          </ul>
+        </div>
+      </div>
     </>
   );
 
   const modalBody = () => {
-    if (loading) return <Spinner animation="border" />;
+    if (loading) return <Loading withOverlay={false} />;
     if (error !== '') {
       return (
-        <Alert variant="danger" onClose={() => setError('')} dismissible>
-          <Alert.Heading>
-            An error occured
-          </Alert.Heading>
-          <p>
-            {`Error Code: ${error.code}`}
-          </p>
-          <p>
-            {`Error Details: ${error.details}`}
-          </p>
-        </Alert>
+        <InlineNotification
+          kind="error"
+          title="An error occured"
+          subtitle={`Error Code: ${error.code} - Error Details: ${error.details}`}
+          onCloseButtonClick={() => setError('')}
+        />
       );
     }
     return modalInputBody();
@@ -238,34 +232,19 @@ const InitGraphModal = ({ show, setShow }) => {
 
   return (
     <div>
-      <Modal className="ModalContainer" show={show} onHide={() => setShow(!show)}>
-        <Modal.Header closeButton>
-          <Row id="headerRow">
-            <Modal.Title>Create a Graph</Modal.Title>
-          </Row>
-        </Modal.Header>
-        <Modal.Body>
-          <Col className="modalCol">
-            {modalBody()}
-          </Col>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button id="clearButton" onClick={clearState}>
-            Clear
-          </Button>
-          <Button onClick={handleSubmit}>
-            Done
-          </Button>
-        </Modal.Footer>
+      <Modal
+        open={show}
+        modalHeading="Create a Graph"
+        primaryButtonText="Done"
+        secondaryButtonText="Clear"
+        onRequestClose={() => setShow(!show)}
+        onRequestSubmit={handleSubmit}
+        onSecondarySubmit={clearState}
+      >
+        {modalBody()}
       </Modal>
     </div>
-
   );
-};
-
-InitGraphModal.propTypes = {
-  show: PropTypes.bool.isRequired,
-  setShow: PropTypes.func.isRequired,
 };
 
 export default InitGraphModal;

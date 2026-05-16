@@ -18,13 +18,11 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import {
-  Button, Input, message, Modal, Select,
-} from 'antd';
-import PropTypes from 'prop-types';
+import { Modal, TextInput, Dropdown, Button } from '@carbon/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import uuid from 'react-uuid';
+import { useNotification } from '../../../hooks/useNotification';
 
 const generateNewFilterObject = () => ({
   key: uuid(),
@@ -40,16 +38,13 @@ const GraphFilterModal = ({
   globalFilter,
   isTable,
 }) => {
-  const [propertyElements, setPropertyElements] = useState([]);
   const [filterList, setFilterList] = useState([
     generateNewFilterObject(),
   ]);
   const [filterElements, setFilterElements] = useState(null);
+  const notify = useNotification();
 
   useEffect(() => {
-    if (visible === true) {
-      setPropertyElements(null);
-    }
     if (visible === true && globalFilter === null) {
       setFilterElements(null);
     }
@@ -82,7 +77,7 @@ const GraphFilterModal = ({
     });
 
     if (failed) {
-      message.error('cannot leave with empty property.');
+      notify.error('cannot leave with empty property.');
       return;
     }
 
@@ -91,28 +86,9 @@ const GraphFilterModal = ({
   };
 
   useEffect(() => {
-    if (properties !== null) {
-      setPropertyElements(
-        properties.map((propertyItem) => {
-          const strPropertyItem = JSON.stringify(propertyItem);
-          return (
-            <Select.Option
-              key={strPropertyItem}
-              value={strPropertyItem}
-            >
-              &#91;
-              {propertyItem.label}
-              &#93;&nbsp;
-              {propertyItem.property}
-            </Select.Option>
-          );
-        }),
-      );
-    }
-  }, [properties]);
-
-  useEffect(() => {
     const filterListLength = filterList.length;
+    const dropdownItems = properties ? properties.map((p) => ({ id: JSON.stringify(p), label: `[${p.label}] ${p.property}` })) : [];
+
     setFilterElements(
       filterList.map((filter, index) => (
         <div
@@ -122,57 +98,51 @@ const GraphFilterModal = ({
             flexDirection: 'row',
           }}
         >
-          <Select
-            defaultValue={null}
-            onChange={(value) => {
-              filterList[index].property = value;
-            }}
+          <Dropdown
+            id={`filter-property-${index}`}
+            items={dropdownItems}
+            itemToString={(item) => item?.label || ''}
+            onChange={({ selectedItem }) => { filterList[index].property = selectedItem?.id || null; }}
+            label="Select"
             style={{ minWidth: 300 }}
-          >
-            <Select.Option value={null} disabled>Select</Select.Option>
-            {propertyElements}
-          </Select>
+          />
           <div style={{ width: '1px' }} />
-          <Input
+          <TextInput
+            id={`filter-keyword-${index}`}
+            labelText=""
+            hideLabel
             style={{ flex: 1 }}
             defaultValue={(globalFilter === null) ? '' : filterList[index].keyword}
             onChange={(event) => {
               filterList[index].keyword = event.target.value;
-              setFilterList(filterList);
+              setFilterList([...filterList]);
             }}
           />
-          <Button onClick={() => onFilterAdd(index)}>
+          <Button kind="ghost" onClick={() => onFilterAdd(index)}>
             <FontAwesomeIcon icon={faPlus} />
           </Button>
           {filterListLength > 1 ? (
-            <Button onClick={() => onFilterDelete(index)}>
+            <Button kind="ghost" onClick={() => onFilterDelete(index)}>
               <FontAwesomeIcon icon={faMinus} />
             </Button>
           ) : null}
-
         </div>
       )),
     );
-  }, [propertyElements, filterList]);
+  }, [properties, filterList]);
+
   return (
-    <Modal title={isTable ? 'Filter Data in Table' : 'Filter on Graph'} visible={visible} onOk={onOk} onCancel={() => setVisible(false)} width={800}>
-      {
-        filterElements
-      }
+    <Modal
+      open={visible}
+      modalHeading={isTable ? 'Filter Data in Table' : 'Filter on Graph'}
+      primaryButtonText="OK"
+      secondaryButtonText="Cancel"
+      onRequestClose={() => setVisible(false)}
+      onRequestSubmit={onOk}
+    >
+      {filterElements}
     </Modal>
   );
-};
-
-GraphFilterModal.propTypes = {
-  visible: PropTypes.bool.isRequired,
-  setVisible: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-  properties: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string,
-    property: PropTypes.string,
-  })).isRequired,
-  globalFilter: PropTypes.bool.isRequired,
-  isTable: PropTypes.bool.isRequired,
 };
 
 export default GraphFilterModal;

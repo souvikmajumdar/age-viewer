@@ -20,9 +20,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
-import {
-  Modal, Select, Input, Button,
-} from 'antd';
 import style from './popover.module.scss';
 
 const EdgeThicknessSettingModal = ({
