@@ -99,29 +99,24 @@ const MetadataSlice = createSlice({
         .find(([k, data]) => data.id === action.payload.id || k === action.payload.name)[0],
     }),
   },
-  extraReducers: {
-    [getMetaData.fulfilled]: (state, action) => {
-      if (action.payload) {
+  extraReducers: (builder) => {
+    builder
+      .addCase(getMetaData.fulfilled, (state, action) => {
+        if (action.payload) {
+          return {
+            ...state,
+            graphs: action.payload,
+            status: 'connected',
+            dbname: action.payload.database,
+            currentGraph: state.currentGraph !== '' ? state.currentGraph : Object.keys(action.payload)[0],
+          };
+        }
         return {
           ...state,
-          graphs: action.payload,
-          status: 'connected',
+          status: 'disconnected',
           dbname: action.payload.database,
-          currentGraph: state.currentGraph !== '' ? state.currentGraph : Object.keys(action.payload)[0],
         };
-      }
-      return {
-        ...state,
-        status: 'disconnected',
-        dbname: action.payload.database,
-      };
-    },
-    /* [getMetaChartData.fulfilled]: (state, action) => {
-      if (action.payload) {
-        return Object.assign(state, { rows: action.payload });
-      }
-      return Object.assign(state, { rows: [] });
-    }, */
+      });
   },
 });
 
