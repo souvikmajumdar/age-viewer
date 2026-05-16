@@ -18,7 +18,6 @@
  */
 
 import React, { useState } from 'react';
-import uuid from 'react-uuid';
 import { ChevronDown, ChevronUp } from '@carbon/icons-react';
 import {
   updateEdgeLabelSize,
@@ -48,7 +47,7 @@ const CypherResultCytoscapeFooter = ({
     for (let i = 0; i < Object.entries(d).length; i += 1) {
       const [alias, val] = Object.entries(d)[i];
       extractedData.push(
-        <span key={uuid()} className="label">
+        <span key={crypto.randomUUID()} className="label">
           <strong className="pl-3">
             {alias}
             {' '}
@@ -164,7 +163,7 @@ const CypherResultCytoscapeFooter = ({
           <button
             onClick={() => [updateNodeLabelSize(footerData.data.label, nodeSize),
               sizeChange(footerData.data.type, footerData.data.label, nodeSize)]}
-            key={uuid()}
+            key={crypto.randomUUID()}
             type="button"
             className={`btn sizeSelector node ${footerData.data.size >= nodeSize ? ' selectedSize ' : ''}`}
             style={{ width: `${size}px`, height: `${size}px` }}
@@ -181,7 +180,7 @@ const CypherResultCytoscapeFooter = ({
           <button
             onClick={() => [updateEdgeLabelSize(footerData.data.label, edgeSize),
               sizeChange(footerData.data.type, footerData.data.label, edgeSize)]}
-            key={uuid()}
+            key={crypto.randomUUID()}
             type="button"
             className={`btn sizeSelector edge ${footerData.data.size >= edgeSize ? ' selectedSize ' : ''}`}
             style={{ width: `${size + 18}px`, height: `${size}px` }}
@@ -208,7 +207,7 @@ const CypherResultCytoscapeFooter = ({
               onClick={() => [
                 updateLabelColor(footerData.data.type, footerData.data.label, color),
                 colorChange(footerData.data.type, footerData.data.label, color)]}
-              key={uuid()}
+              key={crypto.randomUUID()}
               type="button"
               className={`btn colorSelector ${footerData.data.backgroundColor === color.color ? ' selectedColor ' : ''}`}
               style={{ backgroundColor: color.color }}
@@ -224,7 +223,7 @@ const CypherResultCytoscapeFooter = ({
               onClick={() => [
                 updateLabelColor(footerData.data.type, footerData.data.label, color),
                 colorChange(footerData.data.type, footerData.data.label, color)]}
-              key={uuid()}
+              key={crypto.randomUUID()}
               type="button"
               className={`btn colorSelector ${footerData.data.backgroundColor === color.color ? ' selectedColor ' : ''}`}
               style={{ backgroundColor: color.color }}
@@ -267,7 +266,7 @@ const CypherResultCytoscapeFooter = ({
                   onClick={() => [
                     updateLabelCaption(footerData.data.type, footerData.data.label, caption),
                     captionChange(footerData.data.type, footerData.data.label, caption)]}
-                  key={uuid()}
+                  key={crypto.randomUUID()}
                   type="button"
                   className={`btn captionSelector ${selectedCaption === caption ? ' btn-secondary ' : ' btn-outline-dark '}`}
                 >
@@ -282,7 +281,7 @@ const CypherResultCytoscapeFooter = ({
                 onClick={() => [
                   updateLabelCaption(footerData.data.type, footerData.data.label, null),
                   captionChange(footerData.data.type, footerData.data.label, null)]}
-                key={uuid()}
+                key={crypto.randomUUID()}
                 type="button"
                 className={`btn captionSelector ${selectedCaption === null ? ' btn-secondary ' : ' btn-outline-dark '}`}
               >

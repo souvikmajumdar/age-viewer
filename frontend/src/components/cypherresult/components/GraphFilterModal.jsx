@@ -20,11 +20,10 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, TextInput, Dropdown, Button } from '@carbon/react';
 import { Subtract, Add } from '@carbon/icons-react';
-import uuid from 'react-uuid';
 import { useNotification } from '../../../hooks/useNotification';
 
 const generateNewFilterObject = () => ({
-  key: uuid(),
+  key: crypto.randomUUID(),
   keyword: null,
   property: null,
 });

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button } from '@carbon/react';
-import uuid from 'react-uuid';
 
 const BuilderSelection = ({ finder, setQuery, currentWord }) => {
   const handleClick = (e) => {
@@ -12,7 +11,7 @@ const BuilderSelection = ({ finder, setQuery, currentWord }) => {
       {
         finder?.getConnectedNames(currentWord).map(
           (element) => (
-            <li key={uuid()} style={{ marginBottom: '4px' }}>
+            <li key={crypto.randomUUID()} style={{ marginBottom: '4px' }}>
               <Button
                 kind="ghost"
                 size="sm"

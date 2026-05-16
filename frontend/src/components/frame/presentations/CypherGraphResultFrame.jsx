@@ -18,10 +18,8 @@
  */
 
 import React, { createRef, useEffect, useState } from 'react';
-import uuid from 'react-uuid';
 import { saveAs } from 'file-saver';
-import { Parser } from 'json2csv';
-import PropTypes from 'prop-types';
+import Papa from 'papaparse';
 import { Loading } from '@carbon/react';
 import CypherResultCytoscapeContainer from '../../cypherresult/containers/CypherResultCytoscapeContainer';
 import CypherResultTableContainer from '../../cypherresult/containers/CypherResultTableContainer';
@@ -36,7 +34,7 @@ const CypherResultFrame = ({
   reqString,
 }) => {
   const chartAreaRef = createRef();
-  const [cytoscapeContainerKey, setCytoscapeContainerKey] = useState(uuid());
+  const [cytoscapeContainerKey, setCytoscapeContainerKey] = useState(crypto.randomUUID());
 
   const [filterModalVisible, setFilterModalVisible] = useState(false);
   const [thicknessModalVisible, setThicknessModalVisible] = useState(false);
@@ -116,7 +114,7 @@ const CypherResultFrame = ({
   }, [globalThickness]);
 
   const refreshFrame = () => {
-    setCytoscapeContainerKey(uuid());
+    setCytoscapeContainerKey(crypto.randomUUID());
   };
 
   const downloadPng = () => {
@@ -166,8 +164,8 @@ const CypherResultFrame = ({
     }));
 
     try {
-      const json2csvParser = new Parser();
-      saveAs(new Blob([`\uFEFF${json2csvParser.parse(dataJson)}`], { type: 'text/csv;charset=utf-8' }), `${reqString.replace(/ /g, '_')}.csv`);
+      const csvString = Papa.unparse(dataJson);
+      saveAs(new Blob([`\uFEFF${csvString}`], { type: 'text/csv;charset=utf-8' }), `${reqString.replace(/ /g, '_')}.csv`);
     } catch (err) {
       alert('Unknown Error.');
     }
@@ -255,17 +253,6 @@ const CypherResultFrame = ({
     </>
 
   );
-};
-
-CypherResultFrame.propTypes = {
-  queryComplete: PropTypes.shape(
-    {
-      complete: PropTypes.bool.isRequired,
-    },
-  ).isRequired,
-  refKey: PropTypes.string.isRequired,
-  isPinned: PropTypes.bool.isRequired,
-  reqString: PropTypes.string.isRequired,
 };
 
 export default CypherResultFrame;

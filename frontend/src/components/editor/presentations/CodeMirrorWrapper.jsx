@@ -17,116 +17,90 @@
  * under the License.
  */
 
-import React, { useRef, useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
-import 'codemirror/keymap/sublime';
-import 'codemirror/addon/display/placeholder';
-import 'codemirror/theme/ambiance-mobile.css';
+import { sql } from '@codemirror/lang-sql';
+import { keymap } from '@codemirror/view';
 import './CodeMirror.scss';
-import PropTypes from 'prop-types';
 
 const CodeMirrorWrapper = ({
   value, onChange, commandHistory, onClick,
 }) => {
-  const [commandHistoryIndex, setCommandHistoryIndex] = useState(commandHistory.length);
-  const codeMirrorRef = useRef();
+  const [commandHistoryIndex, setCommandHistoryIndex] = useState(-1);
+
+  const handleChange = useCallback((val) => {
+    onChange(val);
+  }, [onChange]);
+
+  const customKeymap = keymap.of([
+    {
+      key: 'Shift-Enter',
+      run: () => {
+        onClick();
+        onChange('');
+        setCommandHistoryIndex(-1);
+        return true;
+      },
+    },
+    {
+      key: 'Ctrl-Enter',
+      run: () => {
+        onClick();
+        onChange('');
+        setCommandHistoryIndex(-1);
+        return true;
+      },
+    },
+    {
+      key: 'Ctrl-ArrowUp',
+      run: (view) => {
+        if (commandHistory.length === 0) return true;
+        let newIdx;
+        if (commandHistoryIndex === -1) {
+          newIdx = commandHistory.length - 1;
+        } else if (commandHistoryIndex === 0) {
+          newIdx = 0;
+        } else {
+          newIdx = commandHistoryIndex - 1;
+        }
+        view.dispatch({ changes: { from: 0, to: view.state.doc.length, insert: commandHistory[newIdx] } });
+        onChange(commandHistory[newIdx]);
+        setCommandHistoryIndex(newIdx);
+        return true;
+      },
+    },
+    {
+      key: 'Ctrl-ArrowDown',
+      run: (view) => {
+        if (commandHistory.length === 0) return true;
+        if (commandHistoryIndex === -1 || commandHistoryIndex === commandHistory.length - 1) {
+          view.dispatch({ changes: { from: 0, to: view.state.doc.length, insert: '' } });
+          onChange('');
+          setCommandHistoryIndex(-1);
+          return true;
+        }
+        const newIdx = commandHistoryIndex + 1;
+        view.dispatch({ changes: { from: 0, to: view.state.doc.length, insert: commandHistory[newIdx] } });
+        onChange(commandHistory[newIdx]);
+        setCommandHistoryIndex(newIdx);
+        return true;
+      },
+    },
+  ]);
 
   return (
     <CodeMirror
       id="editor"
-      ref={codeMirrorRef}
       value={value}
-      options={{
-        keyMap: 'sublime',
-        mode: 'cypher',
-        placeholder: 'Create a query...',
-        tabSize: 4,
+      extensions={[sql(), customKeymap]}
+      onChange={handleChange}
+      placeholder="Create a query..."
+      basicSetup={{
         lineNumbers: true,
-        spellcheck: false,
-        autocorrect: false,
-        autocapitalize: false,
-        lineNumberFormatter: () => '$',
-        extraKeys: {
-          'Shift-Enter': (editor) => {
-            onClick();
-            editor.setValue('');
-            setCommandHistoryIndex(-1);
-          },
-          'Ctrl-Enter': (editor) => {
-            onClick();
-            editor.setValue('');
-            setCommandHistoryIndex(-1);
-          },
-          'Ctrl-Up': (editor) => {
-            if (commandHistory.length === 0) {
-              return;
-            }
-            if (commandHistoryIndex === -1) {
-              const currentIdx = commandHistory.length - 1;
-              editor.setValue(commandHistory[currentIdx]);
-              setCommandHistoryIndex(currentIdx);
-              return;
-            }
-            if (commandHistoryIndex === 0) {
-              editor.setValue(commandHistory[0]);
-              setCommandHistoryIndex(0);
-              return;
-            }
-
-            editor.setValue(commandHistory[commandHistoryIndex - 1]);
-            setCommandHistoryIndex(commandHistoryIndex - 1);
-          },
-          'Ctrl-Down': (editor) => {
-            if (commandHistory.length === 0) {
-              return;
-            }
-            if (commandHistoryIndex === -1) {
-              editor.setValue('');
-              return;
-            }
-
-            if (commandHistoryIndex === (commandHistory.length - 1)) {
-              editor.setValue('');
-              setCommandHistoryIndex(-1);
-              return;
-            }
-
-            editor.setValue(commandHistory[commandHistoryIndex + 1]);
-            setCommandHistoryIndex(commandHistoryIndex + 1);
-          },
-          Enter: (editor) => {
-            editor.replaceSelection('\n', 'end');
-          },
-        },
-      }}
-      onChange={(editor) => {
-        onChange(editor.getValue());
-        const lineCount = editor.lineCount();
-        let draggedHeight;
-        let height;
-        if (lineCount <= 1) {
-          editor.setOption('lineNumberFormatter', () => '$');
-        } else {
-          editor.setOption('lineNumberFormatter', (number) => number);
-          draggedHeight = document.getElementById('codeMirrorEditor').style.height;
-          if (draggedHeight) {
-            [height] = draggedHeight.split('px');
-            if (height < (58 + 21 * lineCount)) {
-              document.getElementById('codeMirrorEditor').style.height = null;
-            }
-          }
-        }
-        return true;
+        tabSize: 4,
       }}
     />
   );
-};
-
-CodeMirrorWrapper.propTypes = {
-  onChange: PropTypes.func.isRequired,
-  value: PropTypes.string.isRequired,
-  commandHistory: PropTypes.arrayOf(PropTypes.string).isRequired,
-  onClick: PropTypes.func.isRequired,
 };
 
 export default CodeMirrorWrapper;

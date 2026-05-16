@@ -19,8 +19,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import uuid from 'react-uuid';
-import PropTypes from 'prop-types';
 import { CloseOutline, ToggleOff, ToggleOn } from '@carbon/icons-react';
 import store from '../../../app/store';
 import AlertContainers from '../../alert/containers/AlertContainers';
@@ -61,7 +59,7 @@ const Editor = ({
   };
 
   const onClick = () => {
-    const refKey = uuid();
+    const refKey = crypto.randomUUID();
     if (command.toUpperCase().startsWith(':PLAY')) {
       dispatch(() => addFrame(command, 'Contents', refKey));
     } else if (command.toUpperCase().startsWith(':CSV')) {
@@ -207,35 +205,6 @@ const Editor = ({
       {alerts}
     </div>
   );
-};
-
-Editor.propTypes = {
-  setCommand: PropTypes.func.isRequired,
-  activeRequests: PropTypes.arrayOf(PropTypes.string).isRequired,
-  command: PropTypes.string.isRequired,
-  addFrame: PropTypes.func.isRequired,
-  trimFrame: PropTypes.func.isRequired,
-  addAlert: PropTypes.func.isRequired,
-  alertList: PropTypes.arrayOf(PropTypes.shape({
-    alertName: PropTypes.string.isRequired,
-    alertProps: PropTypes.shape({
-      key: PropTypes.string.isRequired,
-      alertType: PropTypes.string.isRequired,
-      errorMessage: PropTypes.string.isRequired,
-    }),
-  })).isRequired,
-  isActive: PropTypes.bool.isRequired,
-  database: PropTypes.shape({
-    status: PropTypes.string.isRequired,
-    host: PropTypes.string.isRequired,
-  }).isRequired,
-  executeCypherQuery: PropTypes.func.isRequired,
-  addCommandHistory: PropTypes.func.isRequired,
-  toggleMenu: PropTypes.func.isRequired,
-  update: PropTypes.bool.isRequired,
-  setLabel: PropTypes.func.isRequired,
-  isLabel: PropTypes.bool.isRequired,
-  // addCommandFavorites: PropTypes.func.isRequired,
 };
 
 export default Editor;

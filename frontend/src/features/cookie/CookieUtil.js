@@ -17,22 +17,41 @@
  * under the License.
  */
 
-import cookie from 'react-cookies';
-
 const oneYearFromNow = new Date();
 oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1);
 
-const cookieOptions = {
+const defaultOptions = {
   path: '/',
   expires: oneYearFromNow,
   secure: false,
-  httpOnly: false,
 };
 
-export const loadFromCookie = (cookieName) => cookie.load(cookieName);
-
-export const saveToCookie = (cookieName, value, options = cookieOptions) => {
-  cookie.save(cookieName, value, options);
+const parseCookies = () => {
+  const cookies = {};
+  document.cookie.split(';').forEach((cookie) => {
+    const [name, ...rest] = cookie.trim().split('=');
+    if (name) {
+      try {
+        cookies[name] = JSON.parse(decodeURIComponent(rest.join('=')));
+      } catch {
+        cookies[name] = decodeURIComponent(rest.join('='));
+      }
+    }
+  });
+  return cookies;
 };
 
-export const loadAllFromCookie = () => cookie.loadAll();
+export const loadFromCookie = (cookieName) => {
+  const cookies = parseCookies();
+  return cookies[cookieName] !== undefined ? cookies[cookieName] : undefined;
+};
+
+export const saveToCookie = (cookieName, value, options = defaultOptions) => {
+  let cookieString = `${cookieName}=${encodeURIComponent(JSON.stringify(value))}`;
+  if (options.path) cookieString += `; path=${options.path}`;
+  if (options.expires) cookieString += `; expires=${options.expires.toUTCString()}`;
+  if (options.secure) cookieString += '; secure';
+  document.cookie = cookieString;
+};
+
+export const loadAllFromCookie = () => parseCookies();

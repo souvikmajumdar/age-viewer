@@ -18,7 +18,6 @@
  */
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import uuid from 'react-uuid';
 
 export const getMetaData = createAsyncThunk(
   'database/getMetaData',
@@ -47,7 +46,7 @@ export const getMetaData = createAsyncThunk(
           });
           ret[gname].nodes?.unshift({ label: '*', cnt: allCountNode });
           ret[gname].edges?.unshift({ label: '*', cnt: allCountEdge });
-          ret[gname].id = uuid();
+          ret[gname].id = crypto.randomUUID();
         });
         return ret;
       }

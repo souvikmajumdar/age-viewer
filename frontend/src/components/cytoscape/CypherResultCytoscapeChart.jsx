@@ -36,7 +36,6 @@ import {
   TrashCan,
   Pin,
 } from '@carbon/icons-react';
-import uuid from 'react-uuid';
 import cxtmenu from '../../lib/cytoscape-cxtmenu';
 import { initLocation, seletableLayouts } from './CytoscapeLayouts';
 import { stylesheet } from './CytoscapeStyleSheet';
@@ -259,7 +258,7 @@ const CypherResultCytoscapeCharts = ({
             content: ReactDOMServer.renderToString(<IconFilter size="lg" />),
             select(ele) {
               const newFilterObject = {
-                key: uuid(),
+                key: crypto.randomUUID(),
                 keyword: ele.data().properties[ele.data().caption],
                 property: {
                   label: ele.data().label,
