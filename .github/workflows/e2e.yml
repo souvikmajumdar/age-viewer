@@ -1,0 +1,138 @@
+name: E2E Tests
+
+on:
+  pull_request:
+    branches: [development]
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: apache/age:latest
+        env:
+          POSTGRES_USER: ${{ vars.E2E_DB_USER || 'ageviewer_e2e' }}
+          POSTGRES_PASSWORD: ${{ secrets.E2E_DB_PASSWORD }}
+          POSTGRES_DB: ${{ vars.E2E_DB_NAME || 'ageviewer_e2e' }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U ageviewer_e2e -d ageviewer_e2e"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+
+    strategy:
+      matrix:
+        node-version: [24.x]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify required secrets
+        run: |
+          if [ -z "${{ secrets.E2E_DB_PASSWORD }}" ]; then
+            echo "::error::E2E_DB_PASSWORD secret is not configured."
+            echo ""
+            echo "========================================="
+            echo "  SETUP REQUIRED: GitHub Secret Missing"
+            echo "========================================="
+            echo ""
+            echo "The E2E workflow requires a repository secret named E2E_DB_PASSWORD."
+            echo ""
+            echo "To configure:"
+            echo "  1. Go to: Settings → Secrets and variables → Actions"
+            echo "  2. Click 'New repository secret'"
+            echo "  3. Name: E2E_DB_PASSWORD"
+            echo "  4. Value: (any secure password for the test database)"
+            echo ""
+            echo "This secret is used to initialize the ephemeral PostgreSQL"
+            echo "service container that runs E2E tests. It is never persisted"
+            echo "beyond the CI job lifetime."
+            echo "========================================="
+            exit 1
+          fi
+          echo "✅ E2E_DB_PASSWORD secret is configured"
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install root dependencies
+        run: npm install
+
+      - name: Install backend dependencies
+        run: cd backend && npm install
+
+      - name: Install frontend dependencies and build
+        run: cd frontend && npm install && npm run build
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          for i in $(seq 1 30); do
+            if pg_isready -h 127.0.0.1 -p 5432 -U ageviewer_e2e; then
+              echo "PostgreSQL is ready"
+              break
+            fi
+            echo "Waiting for PostgreSQL... ($i/30)"
+            sleep 2
+          done
+
+      - name: Initialize AGE extension
+        env:
+          PGPASSWORD: ${{ secrets.E2E_DB_PASSWORD }}
+        run: |
+          psql -h 127.0.0.1 -p 5432 -U ageviewer_e2e -d ageviewer_e2e -c "CREATE EXTENSION IF NOT EXISTS age;"
+          psql -h 127.0.0.1 -p 5432 -U ageviewer_e2e -d ageviewer_e2e -c "LOAD 'age';"
+          echo "✅ AGE extension initialized"
+
+      - name: Start backend
+        run: cd backend && PORT=3001 node src/bin/www.js &
+        env:
+          E2E_DB_HOST: localhost
+          E2E_DB_PORT: 5432
+
+      - name: Wait for backend
+        run: |
+          for i in $(seq 1 30); do
+            if curl -s http://localhost:3001/api/v1/miscellaneous > /dev/null; then
+              echo "Backend is ready"
+              break
+            fi
+            sleep 1
+          done
+
+      - name: Serve frontend build
+        run: cd frontend && npx serve -s build -l 3000 &
+
+      - name: Wait for frontend
+        run: |
+          for i in $(seq 1 15); do
+            if curl -s http://localhost:3000 > /dev/null; then
+              echo "Frontend is ready"
+              break
+            fi
+            sleep 1
+          done
+
+      - name: Run Playwright tests
+        run: npx playwright test
+        env:
+          E2E_DB_HOST: localhost
+          E2E_DB_PORT: 5432
+          E2E_DB_USER: ${{ vars.E2E_DB_USER || 'ageviewer_e2e' }}
+          E2E_DB_PASSWORD: ${{ secrets.E2E_DB_PASSWORD }}
+          E2E_DB_NAME: ${{ vars.E2E_DB_NAME || 'ageviewer_e2e' }}
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

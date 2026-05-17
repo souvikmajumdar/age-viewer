@@ -204,17 +204,17 @@
 ### 4f: E2E Tests (Playwright)
 ### 4f: E2E Tests (Playwright)
 
-#### 4f-i: E2E Infrastructure Setup
-- [ ] Create `scripts/e2e-run.sh` — orchestrator (calls check → setup if needed → test)
-- [ ] Create `scripts/e2e-check-env.sh` — validates Docker/Podman, container running, DB accessible
-- [ ] Create `scripts/e2e-setup-env.sh` — pulls `apache/age` image, starts container, configures RBAC
-- [ ] Create `scripts/e2e-test.sh` — starts backend + frontend, runs Playwright
-- [ ] Update `docker-compose.yml` for test environment (replace old Postgres 11 setup)
-- [ ] Install Playwright as dev dependency
-- [ ] Create `playwright.config.js`
-- [ ] Add `e2e` script to root package.json
-- [ ] Add E2E CI workflow (separate file, PRs to `development` only)
-- [ ] Document the setup
+#### 4f-i: E2E Infrastructure Setup ✅ COMPLETE
+- [x] Create `scripts/e2e-run.sh` — orchestrator (calls check → setup if needed → test)
+- [x] Create `scripts/e2e-check-env.sh` — validates Docker/Podman, container running, DB accessible
+- [x] Create `scripts/e2e-setup-env.sh` — pulls `apache/age` image, starts container, configures RBAC
+- [x] Create `scripts/e2e-test.sh` — starts backend + frontend, runs Playwright
+- [x] Update `docker-compose.yml` for test environment (replace old Postgres 11 setup)
+- [x] Install Playwright as dev dependency
+- [x] Create `playwright.config.js`
+- [x] Add `e2e` script to root package.json
+- [x] Add E2E CI workflow (separate file, PRs to `development` only)
+- [x] Smoke test placeholder
 
 #### 4f-ii: E2E Test Scenarios
 - [ ] Flow 1: Connect to database → verify status frame
