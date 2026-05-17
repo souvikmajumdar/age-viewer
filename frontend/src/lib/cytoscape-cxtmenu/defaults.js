@@ -52,4 +52,4 @@ const defaults = {
   atMouse: false, // draw menu at mouse position
 };
 
-module.exports = defaults;
+export default defaults;
