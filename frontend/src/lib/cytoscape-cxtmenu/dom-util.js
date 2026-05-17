@@ -70,6 +70,6 @@ const getOffset = function (el) {
   };
 };
 
-module.exports = {
+export {
   removeEles, setStyles, createElement, getPixelRatio, getOffset,
 };

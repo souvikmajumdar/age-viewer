@@ -21,11 +21,11 @@
  */
 
 /* eslint-disable */
-const defaults = require('./defaults');
-const assign = require('./assign');
-const {
+import defaults from './defaults';
+import assign from './assign';
+import {
   removeEles, setStyles, createElement, getPixelRatio, getOffset,
-} = require('./dom-util');
+} from './dom-util';
 
 const cxtmenu = function (params) {
   const options = assign({}, defaults, params);
@@ -596,4 +596,4 @@ const cxtmenu = function (params) {
   };
 };
 
-module.exports = cxtmenu;
+export default cxtmenu;

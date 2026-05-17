@@ -21,7 +21,7 @@
  */
 
 /* eslint-disable */
-const cxtmenu = require('./cxtmenu');
+import cxtmenu from './cxtmenu';
 
 // registers the extension on a cytoscape lib ref
 const register = function (cytoscape) {
