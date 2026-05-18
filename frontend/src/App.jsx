@@ -19,6 +19,7 @@
 
 import React from 'react';
 import './styles/carbon.scss';
+import './static/utilities.css';
 import './static/style.css';
 import './static/navbar-fixed-left.css';
 import { NotificationProvider } from './hooks/useNotification';
