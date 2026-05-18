@@ -18,6 +18,7 @@
  */
 
 import { combineReducers } from '@reduxjs/toolkit';
+// RootState is inferred from the combined reducers shape
 import DatabaseReducer from '../features/database/DatabaseSlice';
 import MetadataReducer from '../features/database/MetadataSlice';
 import FrameReducer from '../features/frame/FrameSlice';
@@ -28,7 +29,6 @@ import AlertReducer from '../features/alert/AlertSlice';
 import EditorSlice from '../features/editor/EditorSlice';
 import ModalSlice from '../features/modal/ModalSlice';
 import LayoutSlice from '../features/layout/LayoutSlice';
-
 const rootReducer = combineReducers({
   navigator: MenuReducer,
   setting: SettingReducer,

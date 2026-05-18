@@ -18,19 +18,20 @@
  */
 
 /* eslint-disable no-param-reassign */
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import type { FrameState } from '../../types/redux';
 
 const FrameSlice = createSlice({
   name: 'frames',
-  initialState: [],
+  initialState: [] as FrameState,
   reducers: {
     addFrame: {
-      reducer: (state, action) => {
+      reducer: (state, action: PayloadAction<{ reqString: string; frameName: string; refKey?: string }>) => {
         const reqString = action.payload.reqString.trim();
         const firstNotPinnedIndex = state.findIndex((frame) => (frame.isPinned === false));
         const { frameName } = action.payload;
 
-        const frameProps = {
+        const frameProps: { reqString: string; key: string; playTarget?: string } = {
           reqString,
           key: action.payload.refKey ? action.payload.refKey : crypto.randomUUID(),
         };
@@ -42,18 +43,17 @@ const FrameSlice = createSlice({
         state.splice(firstNotPinnedIndex, 0, { frameName, frameProps, isPinned: false });
         state.map((frame) => { if (frame.orgIndex) { frame.orgIndex += 1; } return frame; });
       },
-      prepare: (reqString, frameName, refKey) => ({ payload: { reqString, frameName, refKey } }),
+      prepare: (reqString: string, frameName: string, refKey?: string) => ({ payload: { reqString, frameName, refKey } }),
     },
     removeFrame: {
-      reducer: (state, action) => {
+      reducer: (state, action: PayloadAction<{ refKey: string }>) => {
         const frameKey = action.payload.refKey;
         return state.filter((frame) => frame.frameProps.key !== frameKey);
       },
-      prepare: (refKey) => ({ payload: { refKey } }),
-
+      prepare: (refKey: string) => ({ payload: { refKey } }),
     },
     pinFrame: {
-      reducer: (state, action) => {
+      reducer: (state, action: PayloadAction<{ refKey: string }>) => {
         const frameKey = action.payload.refKey;
         const frameIndex = state.findIndex((frame) => (frame.frameProps.key === frameKey));
         if (!state[frameIndex].isPinned) {
@@ -66,15 +66,14 @@ const FrameSlice = createSlice({
           state.splice(indexMoveTo, 0, state.splice(frameIndex, 1)[0]);
         }
       },
-      prepare: (refKey) => ({ payload: { refKey } }),
+      prepare: (refKey: string) => ({ payload: { refKey } }),
     },
     trimFrame: {
-      reducer: (state, action) => {
+      reducer: (state, action: PayloadAction<{ frameName: string }>) => {
         const { frameName } = action.payload;
         return state.filter((frame) => (frame.frameName !== frameName));
       },
-      prepare: (frameName) => ({ payload: { frameName } }),
-
+      prepare: (frameName: string) => ({ payload: { frameName } }),
     },
   },
 });

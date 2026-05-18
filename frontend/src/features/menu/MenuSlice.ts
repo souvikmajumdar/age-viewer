@@ -18,22 +18,32 @@
  */
 
 /* eslint-disable no-param-reassign */
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import type { NavigatorState } from '../../types/redux';
 
-const LayoutSlice = createSlice({
-  name: 'layout',
+const MenuSlice = createSlice({
+  name: 'navigator',
   initialState: {
-    isLabel: false,
-  },
+    menuList: [['home', 'Home'], ['setting', 'Settings']] as [string, string][],
+    activeMenu: 'home',
+    isActive: true,
+  } as NavigatorState,
   reducers: {
-    setLabel: {
-      reducer: (state) => {
-        state.isLabel = !state.isLabel;
+    toggleMenu: {
+      reducer: (state, action: PayloadAction<{ selectedMenuName: string }>) => {
+        let isActive = true;
+        if (state.activeMenu === action.payload.selectedMenuName) {
+          action.payload.selectedMenuName = '';
+          isActive = false;
+        }
+        state.activeMenu = action.payload.selectedMenuName;
+        state.isActive = isActive;
       },
+      prepare: (selectedMenuName: string) => ({ payload: { selectedMenuName } }),
     },
   },
 });
 
-export const { setLabel } = LayoutSlice.actions;
+export const { toggleMenu } = MenuSlice.actions;
 
-export default LayoutSlice.reducer;
+export default MenuSlice.reducer;

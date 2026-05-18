@@ -18,7 +18,8 @@
  */
 
 /* eslint-disable no-param-reassign */
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import type { ModalState } from '../../types/redux';
 
 const ModalSlice = createSlice({
   name: 'modal',
@@ -27,49 +28,37 @@ const ModalSlice = createSlice({
     isTutorial: false,
     graphHistory: [],
     elementHistory: [],
-  },
+  } as ModalState,
   reducers: {
-    openModal: {
-      reducer: (state) => {
-        state.isOpen = true;
-      },
+    openModal: (state) => {
+      state.isOpen = true;
     },
-    closeModal: {
-      reducer: (state) => {
-        state.isOpen = false;
-      },
+    closeModal: (state) => {
+      state.isOpen = false;
     },
-    openTutorial: {
-      reducer: (state) => {
-        state.isTutorial = true;
-      },
+    openTutorial: (state) => {
+      state.isTutorial = true;
     },
-    closeTutorial: {
-      reducer: (state) => {
-        state.isTutorial = false;
-      },
+    closeTutorial: (state) => {
+      state.isTutorial = false;
     },
     addGraphHistory: {
-      reducer: (state, action) => {
+      reducer: (state, action: PayloadAction<{ graph: unknown }>) => {
         state.graphHistory.push(action.payload.graph);
       },
-      prepare: (graph) => ({ payload: { graph } }),
+      prepare: (graph: unknown) => ({ payload: { graph } }),
     },
     addElementHistory: {
-      reducer: (state, action) => {
+      reducer: (state, action: PayloadAction<{ element: unknown }>) => {
         state.elementHistory.push(action.payload.element);
       },
-      prepare: (element) => ({ payload: { element } }),
+      prepare: (element: unknown) => ({ payload: { element } }),
     },
-    removeGraphHistory: {
-      reducer: (state) => {
-        state.graphHistory = [];
-      },
+    removeGraphHistory: (state) => {
+      state.graphHistory = [];
     },
-    removeElementHistory: {
-      reducer: (state) => {
-        state.elementHistory = [];
-      },
+    removeElementHistory: (state) => {
+      state.elementHistory = [];
     },
   },
 });

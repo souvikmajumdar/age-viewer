@@ -1,17 +1,25 @@
+interface KeyWordMatrix {
+  kw: string[];
+  relationships: string[][];
+}
+
 class KeyWordFinder {
+  keywordMap: Record<string, string[]>;
+  allKeywords: Set<string>;
+
   constructor() {
-    this.keywordMap = new Map();
+    this.keywordMap = new Map() as unknown as Record<string, string[]>;
     this.allKeywords = new Set();
   }
 
-  getConnectedNames(kw) {
+  getConnectedNames(kw: string): string[] {
     const key = kw.toUpperCase();
     if (!this.allKeywords.has(key)) {
       return KeyWordFinder.INITIAL;
     }
     const relationships = this.keywordMap[key];
     const keywordList = Object.keys(this.keywordMap);
-    const relatedKeys = [];
+    const relatedKeys: string[] = [];
     relationships.forEach((element, index) => {
       if (element !== '0') {
         relatedKeys.push(keywordList[index]);
@@ -20,16 +28,16 @@ class KeyWordFinder {
     return relatedKeys;
   }
 
-  hasWord(word) {
+  hasWord(word: string): boolean {
     const upperWord = word.toUpperCase();
     return this.allKeywords.has(upperWord);
   }
 
-  static get INITIAL() {
+  static get INITIAL(): string[] {
     return ['MATCH', 'CREATE', 'MERGE'];
   }
 
-  static fromMatrix(data) {
+  static fromMatrix(data: KeyWordMatrix): KeyWordFinder {
     const { kw, relationships } = data;
     const finder = new KeyWordFinder();
     // kw is list of keywordList and relationships is matrix

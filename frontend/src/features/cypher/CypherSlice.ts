@@ -18,10 +18,22 @@
  */
 
 /* eslint-disable no-param-reassign */
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import type { CypherState, CypherQueryResult } from '../../types/redux';
+
+type CypherQueryArgs = [string, string]; // [key, query]
+
+interface CypherApiResult {
+  key: string;
+  query: string;
+  rows?: unknown[];
+  columns?: string[];
+  rowCount?: number;
+  command?: string;
+}
 
 // eslint-disable-next-line no-unused-vars
-const validateSamePathVariableReturn = (cypherQuery) => {
+const validateSamePathVariableReturn = (cypherQuery: string): void => {
   const cypherPathValidator = new RegExp('^match\\s([a-zA-Z0-9].*)\\s*=\\s*\\(', 'i');
 
   if (cypherPathValidator.test(cypherQuery)) {
@@ -34,7 +46,7 @@ const validateSamePathVariableReturn = (cypherQuery) => {
 };
 
 // eslint-disable-next-line no-unused-vars
-const validateVlePathVariableReturn = (cypherQuery) => {
+const validateVlePathVariableReturn = (cypherQuery: string): void => {
   const cypherVleValidator = new RegExp('^match\\s.*[.*[0-9]*\\s*\\.\\.\\s*[0-9]*]', 'i');
 
   if (cypherVleValidator.test(cypherQuery)) {
@@ -46,7 +58,7 @@ const validateVlePathVariableReturn = (cypherQuery) => {
   }
 };
 
-export const executeCypherQuery = createAsyncThunk(
+export const executeCypherQuery = createAsyncThunk<CypherApiResult, CypherQueryArgs>(
   'cypher/executeCypherQuery',
   async (args, thunkAPI) => {
     try {
@@ -66,19 +78,18 @@ export const executeCypherQuery = createAsyncThunk(
       }
       throw response;
     } catch (error) {
-      if (error.json === undefined) {
+      if ((error as Response).json === undefined) {
         throw error;
       } else {
-        const errorJson = await error.json();
+        const errorJson = await (error as Response).json();
         const messaage = errorJson.message.charAt(0).toUpperCase() + errorJson.message.slice(1);
         throw messaage;
       }
     }
   },
-
 );
 
-const removeActive = (state, key) => {
+const removeActive = (state: CypherState, key: string): void => {
   state.activeRequests = state.activeRequests.filter((ref) => ref !== key);
 };
 
@@ -88,10 +99,10 @@ const CypherSlice = createSlice({
     queryResult: {},
     activeRequests: [],
     labels: { nodeLabels: {}, edgeLabels: {} },
-  },
+  } as CypherState,
   reducers: {
     setLabels: {
-      reducer: (state, action) => {
+      reducer: (state, action: PayloadAction<{ elementType: string; label: string; property: Record<string, unknown> }>) => {
         if (action.payload.elementType === 'node') {
           if (state.labels.nodeLabels[action.payload.label] === undefined) {
             state.labels.nodeLabels[action.payload.label] = action.payload.property;
@@ -106,9 +117,9 @@ const CypherSlice = createSlice({
           }
         }
       },
-      prepare: (elementType, label, property) => ({ payload: { elementType, label, property } }),
+      prepare: (elementType: string, label: string, property: Record<string, unknown>) => ({ payload: { elementType, label, property } }),
     },
-    removeActiveRequests: (state, action) => removeActive(state, action.payload),
+    removeActiveRequests: (state, action: PayloadAction<string>) => removeActive(state, action.payload),
   },
   extraReducers: (builder) => {
     builder
@@ -123,7 +134,7 @@ const CypherSlice = createSlice({
         const key = action.meta.arg[0];
         const command = action.meta.arg[1];
         const rid = action.meta.requestId;
-        state.queryResult[key] = {};
+        state.queryResult[key] = {} as CypherQueryResult;
         state.activeRequests = [...state.activeRequests, key];
         Object.assign(state.queryResult[key], {
           command,

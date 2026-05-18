@@ -17,19 +17,21 @@
  * under the License.
  */
 
-import { createSlice } from '@reduxjs/toolkit';
-import html2canvas from 'html2canvas';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+// html2canvas is not installed as a package; declare a minimal type to satisfy TypeScript
+declare function html2canvas(element: HTMLElement): Promise<HTMLCanvasElement>;
 
 export const Capture = createSlice({
   name: 'capture',
-  initialState: [],
+  initialState: [] as unknown[],
   reducers: {
     capturePng: {
-      reducer: (state, action) => {
+      reducer: (state, action: PayloadAction<{ refKey: string }>) => {
         const frameKey = action.payload.refKey;
-        state.splice(state.findIndex((frame) => (frame.frameProps.key === frameKey)), 1);
+        state.splice(state.findIndex((frame: unknown) => (frame as { frameProps: { key: string } }).frameProps.key === frameKey), 1);
         state.map((frame) => {
-          html2canvas(frame).then((canvas) => {
+          html2canvas(frame as HTMLElement).then((canvas) => {
             const saveImgLink = canvas.toDataURL();
             const link = document.createElement('a');
             link.download = 'saveimage';
@@ -39,7 +41,7 @@ export const Capture = createSlice({
           return frame;
         });
       },
-      prepare: (refKey) => ({ payload: { refKey } }),
+      prepare: (refKey: string) => ({ payload: { refKey } }),
     },
   },
 });
