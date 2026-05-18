@@ -25,13 +25,36 @@ const __dirname = dirname(__filename);
 
 const sqlBasePath = join(__dirname, '../../sql');
 
-// todo: util.format -> ejs
-function getQuery(name, version='') {
-    const sqlPath = join(sqlBasePath, version, `${name}.sql`);
-    if (!fs.existsSync(sqlPath)) {
-        throw new Error(`SQL does not exist, name = ${name}`);
+// Supported PostgreSQL major versions
+const SUPPORTED_VERSIONS = ['14', '15', '16', '17', '18'];
+const MIN_SUPPORTED_VERSION = 14;
+const MAX_SUPPORTED_VERSION = 18;
+
+function getQuery(name, version = '') {
+  if (version && !SUPPORTED_VERSIONS.includes(version)) {
+    const versionNum = parseInt(version, 10);
+    if (versionNum < MIN_SUPPORTED_VERSION) {
+      throw new Error(
+        `PostgreSQL ${version} is no longer supported. Minimum supported version is ${MIN_SUPPORTED_VERSION}. ` +
+        `Please upgrade your PostgreSQL installation.`
+      );
     }
-    return fs.readFileSync(sqlPath, 'utf8');
+    if (versionNum > MAX_SUPPORTED_VERSION) {
+      throw new Error(
+        `PostgreSQL ${version} is not yet supported. Maximum supported version is ${MAX_SUPPORTED_VERSION}. ` +
+        `Supported versions: ${SUPPORTED_VERSIONS.join(', ')}.`
+      );
+    }
+  }
+
+  const sqlPath = join(sqlBasePath, version, `${name}.sql`);
+  if (!fs.existsSync(sqlPath)) {
+    throw new Error(
+      `SQL file not found: ${name}.sql (version: ${version || 'default'}). ` +
+      `Supported PostgreSQL versions: ${SUPPORTED_VERSIONS.join(', ')}.`
+    );
+  }
+  return fs.readFileSync(sqlPath, 'utf8');
 }
 
-export {getQuery}
+export { getQuery, SUPPORTED_VERSIONS, MIN_SUPPORTED_VERSION, MAX_SUPPORTED_VERSION };

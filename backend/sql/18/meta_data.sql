@@ -10,4 +10,4 @@ JOIN ag_graph as g ON q1.namespace_id = g.namespace
 INNER JOIN ag_label as label
 
 ON label.name = q1.label
-AND label.graph = g.oid;
+AND label.graph = g.graphid;
