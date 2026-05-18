@@ -19,6 +19,7 @@
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import express from 'express';
+import type { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import session from 'express-session';
 import { v4 as uuidv4 } from 'uuid';
@@ -38,20 +39,19 @@ const app = express();
 app.use(cors({
     origin: true,
     credentials: true
-}))
+}));
 app.use(express.static(join(__dirname, '../../frontend/build')));
-app.get('/', function (req, res) {
+app.get('/', function (req: Request, res: Response) {
     res.sendFile(join(__dirname, '../../frontend/build', 'index.html'));
 });
 
 app.use(
     session({
         secret: 'apache-age-viewer',
-        secure: true,
         resave: false,
         saveUninitialized: true,
         proxy: true,
-        genid: (req) => {
+        genid: (_req: Request) => {
             return uuidv4();
         },
     })
@@ -66,8 +66,14 @@ app.use('/api/v1/miscellaneous', miscellaneousRouter);
 app.use('/api/v1/cypher', cypherRouter);
 app.use('/api/v1/db', databaseRouter);
 
+interface AppError extends Error {
+    status?: number;
+    severity?: string;
+    code?: string;
+}
+
 // Error Handler
-app.use(function (err, req, res, next) {
+app.use(function (err: AppError, req: Request, res: Response, next: NextFunction) {
     // TODO: logger
     console.error(err);
     res.status(err.status || 500).json(
@@ -79,7 +85,7 @@ app.use(function (err, req, res, next) {
     );
 });
 
-process.on('uncaughtException', function (exception) {
+process.on('uncaughtException', function (exception: Error) {
     console.log(exception);
 });
 

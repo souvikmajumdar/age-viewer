@@ -17,6 +17,16 @@
  * under the License.
  */
 
-export default {
-    AGE: 'AGE'
+import type { Request, Response, NextFunction } from 'express';
+
+type AsyncRouteHandler = (req: Request, res: Response, next: NextFunction) => Promise<unknown>;
+
+export function wrap(asyncFn: AsyncRouteHandler): (req: Request, res: Response, next: NextFunction) => Promise<unknown> {
+    return (async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            return await asyncFn(req, res, next);
+        } catch (error) {
+            return next(error);
+        }
+    });
 }

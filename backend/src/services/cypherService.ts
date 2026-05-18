@@ -17,92 +17,105 @@
  * under the License.
  */
 
+import type GraphRepository from '../models/GraphRepository.js';
+import type {
+    AgeVertex,
+    AgeEdge,
+    AgePath,
+    ConvertedVertex,
+    ConvertedEdge,
+    ConvertedPath,
+    QueryResult,
+} from '../types/age.js';
+
+interface CypherResult {
+    rows: Record<string, unknown>[];
+    columns: string[];
+    rowCount: number;
+    command: string;
+}
+
 class CypherService {
-    constructor(graphRepository) {
+    private _graphRepository: GraphRepository;
+
+    constructor(graphRepository: GraphRepository) {
         this._graphRepository = graphRepository;
     }
 
-    async executeCypher(query) {
+    async executeCypher(query: string): Promise<CypherResult> {
         if (!query) {
             throw new Error('Query not entered!');
-        } else {
-            try {
-                let resultSet = await this._graphRepository.execute(query);
-                return this.createResult(resultSet);
-            } catch (err) {
-                throw err;
-            }
         }
+        const resultSet = await this._graphRepository.execute(query);
+        return this.createResult(resultSet);
     }
-    
-    createResult(resultSet) {
-        let result;
 
-        let targetItem = resultSet;
+    createResult(resultSet: QueryResult | QueryResult[]): CypherResult {
+        let targetItem: QueryResult;
+
         if (Array.isArray(resultSet)) {
-            targetItem = resultSet.pop();
+            targetItem = resultSet.pop()!;
+        } else {
+            targetItem = resultSet;
         }
 
-        let cypherRow = targetItem.rows;
-        result = {
+        const cypherRow = targetItem.rows;
+        return {
             rows: cypherRow,
             columns: this._getColumns(targetItem),
             rowCount: this._getRowCount(targetItem),
             command: this._getCommand(targetItem),
         };
-        return result;
     }
 
-    _getColumns(resultSet) {
+    private _getColumns(resultSet: QueryResult): string[] {
         return resultSet.fields.map((field) => field.name);
     }
 
-    _getRowCount(resultSet) {
+    private _getRowCount(resultSet: QueryResult): number {
         return resultSet.rowCount;
     }
 
-    _getCommand(resultSet) {
+    private _getCommand(resultSet: QueryResult): string {
         return resultSet.command;
     }
 
-    _convertRowToResult(resultSet) {
+    _convertRowToResult(resultSet: QueryResult): Record<string, unknown>[] {
         return resultSet.rows.map((row) => {
-            let convetedObject = {};
-            for (let k in row) {
+            const convertedObject: Record<string, unknown> = {};
+            for (const k in row) {
                 if (row[k]) {
-                    let typeName = row[k].constructor.name;
+                    const value = row[k] as { constructor: { name: string } };
+                    const typeName = value.constructor.name;
                     if (typeName === 'Path') {
-                        convetedObject[k] = this.convertPath(row[k]);
+                        convertedObject[k] = this.convertPath(row[k] as AgePath);
                     } else if (typeName === 'Vertex') {
-                        convetedObject[k] = this.convertVertex(row[k]);
+                        convertedObject[k] = this.convertVertex(row[k] as AgeVertex);
                     } else if (typeName === 'Edge') {
-                        convetedObject[k] = this.convertEdge(row[k]);
+                        convertedObject[k] = this.convertEdge(row[k] as AgeEdge);
                     } else {
-                        convetedObject[k] = row[k];
+                        convertedObject[k] = row[k];
                     }
                 } else {
-                    convetedObject[k] = null;
+                    convertedObject[k] = null;
                 }
             }
-            return convetedObject;
+            return convertedObject;
         });
     }
 
-    convertPath({vertices, edges, start, end, len}) {
-        let result = [];
-        // vertex
-        for (let idx in vertices) {
+    convertPath({ vertices, edges }: AgePath): ConvertedPath {
+        const result: ConvertedPath = [];
+        for (const idx in vertices) {
             result.push(this.convertVertex(vertices[idx]));
         }
-        // edge
-        for (let idx in edges) {
+        for (const idx in edges) {
             result.push(this.convertEdge(edges[idx]));
         }
-
         return result;
     }
 
-    convertEdge({label, id, start, end, props}) {
+    convertEdge({ label, id, start, end, props }: AgeEdge): ConvertedEdge {
         return {
             label: label,
             id: `${id.oid}.${id.id}`,
@@ -112,7 +125,7 @@ class CypherService {
         };
     }
 
-    convertVertex({label, id, props}) {
+    convertVertex({ label, id, props }: AgeVertex): ConvertedVertex {
         return {
             label: label,
             id: `${id.oid}.${id.id}`,
