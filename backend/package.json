@@ -15,9 +15,10 @@
     "test:watch": "vitest",
     "test:integration": "vitest run ./test/graphCreate.test.js",
     "test:ageParsing": "vitest run ./test/ageParsing.test.js",
-    "start": "node src/bin/www.js",
+    "start": "tsx src/bin/www.ts",
     "start:dev": "nodemon --watch src/ src/bin/www.js",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "dev": "tsx watch src/bin/www.ts"
   },
   "dependencies": {
     "antlr4": "4.9.3",

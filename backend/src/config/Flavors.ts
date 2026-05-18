@@ -17,22 +17,12 @@
  * under the License.
  */
 
-class SessionService {
-    constructor() {
-        this._sessionMap = new Map();
-    }
-
-    put(key, value) {
-        this._sessionMap.set(key, value);
-    }
-
-    get(key) {
-        if(!this._sessionMap.get(key)) {
-            return null;
-        }
-        return this._sessionMap.get(key);
-    }
+export interface FlavorConfig {
+  AGE: string;
 }
-const sessionService = new SessionService();
 
-export default sessionService;
+const flavors: FlavorConfig = {
+  AGE: 'AGE',
+};
+
+export default flavors;

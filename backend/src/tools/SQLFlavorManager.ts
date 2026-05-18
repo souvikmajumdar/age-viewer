@@ -23,14 +23,14 @@ import { dirname, join } from 'node:path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const sqlBasePath = join(__dirname, '../../sql');
+const sqlBasePath: string = join(__dirname, '../../sql');
 
 // Supported PostgreSQL major versions
-const SUPPORTED_VERSIONS = ['14', '15', '16', '17', '18'];
+const SUPPORTED_VERSIONS: string[] = ['14', '15', '16', '17', '18'];
 const MIN_SUPPORTED_VERSION = 14;
 const MAX_SUPPORTED_VERSION = 18;
 
-function getQuery(name, version = '') {
+function getQuery(name: string, version: string = ''): string {
   if (version && !SUPPORTED_VERSIONS.includes(version)) {
     const versionNum = parseInt(version, 10);
     if (versionNum < MIN_SUPPORTED_VERSION) {

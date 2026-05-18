@@ -20,10 +20,10 @@ import fs from 'node:fs';
 import winston from 'winston';
 import winstonDaily from 'winston-daily-rotate-file';
 
-const logDir = process.env.LOG_DIR || 'logs';
+const logDir: string = process.env.LOG_DIR || 'logs';
 const { combine, timestamp, printf } = winston.format;
 
-const logFormat = printf((info) => {
+const logFormat = printf((info: winston.Logform.TransformableInfo) => {
     return `${info.timestamp} ${info.level}: ${info.message}`;
 });
 
@@ -59,8 +59,12 @@ const logger = winston.createLogger({
     transports: [infoTransport, errorTransport],
 });
 
-const stream = {
-    write: (message) => {
+export interface LogStream {
+    write: (message: string) => void;
+}
+
+const stream: LogStream = {
+    write: (message: string): void => {
         logger.info(message);
     },
 };

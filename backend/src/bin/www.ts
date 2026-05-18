@@ -25,6 +25,7 @@
 import app from '../app.js';
 import debug from 'debug';
 import http from 'node:http';
+import type { AddressInfo } from 'node:net';
 
 const debugLog = debug('ag-viewer:server');
 
@@ -37,7 +38,7 @@ app.set('port', port);
 /**
  * Create HTTP server.
  */
-const server = http.createServer(app);
+const server: http.Server = http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -51,17 +52,17 @@ server.on('listening', onListening);
  * Normalize a port into a number, string, or false.
  */
 
-function normalizePort(val) {
-  const port = parseInt(val, 10);
+function normalizePort(val: string): number | string | false {
+  const portNum = parseInt(val, 10);
 
-  if (isNaN(port)) {
+  if (isNaN(portNum)) {
     // named pipe
     return val;
   }
 
-  if (port >= 0) {
+  if (portNum >= 0) {
     // port number
-    return port;
+    return portNum;
   }
 
   return false;
@@ -71,7 +72,12 @@ function normalizePort(val) {
  * Event listener for HTTP server "error" event.
  */
 
-function onError(error) {
+interface ServerError extends Error {
+  syscall?: string;
+  code?: string;
+}
+
+function onError(error: ServerError): void {
   if (error.syscall !== 'listen') {
     throw error;
   }
@@ -99,10 +105,10 @@ function onError(error) {
  * Event listener for HTTP server "listening" event.
  */
 
-function onListening() {
-  const addr = server.address();
+function onListening(): void {
+  const addr = server.address() as AddressInfo | string | null;
   const bind = typeof addr === 'string'
       ? 'pipe ' + addr
-      : 'port ' + addr.port;
+      : 'port ' + addr!.port;
   debugLog('Listening on ' + bind);
 }

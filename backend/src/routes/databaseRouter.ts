@@ -16,15 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import express from 'express';
+import DatabaseController from '../controllers/databaseController.js';
+import { wrap } from '../common/Routes.js';
 
-import DatabaseService from '../services/databaseService.js';
-import sessionService from '../services/sessionService.js';
+const router = express.Router();
+const databaseController = new DatabaseController();
 
-function sessionRouter(req, res, next) {
-    if (sessionService.get(req.sessionID) == null) {
-        sessionService.put(req.sessionID, new DatabaseService());
-    }
-    next();
-}
+// Get connection status
+router.get("/", wrap(databaseController.getStatus));
+router.post("/connect", wrap(databaseController.connectDatabase));
+router.get("/disconnect", wrap(databaseController.disconnectDatabase));
+router.post("/meta", wrap(databaseController.getMetadata));
 
-export default sessionRouter;
+export default router;

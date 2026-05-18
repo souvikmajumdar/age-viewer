@@ -17,11 +17,13 @@
  * under the License.
  */
 
-export function stringWrap(valstr, flavor) {
+import type { PoolClient } from 'pg';
+
+export function stringWrap(valstr: unknown, flavor: string): string {
     return JSON.stringify(valstr);
 }
 
-export function JsonStringify(flavor, record) {
+export function JsonStringify(flavor: string, record: Record<string, unknown>): string {
     let ageJsonStr = '{';
     let isFirst = true;
     for (const [key, value] of Object.entries(record)) {
@@ -36,31 +38,47 @@ export function JsonStringify(flavor, record) {
     return ageJsonStr;
 }
 
-export async function createVertex(client, graphPathStr, label, record, flavor) {
+export async function createVertex(
+    client: PoolClient,
+    graphPathStr: string,
+    label: string,
+    record: Record<string, unknown>,
+    flavor: string,
+): Promise<void> {
     const createQ = `CREATE (n:${label} ${JsonStringify(flavor, record)})`;
     if (flavor === 'AGE') {
         return AGECreateVertex(client, graphPathStr, createQ);
     } else {
-        throw new Error(`Unknown flavor ${flavor}`)
+        throw new Error(`Unknown flavor ${flavor}`);
     }
 }
 
-async function AGECreateVertex(client, graphPathStr, createQ) {
+async function AGECreateVertex(client: PoolClient, graphPathStr: string, createQ: string): Promise<void> {
     await client.query(
         `select *
          from cypher('${graphPathStr}', $$ ${createQ} $$) as (a agtype)`);
 }
 
-export async function createEdge(client, label, record, graphPathStr, edgeStartLabel, edgeEndLabel, startNodeName, endNodeName, flavor) {
+export async function createEdge(
+    client: PoolClient,
+    label: string,
+    record: Record<string, unknown>,
+    graphPathStr: string,
+    edgeStartLabel: string,
+    edgeEndLabel: string,
+    startNodeName: string,
+    endNodeName: string,
+    flavor: string,
+): Promise<void> {
     const createQ = `CREATE (:${edgeStartLabel} {name: ${stringWrap(startNodeName, flavor)}})-[n:${label} ${JsonStringify(flavor, record)}]->(:${edgeEndLabel} {name: ${stringWrap(endNodeName, flavor)}})`;
     if (flavor === 'AGE') {
         return AGECreateEdge(client, graphPathStr, createQ);
     } else {
-        throw new Error(`Unknown flavor ${flavor}`)
+        throw new Error(`Unknown flavor ${flavor}`);
     }
 }
 
-async function AGECreateEdge(client, graphPathStr, createQ) {
+async function AGECreateEdge(client: PoolClient, graphPathStr: string, createQ: string): Promise<void> {
     await client.query(
         `select *
          from cypher('${graphPathStr}', $$ ${createQ} $$) as (a agtype)`);
