@@ -24,3 +24,5 @@ jobs:
       run: cd backend && npm install && npm test
     - name: Frontend install, build, and test
       run: cd frontend && npm install && npm run build && npm test
+    - name: Lint check
+      run: npm run lint || echo "::warning::Lint issues found — see output above"
