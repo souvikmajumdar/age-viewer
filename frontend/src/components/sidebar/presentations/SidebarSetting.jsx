@@ -19,8 +19,15 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ColoredLine, SubLabelLeft } from './SidebarComponents';
 import { saveToCookie } from '../../../features/cookie/CookieUtil';
+
+const ColoredLine = () => (
+  <hr style={{ color: '#e0e0e0', backgroundColor: '#e0e0e0', marginTop: 0, height: 1, border: 'none' }} />
+);
+
+const SubLabelLeft = ({ label }) => (
+  <div style={{ fontSize: '0.8125rem', fontWeight: '500', marginBottom: '0.25rem' }}>{label}</div>
+);
 
 const SidebarSetting = ({
   theme,

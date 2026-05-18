@@ -489,11 +489,6 @@
   color: #ffffff !important;
 }
 
-/* Hide the sidebar toggle button in editor (we have our own panel toggle) */
-.editor-bar [aria-label="Toggle Inspector"] {
-  display: none;
-}
-
 /* ─── CONTENT AREA OVERRIDES ─── */
 .content-area > [class*="Content"] {
   width: 100%;
