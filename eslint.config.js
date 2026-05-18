@@ -1,6 +1,7 @@
 import js from '@eslint/js';
 import globals from 'globals';
 import eslintConfigPrettier from 'eslint-config-prettier';
+import tseslint from 'typescript-eslint';
 
 export default [
   // Global ignores
@@ -19,9 +20,15 @@ export default [
   // Base config for all JS files
   js.configs.recommended,
 
-  // Backend files (Node.js ESM)
+  // TypeScript files — type-aware linting
+  ...tseslint.configs.recommended.map((config) => ({
+    ...config,
+    files: ['**/*.{ts,tsx}'],
+  })),
+
+  // Backend JS files (Node.js ESM)
   {
-    files: ['backend/**/*.js'],
+    files: ['backend/**/*.{js,ts}'],
     languageOptions: {
       ecmaVersion: 2024,
       sourceType: 'module',
@@ -37,7 +44,7 @@ export default [
 
   // Frontend files (React + Browser)
   {
-    files: ['frontend/src/**/*.{js,jsx}'],
+    files: ['frontend/src/**/*.{js,jsx,ts,tsx}'],
     languageOptions: {
       ecmaVersion: 2024,
       sourceType: 'module',
@@ -54,9 +61,20 @@ export default [
     },
   },
 
+  // TypeScript-specific rule overrides
+  {
+    files: ['**/*.{ts,tsx}'],
+    rules: {
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-require-imports': 'off',
+    },
+  },
+
   // Test files
   {
-    files: ['**/*.test.{js,jsx}', '**/test/**/*.js', 'e2e/**/*.js'],
+    files: ['**/*.test.{js,jsx,ts,tsx}', '**/test/**/*.{js,ts}', 'e2e/**/*.{js,ts}'],
     languageOptions: {
       globals: {
         ...globals.node,
@@ -65,6 +83,7 @@ export default [
     },
     rules: {
       'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
     },
   },
 
