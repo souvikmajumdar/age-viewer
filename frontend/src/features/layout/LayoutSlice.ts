@@ -17,11 +17,22 @@
  * under the License.
  */
 
-import { configureStore } from '@reduxjs/toolkit';
-import rootReducer from './reducers';
+/* eslint-disable no-param-reassign */
+import { createSlice } from '@reduxjs/toolkit';
+import type { LayoutState } from '../../types/redux';
 
-const store = configureStore({
-  reducer: rootReducer,
+const LayoutSlice = createSlice({
+  name: 'layout',
+  initialState: {
+    isLabel: false,
+  } as LayoutState,
+  reducers: {
+    setLabel: (state) => {
+      state.isLabel = !state.isLabel;
+    },
+  },
 });
 
-export default store;
+export const { setLabel } = LayoutSlice.actions;
+
+export default LayoutSlice.reducer;

@@ -18,9 +18,10 @@
  */
 
 /* eslint-disable no-param-reassign */
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { about, setting } from '../../conf/config';
 import { saveToCookie } from '../cookie/CookieUtil';
+import type { SettingState } from '../../types/redux';
 
 const SidebarSettingSlice = createSlice({
   name: 'setting',
@@ -33,9 +34,9 @@ const SidebarSettingSlice = createSlice({
     releaseDate: about.releaseDate,
     version: about.version,
     license: about.license,
-  },
+  } as SettingState,
   reducers: {
-    resetSetting: () => {
+    resetSetting: (): SettingState => {
       saveToCookie('theme', setting.theme);
       saveToCookie('maxNumOfFrames', setting.maxNumOfFrames);
       saveToCookie('maxNumOfHistories', setting.maxNumOfHistories);
@@ -57,44 +58,44 @@ const SidebarSettingSlice = createSlice({
       };
     },
     changeTheme: {
-      reducer: (state, action) => {
+      reducer: (state, action: PayloadAction<{ theme: string }>) => {
         state.theme = action.payload.theme;
       },
-      prepare: (event) => ({ payload: { theme: event.target.value } }),
+      prepare: (event: React.ChangeEvent<HTMLSelectElement>) => ({ payload: { theme: event.target.value } }),
     },
     changeMaxNumOfFrames: {
-      reducer: (state, action) => {
+      reducer: (state, action: PayloadAction<{ maxNumOfFrames: number }>) => {
         state.maxNumOfFrames = action.payload.maxNumOfFrames;
       },
-      prepare: (event) => ({ payload: { maxNumOfFrames: event } }),
+      prepare: (event: number) => ({ payload: { maxNumOfFrames: event } }),
     },
     changeMaxNumOfHistories: {
-      reducer: (state, action) => {
+      reducer: (state, action: PayloadAction<{ maxNumOfHistories: number }>) => {
         state.maxNumOfHistories = action.payload.maxNumOfHistories;
       },
-      prepare: (event) => ({ payload: { maxNumOfHistories: event } }),
+      prepare: (event: number) => ({ payload: { maxNumOfHistories: event } }),
     },
     changeMaxDataOfGraph: {
-      reducer: (state, action) => {
+      reducer: (state, action: PayloadAction<{ maxDataOfGraph: number }>) => {
         state.maxDataOfGraph = action.payload.maxDataOfGraph;
       },
-      prepare: (event) => ({ payload: { maxDataOfGraph: event } }),
+      prepare: (event: number) => ({ payload: { maxDataOfGraph: event } }),
     },
     changeMaxDataOfTable: {
-      reducer: (state, action) => {
+      reducer: (state, action: PayloadAction<{ maxDataOfTable: number }>) => {
         state.maxDataOfTable = action.payload.maxDataOfTable;
       },
-      prepare: (event) => ({ payload: { maxDataOfTable: event } }),
+      prepare: (event: number) => ({ payload: { maxDataOfTable: event } }),
     },
     changeSettings: {
-      reducer: (state, action) => {
+      reducer: (state, action: PayloadAction<Omit<SettingState, 'releaseDate' | 'version' | 'license'>>) => {
         state.theme = action.payload.theme;
         state.maxNumOfFrames = action.payload.maxNumOfFrames;
         state.maxNumOfHistories = action.payload.maxNumOfHistories;
         state.maxDataOfGraph = action.payload.maxDataOfGraph;
         state.maxDataOfTable = action.payload.maxDataOfTable;
       },
-      prepare: (settings) => ({
+      prepare: (settings: Omit<SettingState, 'releaseDate' | 'version' | 'license'>) => ({
         payload: {
           theme: settings.theme,
           maxNumOfFrames: settings.maxNumOfFrames,

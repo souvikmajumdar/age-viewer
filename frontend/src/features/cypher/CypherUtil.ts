@@ -17,7 +17,91 @@
  * under the License.
  */
 
-export const nodeLabelColors = [
+interface LabelColor {
+  color: string;
+  borderColor: string;
+  fontColor: string;
+  index: number;
+}
+
+interface NodeLabelColor extends LabelColor {
+  nodeLabels: Set<string>;
+}
+
+interface EdgeLabelColor extends LabelColor {
+  edgeLabels: Set<string>;
+}
+
+interface LabelSize {
+  size: number;
+  labels: Set<string>;
+  index: number;
+}
+
+interface SelectedColor {
+  color: string;
+  borderColor: string;
+  fontColor: string;
+}
+
+interface LegendEntry extends SelectedColor {
+  size: number;
+  caption: string;
+}
+
+interface GraphValue {
+  id: string | number;
+  label: string;
+  start?: string | number;
+  end?: string | number;
+  start_id?: string | number;
+  end_id?: string | number;
+  properties: Record<string, unknown>;
+}
+
+interface MetadataValue {
+  la_name: string;
+  la_oid: string | number;
+  la_start?: string | number;
+  la_end?: string | number;
+  la_count?: number;
+}
+
+interface CytoscapeNodeData {
+  id: string | number;
+  label: string;
+  backgroundColor: string;
+  borderColor: string;
+  fontColor: string;
+  size: number;
+  properties: Record<string, unknown>;
+  caption: string;
+}
+
+interface CytoscapeEdgeData extends CytoscapeNodeData {
+  source: string | number;
+  target: string | number;
+}
+
+interface CytoscapeElement {
+  group: 'nodes' | 'edges';
+  data: CytoscapeNodeData | CytoscapeEdgeData;
+  alias?: string | number;
+  classes: string;
+}
+
+interface GenerateResult {
+  legend: {
+    nodeLegend: Record<string, LegendEntry>;
+    edgeLegend: Record<string, LegendEntry>;
+  };
+  elements: {
+    nodes: CytoscapeElement[];
+    edges: CytoscapeElement[];
+  };
+}
+
+export const nodeLabelColors: NodeLabelColor[] = [
   {
     color: '#604A0E', borderColor: '#423204', fontColor: '#FFF', nodeLabels: new Set([]), index: 0,
   },
@@ -56,7 +140,7 @@ export const nodeLabelColors = [
   },
 ];
 
-export const edgeLabelColors = [
+export const edgeLabelColors: EdgeLabelColor[] = [
   {
     color: '#CCA63D', borderColor: '#997000', fontColor: '#2A2C34', edgeLabels: new Set([]), index: 0,
   },
@@ -95,7 +179,7 @@ export const edgeLabelColors = [
   },
 ];
 
-export const nodeLabelSizes = [
+export const nodeLabelSizes: LabelSize[] = [
   { size: 11, labels: new Set([]), index: 0 },
   { size: 33, labels: new Set([]), index: 0 },
   { size: 55, labels: new Set([]), index: 0 },
@@ -103,7 +187,7 @@ export const nodeLabelSizes = [
   { size: 99, labels: new Set([]), index: 0 },
 ];
 
-export const edgeLabelSizes = [
+export const edgeLabelSizes: LabelSize[] = [
   { size: 1, labels: new Set([]), index: 0 },
   { size: 6, labels: new Set([]), index: 0 },
   { size: 11, labels: new Set([]), index: 0 },
@@ -111,10 +195,10 @@ export const edgeLabelSizes = [
   { size: 21, labels: new Set([]), index: 0 },
 ];
 
-export const nodeLabelCaptions = {};
-export const edgeLabelCaptions = {};
+export const nodeLabelCaptions: Record<string, string> = {};
+export const edgeLabelCaptions: Record<string, string> = {};
 
-const getCaption = (valType, val) => {
+const getCaption = (valType: string, val: GraphValue): string => {
   if (valType === 'node' && Object.prototype.hasOwnProperty.call(nodeLabelCaptions, val.label)) {
     return nodeLabelCaptions[val.label];
   }
@@ -135,8 +219,8 @@ const getCaption = (valType, val) => {
   return caption;
 };
 
-const getNodeColor = (labelName) => {
-  let selectedColor = {};
+const getNodeColor = (labelName: string): SelectedColor => {
+  let selectedColor: Partial<SelectedColor> = {};
   nodeLabelColors.forEach((labelColor) => {
     if (labelColor.nodeLabels.has(labelName)) {
       selectedColor = {
@@ -156,11 +240,11 @@ const getNodeColor = (labelName) => {
       fontColor: nodeLabelColors[randomIndex].fontColor,
     };
   }
-  return selectedColor;
+  return selectedColor as SelectedColor;
 };
 
-const getEdgeColor = (labelName) => {
-  let selectedColor = {};
+const getEdgeColor = (labelName: string): SelectedColor => {
+  let selectedColor: Partial<SelectedColor> = {};
   edgeLabelColors.forEach((labelColor) => {
     if (labelColor.edgeLabels.has(labelName)) {
       selectedColor = {
@@ -180,9 +264,10 @@ const getEdgeColor = (labelName) => {
       fontColor: edgeLabelColors[randomIndex].fontColor,
     };
   }
-  return selectedColor;
+  return selectedColor as SelectedColor;
 };
-const getNodeSize = (labelName) => {
+
+const getNodeSize = (labelName: string): number => {
   let selectedSize = 0;
 
   const nSize = nodeLabelSizes.find((labelSize) => labelSize.labels.has(labelName));
@@ -197,7 +282,7 @@ const getNodeSize = (labelName) => {
   return selectedSize;
 };
 
-const getEdgeSize = (labelName) => {
+const getEdgeSize = (labelName: string): number => {
   let selectedSize = 0;
 
   const eSize = edgeLabelSizes.find((labelSize) => labelSize.labels.has(labelName));
@@ -212,8 +297,8 @@ const getEdgeSize = (labelName) => {
   return selectedSize;
 };
 
-const sortByKey = (data) => {
-  const sorted = {};
+const sortByKey = (data: Record<string, unknown> | undefined): Record<string, unknown> => {
+  const sorted: Record<string, unknown> = {};
   if (data === undefined) {
     return sorted;
   }
@@ -223,7 +308,7 @@ const sortByKey = (data) => {
   return sorted;
 };
 
-export const updateLabelColor = (labelType, labelName, newLabelColor) => {
+export const updateLabelColor = (labelType: string, labelName: string, newLabelColor: SelectedColor): void => {
   if (labelType === 'node') {
     nodeLabelColors.forEach((labelColor) => {
       if (labelColor.nodeLabels.has(labelName)) {
@@ -247,7 +332,7 @@ export const updateLabelColor = (labelType, labelName, newLabelColor) => {
   }
 };
 
-export const updateNodeLabelSize = (labelName, newLabelSize) => {
+export const updateNodeLabelSize = (labelName: string, newLabelSize: number): void => {
   nodeLabelSizes.forEach((labelSize) => {
     if (labelSize.labels.has(labelName)) {
       labelSize.labels.delete(labelName);
@@ -259,7 +344,7 @@ export const updateNodeLabelSize = (labelName, newLabelSize) => {
   });
 };
 
-export const updateEdgeLabelSize = (labelName, newLabelSize) => {
+export const updateEdgeLabelSize = (labelName: string, newLabelSize: number): void => {
   edgeLabelSizes.forEach((labelSize) => {
     if (labelSize.labels.has(labelName)) {
       labelSize.labels.delete(labelName);
@@ -271,7 +356,7 @@ export const updateEdgeLabelSize = (labelName, newLabelSize) => {
   });
 };
 
-export const updateLabelCaption = (labelType, labelName, newLabelCaption) => {
+export const updateLabelCaption = (labelType: string, labelName: string, newLabelCaption: string): void => {
   if (labelType === 'node') {
     nodeLabelCaptions[labelName] = newLabelCaption;
   } else {
@@ -279,13 +364,17 @@ export const updateLabelCaption = (labelType, labelName, newLabelCaption) => {
   }
 };
 
-export const generateCytoscapeElement = (data, maxDataOfGraph, isNew) => {
-  const nodes = [];
-  const edges = [];
-  const nodeLegend = {};
-  const edgeLegend = {};
+export const generateCytoscapeElement = (
+  data: Record<string, unknown>[] | null | undefined,
+  maxDataOfGraph: number,
+  isNew: boolean,
+): GenerateResult => {
+  const nodes: CytoscapeElement[] = [];
+  const edges: CytoscapeElement[] = [];
+  const nodeLegend: Record<string, LegendEntry> = {};
+  const edgeLegend: Record<string, LegendEntry> = {};
 
-  function generateElements(alias, val) {
+  function generateElements(alias: string | number, val: GraphValue): void {
     const labelName = val.label.trim();
     let source = val.start;
     let target = val.end;
@@ -386,12 +475,12 @@ export const generateCytoscapeElement = (data, maxDataOfGraph, isNew) => {
         const [alias, val] = rowEntry;
         if (Array.isArray(val)) {
           // val이 Path인 경우 ex) MATCH P = (V)-[R]->(V2) RETURN P;
-          Object.entries(val).forEach((valueEntry) => {
+          Object.entries(val as unknown as Record<string, GraphValue>).forEach((valueEntry) => {
             const [pathAlias, pathVal] = valueEntry;
             generateElements(pathAlias, pathVal);
           });
         } else if (val) {
-          generateElements(alias, val);
+          generateElements(alias, val as GraphValue);
         }
       });
     });
@@ -399,8 +488,8 @@ export const generateCytoscapeElement = (data, maxDataOfGraph, isNew) => {
   console.log('edge sizes', edgeLabelSizes);
   return {
     legend: {
-      nodeLegend: sortByKey(nodeLegend),
-      edgeLegend: sortByKey(edgeLegend),
+      nodeLegend: sortByKey(nodeLegend) as Record<string, LegendEntry>,
+      edgeLegend: sortByKey(edgeLegend) as Record<string, LegendEntry>,
     },
     elements: {
       nodes,
@@ -409,7 +498,13 @@ export const generateCytoscapeElement = (data, maxDataOfGraph, isNew) => {
   };
 };
 
-const generateMetadataElements = (nodeLegend, edgeLegend, nodes, edges, val) => {
+const generateMetadataElements = (
+  nodeLegend: Record<string, LegendEntry>,
+  edgeLegend: Record<string, LegendEntry>,
+  nodes: CytoscapeElement[],
+  edges: CytoscapeElement[],
+  val: MetadataValue,
+): void => {
   const labelName = val.la_name;
   if (val.la_start && val.la_end) {
     edges.push(
@@ -450,18 +545,18 @@ const generateMetadataElements = (nodeLegend, edgeLegend, nodes, edges, val) => 
   }
 };
 
-export const generateCytoscapeMetadataElement = (data) => {
-  const nodes = [];
-  const edges = [];
-  const nodeLegend = {};
-  const edgeLegend = {};
+export const generateCytoscapeMetadataElement = (data: MetadataValue[] | null | undefined): GenerateResult => {
+  const nodes: CytoscapeElement[] = [];
+  const edges: CytoscapeElement[] = [];
+  const nodeLegend: Record<string, LegendEntry> = {};
+  const edgeLegend: Record<string, LegendEntry> = {};
 
   if (data) {
     data.forEach((val) => {
       if (!Object.prototype.hasOwnProperty.call(val, 'la_count')) {
         return;
       }
-      if (Object.prototype.hasOwnProperty.call(val, 'la_count') && val.la_count <= 0) {
+      if (Object.prototype.hasOwnProperty.call(val, 'la_count') && (val.la_count ?? 0) <= 0) {
         return;
       }
 
@@ -487,8 +582,8 @@ export const generateCytoscapeMetadataElement = (data) => {
 
   return {
     legend: {
-      nodeLegend: sortByKey(nodeLegend),
-      edgeLegend: sortByKey(edgeLegend),
+      nodeLegend: sortByKey(nodeLegend) as Record<string, LegendEntry>,
+      edgeLegend: sortByKey(edgeLegend) as Record<string, LegendEntry>,
     },
     elements: { nodes, edges },
   };

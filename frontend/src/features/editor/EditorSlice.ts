@@ -18,7 +18,8 @@
  */
 
 /* eslint-disable no-param-reassign */
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import type { EditorState } from '../../types/redux';
 
 const EditorSlice = createSlice({
   name: 'editor',
@@ -27,26 +28,26 @@ const EditorSlice = createSlice({
     updateClause: false,
     commandHistory: [],
     commandFavorites: [],
-  },
+  } as EditorState,
   reducers: {
     setCommand: {
-      reducer: (state, action) => {
+      reducer: (state, action: PayloadAction<{ command: string }>) => {
         state.command = action.payload.command;
         state.updateClause = action.payload.command.match(/(CREATE|REMOVE|DELETE)/g) !== null;
       },
-      prepare: (command) => ({ payload: { command } }),
+      prepare: (command: string) => ({ payload: { command } }),
     },
     addCommandHistory: {
-      reducer: (state, action) => {
+      reducer: (state, action: PayloadAction<{ command: string }>) => {
         state.commandHistory.push(action.payload.command);
       },
-      prepare: (command) => ({ payload: { command } }),
+      prepare: (command: string) => ({ payload: { command } }),
     },
     addCommandFavorites: {
-      reducer: (state, action) => {
+      reducer: (state, action: PayloadAction<{ command: string }>) => {
         state.commandFavorites.push(action.payload.command);
       },
-      prepare: (command) => ({ payload: { command } }),
+      prepare: (command: string) => ({ payload: { command } }),
     },
   },
 });

@@ -17,30 +17,31 @@
  * under the License.
  */
 
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import type { AlertState } from '../../types/redux';
 
 const AlertSlice = createSlice({
   name: 'alerts',
-  initialState: [],
+  initialState: [] as AlertState,
   reducers: {
     addAlert: {
-      reducer: (state, action) => {
+      reducer: (state, action: PayloadAction<{ alertName: string; message: string }>) => {
         const { alertName, message: errorMessage = '' } = action.payload;
-        let alertType = 'Notice';
+        let alertType: 'Notice' | 'Error' = 'Notice';
         if (['ErrorServerConnectFail', 'ErrorNoDatabaseConnected', 'ErrorPlayLoadFail'].includes(alertName)) {
           alertType = 'Error';
         }
 
         state.push({ alertName, alertProps: { key: crypto.randomUUID(), alertType, errorMessage } });
       },
-      prepare: (alertName, message) => ({ payload: { alertName, message } }),
+      prepare: (alertName: string, message: string) => ({ payload: { alertName, message } }),
     },
     removeAlert: {
-      reducer: (state, action) => {
+      reducer: (state, action: PayloadAction<{ alertKey: string }>) => {
         const { alertKey } = action.payload;
         return state.filter((alert) => (alert.alertProps.key !== alertKey));
       },
-      prepare: (alertKey) => ({ payload: { alertKey } }),
+      prepare: (alertKey: string) => ({ payload: { alertKey } }),
     },
   },
 });

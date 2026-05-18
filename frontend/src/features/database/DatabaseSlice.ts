@@ -17,9 +17,26 @@
  * under the License.
  */
 
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import type { ConnectionInfo } from '../../types/api';
+import type { DatabaseState } from '../../types/redux';
 
-export const connectToDatabase = createAsyncThunk(
+interface ConnectFormData {
+  host: string;
+  port: number;
+  database: string;
+  user: string;
+  password: string;
+  graph?: string;
+}
+
+interface ConnectionError {
+  name: string;
+  message: string;
+  statusText: string;
+}
+
+export const connectToDatabase = createAsyncThunk<ConnectionInfo, ConnectFormData>(
   'database/connectToDatabase',
   async (formData) => {
     try {
@@ -35,25 +52,25 @@ export const connectToDatabase = createAsyncThunk(
       if (response.ok) { return await response.json(); }
       throw response;
     } catch (error) {
-      const errorJson = await error.json();
-      const errorDetail = {
+      const errorJson = await (error as Response).json();
+      const errorDetail: ConnectionError = {
         name: 'Failed to Retrieve Connection Information',
         message: `[${errorJson.severity}]:(${errorJson.code}) ${errorJson.message} `,
-        statusText: error.statusText,
+        statusText: (error as Response).statusText,
       };
       throw errorDetail;
     }
   },
 );
 
-export const disconnectToDatabase = createAsyncThunk(
+export const disconnectToDatabase = createAsyncThunk<void, void>(
   'database/disconnectToDatabase',
   async () => {
     await fetch('/api/v1/db/disconnect');
   },
 );
 
-export const getConnectionStatus = createAsyncThunk(
+export const getConnectionStatus = createAsyncThunk<ConnectionInfo, void>(
   'database/getConnectionStatus',
   async () => {
     try {
@@ -61,24 +78,34 @@ export const getConnectionStatus = createAsyncThunk(
       if (response.ok) { return await response.json(); }
       throw response;
     } catch (error) {
-      const errorJson = await error.json();
-      const errorDetail = {
+      const errorJson = await (error as Response).json();
+      const errorDetail: ConnectionError = {
         name: 'Failed to Retrieve Connection Information',
         message: `[${errorJson.severity}]:(${errorJson.code}) ${errorJson.message} `,
-        statusText: error.statusText,
+        statusText: (error as Response).statusText,
       };
       throw errorDetail;
     }
   },
 );
 
+const disconnectedState: DatabaseState = {
+  host: '',
+  port: undefined,
+  user: '',
+  password: '',
+  database: '',
+  graph: '',
+  status: 'disconnected',
+};
+
 const DatabaseSlice = createSlice({
   name: 'database',
   initialState: {
     status: 'init',
-  },
+  } as DatabaseState,
   reducers: {
-    changeGraph: (state, action) => ({
+    changeGraph: (state, action: PayloadAction<{ graphName: string }>) => ({
       ...state,
       graph: action.payload.graphName,
     }),
@@ -92,26 +119,10 @@ const DatabaseSlice = createSlice({
         password: action.payload.password,
         database: action.payload.database,
         graph: action.payload.graph,
-        status: 'connected',
+        status: 'connected' as const,
       }))
-      .addCase(connectToDatabase.rejected, () => ({
-        host: '',
-        port: '',
-        user: '',
-        password: '',
-        database: '',
-        graph: '',
-        status: 'disconnected',
-      }))
-      .addCase(disconnectToDatabase.fulfilled, () => ({
-        host: '',
-        port: '',
-        user: '',
-        password: '',
-        database: '',
-        graph: '',
-        status: 'disconnected',
-      }))
+      .addCase(connectToDatabase.rejected, () => disconnectedState)
+      .addCase(disconnectToDatabase.fulfilled, () => disconnectedState)
       .addCase(getConnectionStatus.fulfilled, (state, action) => ({
         host: action.payload.host,
         port: action.payload.port,
@@ -119,19 +130,12 @@ const DatabaseSlice = createSlice({
         password: action.payload.password,
         database: action.payload.database,
         graph: action.payload.graph,
-        status: 'connected',
+        status: 'connected' as const,
       }))
-      .addCase(getConnectionStatus.rejected, () => ({
-        host: '',
-        port: '',
-        user: '',
-        password: '',
-        database: '',
-        graph: '',
-        status: 'disconnected',
-      }));
+      .addCase(getConnectionStatus.rejected, () => disconnectedState);
   },
 });
+
 export const { changeGraph } = DatabaseSlice.actions;
 
 export default DatabaseSlice.reducer;

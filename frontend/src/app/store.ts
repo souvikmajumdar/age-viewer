@@ -17,32 +17,13 @@
  * under the License.
  */
 
-/* eslint-disable no-param-reassign */
-import { createSlice } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
+import rootReducer from './reducers';
 
-const MenuSlice = createSlice({
-  name: 'navigator',
-  initialState: {
-    menuList: [['home', 'Home'], ['setting', 'Settings']],
-    activeMenu: 'home',
-    isActive: true,
-  },
-  reducers: {
-    toggleMenu: {
-      reducer: (state, action) => {
-        let isActive = true;
-        if (state.activeMenu === action.payload.selectedMenuName) {
-          action.payload.selectedMenuName = '';
-          isActive = false;
-        }
-        state.activeMenu = action.payload.selectedMenuName;
-        state.isActive = isActive;
-      },
-      prepare: (selectedMenuName) => ({ payload: { selectedMenuName } }),
-    },
-  },
+const store = configureStore({
+  reducer: rootReducer,
 });
 
-export const { toggleMenu } = MenuSlice.actions;
+export type AppDispatch = typeof store.dispatch;
 
-export default MenuSlice.reducer;
+export default store;

@@ -17,9 +17,16 @@
  * under the License.
  */
 
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import type { MetadataResponse } from '../../types/api';
+import type { MetadataState } from '../../types/redux';
 
-export const getMetaData = createAsyncThunk(
+interface MetadataArg {
+  graph?: string;
+  database?: string;
+}
+
+export const getMetaData = createAsyncThunk<MetadataResponse, MetadataArg>(
   'database/getMetaData',
   async (arg) => {
     try {
@@ -33,7 +40,7 @@ export const getMetaData = createAsyncThunk(
           body: JSON.stringify(arg),
         });
       if (response.ok) {
-        const ret = await response.json();
+        const ret: MetadataResponse = await response.json();
         Object.keys(ret).forEach((gname) => {
           let allCountEdge = 0;
           let allCountNode = 0;
@@ -44,44 +51,24 @@ export const getMetaData = createAsyncThunk(
           ret[gname].edges?.forEach((item) => {
             allCountEdge += item.cnt;
           });
-          ret[gname].nodes?.unshift({ label: '*', cnt: allCountNode });
-          ret[gname].edges?.unshift({ label: '*', cnt: allCountEdge });
+          ret[gname].nodes?.unshift({ label: '*', cnt: allCountNode } as typeof ret[string]['nodes'][0]);
+          ret[gname].edges?.unshift({ label: '*', cnt: allCountEdge } as typeof ret[string]['edges'][0]);
           ret[gname].id = crypto.randomUUID();
         });
         return ret;
       }
       throw response;
     } catch (error) {
+      const err = error as { severity?: string; code?: string; message?: string; statusText?: string };
       const errorDetail = {
         name: 'Database Connection Failed',
-        message: `[${error.severity}]:(${error.code}) ${error.message} `,
-        statusText: error.statusText,
+        message: `[${err.severity}]:(${err.code}) ${err.message} `,
+        statusText: err.statusText,
       };
       throw errorDetail;
     }
   },
 );
-/*
-export const getMetaChartData = createAsyncThunk(
-  'database/getMetaChartData',
-  async () => {
-    try {
-      const response = await fetch('/api/v1/db/metaChart');
-      if (response.ok) {
-        return await response.json();
-      }
-      throw response;
-    } catch (error) {
-      const errorDetail = {
-        name: 'Database Connection Failed',
-        message: `[${error.severity}]:(${error.code}) ${error.message} `,
-        statusText: error.statusText,
-      };
-      throw errorDetail;
-    }
-  },
-);
-*/
 
 const MetadataSlice = createSlice({
   name: 'metadata',
@@ -90,13 +77,13 @@ const MetadataSlice = createSlice({
     status: 'init',
     dbname: '',
     currentGraph: '',
-  },
+  } as MetadataState,
   reducers: {
-    resetMetaData: (state) => (state.initialState),
-    changeCurrentGraph: (state, action) => ({
+    resetMetaData: (state) => (state as unknown as { initialState: MetadataState }).initialState,
+    changeCurrentGraph: (state, action: PayloadAction<{ id?: string; name?: string }>) => ({
       ...state,
       currentGraph: Object.entries(state.graphs)
-        .find(([k, data]) => data.id === action.payload.id || k === action.payload.name)[0],
+        .find(([k, data]) => data.id === action.payload.id || k === action.payload.name)![0],
     }),
   },
   extraReducers: (builder) => {
@@ -106,15 +93,15 @@ const MetadataSlice = createSlice({
           return {
             ...state,
             graphs: action.payload,
-            status: 'connected',
-            dbname: action.payload.database,
+            status: 'connected' as const,
+            dbname: (action.payload as MetadataResponse & { database?: string }).database ?? '',
             currentGraph: state.currentGraph !== '' ? state.currentGraph : Object.keys(action.payload)[0],
           };
         }
         return {
           ...state,
-          status: 'disconnected',
-          dbname: action.payload.database,
+          status: 'disconnected' as const,
+          dbname: (action.payload as MetadataResponse & { database?: string }).database ?? '',
         };
       });
   },
