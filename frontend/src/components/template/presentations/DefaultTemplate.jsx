@@ -18,13 +18,13 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { Button } from '@carbon/react';
-import { Menu } from '@carbon/icons-react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Menu, Settings, SidePanelOpen, SidePanelClose } from '@carbon/icons-react';
 import EditorContainer from '../../contents/containers/Editor';
-import Sidebar from '../../sidebar/containers/Sidebar';
 import Contents from '../../contents/containers/Contents';
+import InspectorPanel from '../../inspector/InspectorPanel';
 import Modal from '../../modal/containers/Modal';
+import SidebarSetting from '../../sidebar/containers/SidebarSetting';
 import { loadFromCookie, saveToCookie } from '../../../features/cookie/CookieUtil';
 import BuilderContainer from '../../query_builder/BuilderContainer';
 import './DefaultTemplate.scss';
@@ -40,7 +40,9 @@ const DefaultTemplate = ({
   isOpen,
 }) => {
   const dispatch = useDispatch();
-  const [open, setOpen] = useState(false);
+  const [builderOpen, setBuilderOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [panelVisible, setPanelVisible] = useState(true);
   const [stateValues] = useState({
     theme,
     maxNumOfFrames,
@@ -49,6 +51,8 @@ const DefaultTemplate = ({
     maxDataOfTable,
   });
   const [finder, setFinder] = useState(null);
+
+  const database = useSelector((state) => state.database);
 
   useEffect(() => {
     async function fetchKeywords() {
@@ -92,41 +96,89 @@ const DefaultTemplate = ({
   });
 
   return (
-    <div className="default-template">
-      { isOpen && <Modal /> }
-      <input
-        type="radio"
-        className="theme-switch"
-        name="theme-switch"
-        id="default-theme"
-        checked={theme === 'default'}
-        readOnly
-      />
-      <input
-        type="radio"
-        className="theme-switch"
-        name="theme-switch"
-        id="dark-theme"
-        checked={theme === 'dark'}
-        readOnly
-      />
-      <div className="content-row">
-        <div>
-          <Button kind="ghost" onClick={() => setOpen(true)}>
-            <Menu size={16} />
-          </Button>
-          <BuilderContainer open={open} setOpen={setOpen} finder={finder} />
-        </div>
-        <div className="editor-division wrapper-extension-padding">
+    <div className={`default-template ${!panelVisible ? 'panel-hidden' : ''}`}>
+      {isOpen && <Modal />}
 
-          <EditorContainer />
-          <Sidebar />
-          <Contents />
+      {/* Hidden theme radios for CSS variable switching */}
+      <input type="radio" className="theme-switch" name="theme-switch" id="default-theme" checked={theme === 'default'} readOnly />
+      <input type="radio" className="theme-switch" name="theme-switch" id="dark-theme" checked={theme === 'dark'} readOnly />
 
-        </div>
-
+      {/* ─── EDITOR BAR ─── */}
+      <div className="editor-bar">
+        <EditorContainer />
       </div>
 
+      {/* ─── LEFT RAIL ─── */}
+      <div className="left-rail">
+        <button
+          type="button"
+          className={`rail-btn ${builderOpen ? 'active' : ''}`}
+          title="Query Builder"
+          onClick={() => setBuilderOpen(!builderOpen)}
+        >
+          <Menu size={20} />
+        </button>
+        <button
+          type="button"
+          className={`rail-btn ${settingsOpen ? 'active' : ''}`}
+          title="Settings"
+          onClick={() => setSettingsOpen(!settingsOpen)}
+        >
+          <Settings size={20} />
+        </button>
+        <button
+          type="button"
+          className="rail-btn"
+          title={panelVisible ? 'Hide Inspector' : 'Show Inspector'}
+          onClick={() => setPanelVisible(!panelVisible)}
+          style={{ marginTop: 'auto' }}
+        >
+          {panelVisible ? <SidePanelClose size={20} /> : <SidePanelOpen size={20} />}
+        </button>
+      </div>
+
+      {/* ─── WORKSPACE (content + inspector) ─── */}
+      <div className="workspace">
+        <div className="content-area">
+          {/* Status bar */}
+          {database.status === 'connected' && (
+            <div className="status-bar">
+              <span className="status-dot" />
+              <span>
+                Connected as <strong>{database.user || 'user'}</strong> to <strong>{database.host}:{database.port}/{database.database}</strong>
+              </span>
+            </div>
+          )}
+          {database.status === 'disconnected' && (
+            <div className="status-bar">
+              <span className="status-dot disconnected" />
+              <span>Not connected</span>
+            </div>
+          )}
+
+          {/* Frame results */}
+          <Contents />
+        </div>
+
+        {/* ─── RIGHT PANEL (Inspector) ─── */}
+        {panelVisible && <InspectorPanel />}
+      </div>
+
+      {/* ─── QUERY BUILDER DRAWER ─── */}
+      <BuilderContainer open={builderOpen} setOpen={setBuilderOpen} finder={finder} />
+
+      {/* ─── SETTINGS DRAWER ─── */}
+      <div className={`settings-drawer ${settingsOpen ? 'open' : ''}`}>
+        <h3>Configuration</h3>
+        <SidebarSetting />
+      </div>
+      {settingsOpen && (
+        <div
+          style={{ position: 'fixed', inset: 0, zIndex: 15 }}
+          onClick={() => setSettingsOpen(false)}
+          role="presentation"
+        />
+      )}
     </div>
   );
 };
