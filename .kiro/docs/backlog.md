@@ -245,13 +245,93 @@
 
 ---
 
-## Phase 5: TypeScript Migration 🔲 FUTURE
+## Phase 5: CSS/Layout Fix — Carbon Grid Implementation 🔲 BLOCKING
 
-- [ ] Add `tsconfig.json` with strict mode
-- [ ] Convert new files to TypeScript
-- [ ] Incrementally convert existing files (start with utilities, models)
-- [ ] Leverage Carbon's TypeScript definitions
-- [ ] Add type checking to CI pipeline
+> **Critical:** App layout is broken after Bootstrap removal. Text wraps character-by-character, no horizontal layouts, sidebar/content structure collapsed. App is unusable.
+>
+> Root cause: Bootstrap utility classes (`d-flex`, `col-sm-*`, `badge`, `content-row`) were removed but the custom SCSS and component layouts still depend on them. Carbon Grid was added to some components but the overall page layout and custom styles weren't updated.
+
+### 5a: Audit & Plan
+- [ ] Identify all remaining Bootstrap class references in SCSS and JSX
+- [ ] Map each to Carbon equivalent or custom CSS
+- [ ] Identify the page layout structure (sidebar + main content + frames)
+
+### 5b: Page Layout & Structure
+- [ ] Fix main page layout (sidebar + editor + content area)
+- [ ] Fix the sidebar component layout (vertical sections, buttons)
+- [ ] Fix the editor/frame area (horizontal flow)
+- [ ] Fix the connection form layout (side-by-side columns)
+
+### 5c: Component-Level Fixes
+- [ ] Fix Frame component layout (header buttons, body)
+- [ ] Fix SidebarHome (node/edge/property sections)
+- [ ] Fix Settings/Configuration panel
+- [ ] Fix graph visualization footer/legend areas
+- [ ] Fix modal layouts
+
+### 5d: Cleanup & Verification
+- [ ] Remove all dead Bootstrap class references from SCSS
+- [ ] Verify all pages render correctly
+- [ ] Test responsive behavior
+- [ ] Update E2E tests if selectors changed
+
+---
+
+## Phase 6: TypeScript Migration 🔲 PENDING
+
+> See [typescript-migration-plan.md](typescript-migration-plan.md) for full details.
+> Scope: 137 source files, ~13,600 LOC. Estimated: 14-20 days.
+
+### 6a: TypeScript Infrastructure Setup
+- [ ] Install TypeScript 5.x, tsx, @types/* packages
+- [ ] Create tsconfig.base.json, backend/tsconfig.json, frontend/tsconfig.json
+- [ ] Configure Vite, Vitest, ESLint for TypeScript
+- [ ] Add `tsc --noEmit` type-check to CI
+- [ ] Verify existing JS works with allowJs: true
+
+### 5b: Shared Type Definitions
+- [ ] Create backend/src/types/ (database, api, age types)
+- [ ] Create frontend/src/types/ (api, redux, graph, components)
+- [ ] Create typed Redux hooks (useAppDispatch, useAppSelector)
+
+### 5c: Backend Migration (22 files → .ts)
+- [ ] Wave 1: Pure utilities (6 files)
+- [ ] Wave 2: Models (3 files)
+- [ ] Wave 3: Services (4 files)
+- [ ] Wave 4: Controllers & Routes (6 files)
+- [ ] Wave 5: Entry point & tools (5 files)
+
+### 5d: Frontend Utilities & Redux (15 files)
+- [ ] Redux store setup (store.ts, reducers.ts, hooks.ts)
+- [ ] All 10 Redux slices → .ts
+- [ ] Utilities & hooks → .ts/.tsx
+
+### 5e: Frontend Components (~70 files)
+- [ ] Wave 1: Simple/leaf components
+- [ ] Wave 2: Form/modal components
+- [ ] Wave 3: Complex components (graph visualization)
+- [ ] Wave 4: Container components (refactor connect() → hooks)
+- [ ] Wave 5: Pages & App
+
+### 5f: Strict Mode & Cleanup
+- [ ] Enable strict: true
+- [ ] Fix all type errors
+- [ ] Remove allowJs, remove any types
+- [ ] Update tests to TypeScript
+- [ ] CI fails on type errors
+
+---
+
+## Future / Backlog Items
+
+### Evaluate Docker Base Image
+> RHDA reports 3 vulnerabilities (1 High, 2 Medium) in `node:24-alpine` base image.
+> These are upstream Alpine/Node.js CVEs, not application code issues.
+- [ ] Evaluate base image options (Alpine vs UBI 9 vs Distroless)
+- [ ] **Note:** UBI 9 (`registry.access.redhat.com/ubi9/nodejs-24`) is the recommended choice for enterprise deployments — works on all Kubernetes platforms (AKS, GKE, EKS, IKS, OpenShift), gets Red Hat's security patching cadence, and integrates with RHDA/Trustify scanning
+- [ ] Update Dockerfile with chosen base image
+- [ ] Verify build and runtime behavior
+- [ ] Update CI workflow if image registry changes
 
 ---
 
