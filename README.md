@@ -1,109 +1,233 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
-  <a href="https://github.com/apache/age/blob/master/LICENSE">
-    <img src="https://img.shields.io/github/license/apache/age-viewer"/>
-  <a href="https://github.com/apache/age/stargazers">
-    <img src="https://img.shields.io/github/stars/apache/age-viewer"/>
-</p>
+[![License](https://img.shields.io/github/license/apache/age-viewer)](LICENSE)
 
-# What is Apache-Age Viewer
-Apache-Age Viewer is a web based user interface that provides visualization of graph data stored in a postgreSQL database with AGE extension. 
-It is graph visualisation tool, for Apache AGE.
+# Apache AGE Viewer
 
-This is a sub-project of [the Apache AGE project](https://age.apache.org/#).
+A web-based graph visualization tool for PostgreSQL databases with the [Apache AGE](https://age.apache.org/) extension.
 
-> **🚧 Modernization in Progress**
-> This project is undergoing a major stack update. See [the update plan](.kiro/docs/update-plan.md) and [backlog](.kiro/docs/backlog.md) for details.
-> Target stack: Node 24 LTS, React 19, Vite, IBM Carbon, native ESM.
+## Tech Stack
 
-# Recommend Node Version & install module
+| Layer | Technology |
+|-------|-----------|
+| Runtime | Node.js 24.x LTS |
+| Frontend | React 19, Vite, IBM Carbon Design System |
+| State | Redux Toolkit 2.x |
+| Graph | Cytoscape.js |
+| Editor | CodeMirror 6 |
+| Backend | Express 4.x, native ESM |
+| Database | PostgreSQL 14-18 with Apache AGE |
 
-- Node version - >=24.0.0
+## Prerequisites
 
-- Node Module - pm2 
+- **Node.js** >= 24.0.0 ([download](https://nodejs.org/))
+- **Docker** or **Podman** (for the PostgreSQL + AGE database)
 
-Install latest **pm2** with :
-``` npm i -g pm2 ```
+## Quick Start
 
+### 1. Set up the database
 
-> [pm2](https://www.npmjs.com/package/pm2) is an NPM module to run the project in production mode, and hence is optional for getting started with setting up development environment for Age-Viewer 
+<details>
+<summary><strong>Using Docker</strong></summary>
 
-# Running Age-Viewer
+```bash
+# Pull the Apache AGE image
+docker pull apache/age:latest
 
- - Install the required node modules using  :  
-	```npm run setup```
-- Run Age-Viewer using : 
-```npm run start```
+# Start the container
+docker run -d \
+  --name age-viewer-db \
+  -p 5455:5432 \
+  -e POSTGRES_USER=ageviewer \
+  -e POSTGRES_PASSWORD=ageviewer_pw \
+  -e POSTGRES_DB=ageviewer \
+  apache/age:latest
 
->This will start the age-viewer on http://localhost:3000 if port 3000 is free.
+# Wait for it to be ready
+docker exec age-viewer-db pg_isready -U ageviewer -d ageviewer
 
+# Initialize the AGE extension
+docker exec age-viewer-db psql -U ageviewer -d ageviewer -c "CREATE EXTENSION IF NOT EXISTS age;"
+docker exec age-viewer-db psql -U ageviewer -d ageviewer -c "LOAD 'age';"
+```
 
-# How to build using command
+</details>
 
-- Build the front-end : 
-```npm run build-front ```
+<details>
+<summary><strong>Using Podman</strong></summary>
 
-- Build the back-end :
-``` npm run build-back```
+```bash
+# Pull the Apache AGE image
+podman pull docker.io/apache/age:latest
 
-- Start the project in production mode :
-  ``` 
-	pm2 stop ag-viewer-develop
+# Start the container
+podman run -d \
+  --name age-viewer-db \
+  -p 5455:5432 \
+  -e POSTGRES_USER=ageviewer \
+  -e POSTGRES_PASSWORD=ageviewer_pw \
+  -e POSTGRES_DB=ageviewer \
+  docker.io/apache/age:latest
 
-	pm2 delete ag-viewer-develop
+# Wait for it to be ready
+podman exec age-viewer-db pg_isready -U ageviewer -d ageviewer
 
-	pm2 start ecosystem.config.js
+# Initialize the AGE extension
+podman exec age-viewer-db psql -U ageviewer -d ageviewer -c "CREATE EXTENSION IF NOT EXISTS age;"
+podman exec age-viewer-db psql -U ageviewer -d ageviewer -c "LOAD 'age';"
+```
 
-	```
+</details>
 
-  # How to start using Age-Viewer
- - To start using Age-Viewer we need to have a running postgreSQL database server with Apache Age Extension 
-	 ### Setting up the PostgreSQL server with AGE extension
-	-  Easiest way  for Windows, Mac-OS and Linux Environment using **Docker**
-  
-	> Install docker in advance (https://www.docker.com/get-started), install the version compatible with your OS from the provided link.
-	
-	 **Run Using Docker** :
-   
-	- Get the docker image - 
-	```docker pull apache/age ```
-	
-	- Create AGE docker container
-	```bash
-	docker run --name myPostgresDb -p 5455:5432 -e POSTGRES_USER=postgresUser \
-	-e POSTGRES_PASSWORD=postgresPW -e POSTGRES_DB=postgresDB -d apache/age
-	```
-	
-	| Docker variables| Description |
-	|--|--|
-	| ``--name`` | Assign a name to the container |
-	|	`-p` |	Publish a container’s port(s) to the host|
-	|	``-e``|	Set environment variables|
-	|	``-d``|	Run container in background and print container ID|
-- To Get the running log of the docker container created - 
-`` docker logs --follow myPostgresDb``
-- To Get into postgreSQL Shell (There are two ways this can be done) -
-	- First get into docker shell using -	`` docker exec -it myPostgresDb bash`` 
-	<br>Then get into postgreSQL shell using - `` psql -U postgresUser postgresDB``
-	
-	OR
-	
-	- Alternatively postgres shell can also be assessed directly (without getting into the docker shell) -
-		`` psql -U postgresUser -d postgresDB -p 5455 -h localhost``
-		and put in ``postgresPW`` when prompted for password.
-- After logging into postgreSQL shell follow the [Post-Installation](https://github.com/apache/age#post-installation) instruction to create a graph in the database.
-### Connect Apache Age-Viewer to PostgreSQL Database
-**Initial Connection Layout**
-![enter image description here](https://user-images.githubusercontent.com/69689387/211624181-9644f489-1a45-4eed-ac8e-7aaf156b97ea.png)
-To Connect to postgreSQL server running from Docker Container
-- Connect URL - localhost
-- Connect Port - 5455 
-- Database Name - postgresDB
-- User Name - postgresUser
-- Password - postgresPW
-> The following field is same as used to make the docker container specified above as flags.
+### 2. Install dependencies
 
+```bash
+npm run setup
+```
 
+This installs dependencies for the root, backend, and frontend.
 
-# License
+### 3. Start the application
 
-Apache AGE Viewer is licensed under the Apache License, Version 2.0. See LICENSE for the full license text.
+```bash
+npm run start
+```
+
+This starts both the backend (port 3001) and frontend (port 3000) concurrently.
+
+Open **http://localhost:3000** in your browser.
+
+### 4. Connect to the database
+
+In the connection form, enter:
+
+| Field | Value |
+|-------|-------|
+| Connect URL | `localhost` |
+| Connect Port | `5455` |
+| Database Name | `ageviewer` |
+| User Name | `ageviewer` |
+| Password | `ageviewer_pw` |
+
+Click **Connect**.
+
+## Development
+
+### Start in development mode
+
+```bash
+# Backend with hot-reload
+cd backend && npm run start:dev
+
+# Frontend with Vite HMR (separate terminal)
+cd frontend && npm run start
+```
+
+### Run tests
+
+```bash
+# Backend unit tests
+cd backend && npm test
+
+# Frontend unit tests
+cd frontend && npm test
+
+# E2E tests (requires Docker/Podman)
+export E2E_DB_PASSWORD=your_test_password
+npm run e2e
+```
+
+### Lint & Format
+
+```bash
+npm run lint          # Check for issues
+npm run lint:fix      # Auto-fix
+npm run format        # Format with Prettier
+npm run format:check  # Verify formatting
+```
+
+### Build for production
+
+```bash
+cd frontend && npm run build
+```
+
+The production build is output to `frontend/build/`. The backend serves it automatically.
+
+## Project Structure
+
+```
+age-viewer/
+├── backend/           # Express API server (native ESM)
+│   ├── src/
+│   │   ├── bin/       # Entry point (www.js)
+│   │   ├── config/    # Database, logging config
+│   │   ├── controllers/
+│   │   ├── models/    # GraphRepository, QueryBuilder
+│   │   ├── routes/    # API routes
+│   │   ├── services/  # Business logic
+│   │   └── tools/     # AGE parser (ANTLR4)
+│   ├── sql/           # Version-specific SQL (PG 14-18)
+│   └── test/          # Vitest tests
+├── frontend/          # React SPA (Vite)
+│   ├── src/
+│   │   ├── app/       # Redux store
+│   │   ├── components/
+│   │   ├── features/  # Redux slices
+│   │   ├── hooks/     # Custom hooks
+│   │   └── test/      # Vitest + RTL tests
+│   └── vite.config.js
+├── e2e/               # Playwright E2E tests
+├── scripts/           # E2E orchestration scripts
+├── .kiro/             # Project documentation
+│   ├── docs/          # Plans, backlog, architecture
+│   └── steering/      # Development guidelines
+└── playwright.config.js
+```
+
+## Supported PostgreSQL Versions
+
+| Version | Status |
+|---------|--------|
+| 18 | ✅ Supported (Current) |
+| 17 | ✅ Supported |
+| 16 | ✅ Supported |
+| 15 | ✅ Supported |
+| 14 | ✅ Supported (EOL Nov 2026) |
+| 13 and below | ❌ Not supported (EOL) |
+
+## Creating a Test Graph
+
+After connecting, you can create a graph using Cypher queries in the editor:
+
+```sql
+-- Create a graph
+SELECT * FROM ag_catalog.create_graph('my_graph');
+
+-- Create nodes
+SELECT * FROM cypher('my_graph', $$ CREATE (n:Person {name: 'Alice', age: 30}) RETURN n $$) as (n agtype);
+SELECT * FROM cypher('my_graph', $$ CREATE (n:Person {name: 'Bob', age: 25}) RETURN n $$) as (n agtype);
+
+-- Create an edge
+SELECT * FROM cypher('my_graph', $$
+  MATCH (a:Person {name: 'Alice'}), (b:Person {name: 'Bob'})
+  CREATE (a)-[r:KNOWS {since: 2020}]->(b)
+  RETURN r
+$$) as (r agtype);
+
+-- Query the graph
+SELECT * FROM cypher('my_graph', $$ MATCH (a)-[r]->(b) RETURN a, r, b $$) as (a agtype, r agtype, b agtype);
+```
+
+## Stopping the database
+
+```bash
+# Docker
+docker stop age-viewer-db && docker rm age-viewer-db
+
+# Podman
+podman stop age-viewer-db && podman rm age-viewer-db
+```
+
+## License
+
+Apache AGE Viewer is licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) for the full license text.
