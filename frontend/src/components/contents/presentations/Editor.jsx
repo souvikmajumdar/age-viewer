@@ -23,7 +23,6 @@ import { CloseOutline, ToggleOff, ToggleOn } from '@carbon/icons-react';
 import store from '../../../app/store';
 import AlertContainers from '../../alert/containers/AlertContainers';
 import CodeMirror from '../../editor/containers/CodeMirrorWapperContainer';
-import SideBarToggle from '../../editor/containers/SideBarMenuToggleContainer';
 import { setting } from '../../../conf/config';
 import IconPlay from '../../../icons/IconPlay';
 import { getMetaData } from '../../../features/database/MetadataSlice';
@@ -167,26 +166,6 @@ const Editor = ({
                 aria-label="Run Query"
               >
                 <IconPlay />
-              </button>
-              <button
-                className="frame-head-button btn btn-link"
-                type="button"
-                onClick={() => {
-                  toggleMenu('home');
-                  /*
-                  if (!isActive) {
-                    document.getElementById('wrapper')?.classList?.remove('wrapper');
-                    document.getElementById('wrapper')?.classList?.add('wrapper-extension-padding');
-                  } else {
-                    document.getElementById('wrapper')?
-                    .classList?.remove('wrapper-extension-padding');
-                    document.getElementById('wrapper')?.classList?.add('wrapper');
-                  } */
-                }}
-                title={(isActive) ? 'Hide' : 'Show'}
-                aria-label="Toggle Inspector"
-              >
-                <SideBarToggle isActive={isActive} />
               </button>
               <button
                 className="frame-head-button btn btn-link"

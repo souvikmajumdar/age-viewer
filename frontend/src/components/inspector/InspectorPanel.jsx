@@ -53,6 +53,13 @@ const InspectorPanel = ({
   const dragItem = useRef(null);
   const dragOverItem = useRef(null);
 
+  // Re-fetch metadata when the current graph changes
+  React.useEffect(() => {
+    if (currentGraph) {
+      getMeta({ currentGraph });
+    }
+  }, [currentGraph]);
+
   const handleDragStart = (index) => {
     dragItem.current = index;
   };
