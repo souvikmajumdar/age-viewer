@@ -1,0 +1,7 @@
+node_modules
+build
+dist
+frontend/src/lib
+playwright-report
+test-results
+*.min.js
