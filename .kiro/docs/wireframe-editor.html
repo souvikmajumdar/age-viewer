@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AGE Viewer — Editor Bar Wireframe</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'IBM Plex Sans', -apple-system, sans-serif; background: #f4f4f4; color: #161616; height: 100vh; overflow: hidden; }
+
+  .app {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    grid-template-columns: 48px 1fr;
+    height: 100vh;
+  }
+
+  /* ─── EDITOR BAR ─── */
+  .editor-bar {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    background: #161616;
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid #393939;
+  }
+
+  /* Top row: code editor */
+  .editor-input-row {
+    display: flex;
+    align-items: stretch;
+    padding: 0.5rem 1rem;
+    gap: 0.5rem;
+  }
+
+  .editor-line-numbers {
+    color: #6f6f6f;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8125rem;
+    padding: 0.5rem 0.5rem 0.5rem 0;
+    border-right: 1px solid #393939;
+    min-width: 28px;
+    text-align: right;
+    user-select: none;
+  }
+
+  .editor-textarea {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #f4f4f4;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    padding: 0.5rem 0.75rem;
+    resize: none;
+    outline: none;
+    min-height: 40px;
+  }
+  .editor-textarea::placeholder { color: #6f6f6f; }
+
+  .editor-actions {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.25rem;
+    padding-top: 0.375rem;
+  }
+
+  .editor-actions .run-btn {
+    background: #0f62fe;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.5rem 0.875rem;
+    cursor: pointer;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    white-space: nowrap;
+  }
+  .editor-actions .run-btn:hover { background: #0353e9; }
+
+  .editor-actions .ghost-btn {
+    background: transparent;
+    color: #c6c6c6;
+    border: none;
+    border-radius: 4px;
+    padding: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+  }
+  .editor-actions .ghost-btn:hover { color: #fff; background: #393939; }
+
+  /* Bottom row: toolbar (clear, shortcuts) */
+  .editor-toolbar {
+    display: flex;
+    align-items: center;
+    padding: 0.25rem 1rem 0.375rem;
+    gap: 0.5rem;
+    border-top: 1px solid #333333;
+  }
+
+  .editor-toolbar .toolbar-hint {
+    font-size: 0.6875rem;
+    color: #6f6f6f;
+    margin-left: auto;
+  }
+
+  .editor-toolbar .toolbar-hint kbd {
+    background: #393939;
+    color: #c6c6c6;
+    padding: 0.125rem 0.375rem;
+    border-radius: 3px;
+    font-size: 0.625rem;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .editor-toolbar .clear-btn {
+    background: transparent;
+    border: none;
+    color: #a8a8a8;
+    font-size: 0.6875rem;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+  }
+  .editor-toolbar .clear-btn:hover { color: #fff; background: #393939; }
+
+  /* ─── LEFT RAIL ─── */
+  .left-rail {
+    grid-column: 1;
+    grid-row: 2;
+    background: #262626;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem 0;
+    gap: 0.25rem;
+    border-right: 1px solid #393939;
+  }
+  .left-rail .rail-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 4px;
+    border: none;
+    background: transparent;
+    color: #c6c6c6;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+  }
+  .left-rail .rail-btn:hover { background: #393939; color: #fff; }
+  .left-rail .rail-btn.active { background: #0f62fe; color: #fff; }
+
+  /* ─── WORKSPACE ─── */
+  .workspace {
+    grid-column: 2;
+    grid-row: 2;
+    display: flex;
+    overflow: hidden;
+  }
+
+  .content-area {
+    flex: 1;
+    overflow-y: auto;
+    background: #f4f4f4;
+  }
+
+  .status-bar {
+    padding: 0.5rem 1rem;
+    background: #edf5ff;
+    border-bottom: 1px solid #d0e2ff;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+  }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #24a148; }
+
+  .right-panel {
+    width: 280px;
+    background: #ffffff;
+    border-left: 1px solid #e0e0e0;
+    padding: 1rem;
+    font-size: 0.8125rem;
+    color: #525252;
+  }
+
+  /* ─── FRAME CARD ─── */
+  .frame-card {
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    margin: 1rem;
+    overflow: hidden;
+  }
+  .frame-card .frame-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0.75rem;
+    background: #f4f4f4;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 0.8125rem;
+  }
+  .frame-card .frame-header .cmd { font-family: 'IBM Plex Mono', monospace; color: #0f62fe; }
+  .frame-card .frame-body { padding: 1rem; min-height: 200px; display: flex; align-items: center; justify-content: center; color: #a8a8a8; }
+
+  .wireframe-label {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #da1e28;
+    color: white;
+    padding: 0.25rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 0 0 4px 4px;
+    z-index: 999;
+  }
+
+  .annotation {
+    position: fixed;
+    background: #fff3cd;
+    border: 2px solid #ffc107;
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+    color: #856404;
+    z-index: 100;
+    max-width: 200px;
+    line-height: 1.4;
+  }
+</style>
+</head>
+<body>
+
+<div class="wireframe-label">WIREFRAME — Editor Bar Design</div>
+
+<!-- Annotations -->
+<div class="annotation" style="top: 30px; right: 20px;">
+  ▶ Run executes query<br>
+  ⌃ collapse/expand editor<br>
+  ◉ toggle label mode
+</div>
+<div class="annotation" style="bottom: 20px; left: 60px;">
+  Editor auto-expands as you type multi-line queries. Line numbers track lines.
+</div>
+
+<div class="app">
+
+  <!-- ═══ EDITOR BAR ═══ -->
+  <div class="editor-bar">
+    <div class="editor-input-row">
+      <div class="editor-line-numbers">1<br>2</div>
+      <textarea class="editor-textarea" rows="2" placeholder="Enter Cypher query...">SELECT * from cypher('test_graph', $$
+  MATCH (V)-[R]-(V2) RETURN V,R,V2
+$$) as (V agtype, R agtype, V2 agtype);</textarea>
+      <div class="editor-actions">
+        <button class="run-btn">▶ Run</button>
+        <button class="ghost-btn" title="Collapse">⌃</button>
+        <button class="ghost-btn" title="Label Mode">◉</button>
+      </div>
+    </div>
+    <div class="editor-toolbar">
+      <button class="clear-btn">✕ Clear</button>
+      <span class="toolbar-hint"><kbd>⌘</kbd> + <kbd>Enter</kbd> to run · <kbd>⌘</kbd> + <kbd>L</kbd> to clear</span>
+    </div>
+  </div>
+
+  <!-- ═══ LEFT RAIL ═══ -->
+  <div class="left-rail">
+    <button class="rail-btn active">⊞</button>
+    <button class="rail-btn">⚙</button>
+    <button class="rail-btn" style="margin-top: auto;">◧</button>
+  </div>
+
+  <!-- ═══ WORKSPACE ═══ -->
+  <div class="workspace">
+    <div class="content-area">
+      <div class="status-bar">
+        <span class="status-dot"></span>
+        <span>Connected as <strong>postgresUser</strong> to <strong>localhost:5455/postgresDB</strong> · Graph: <strong>test_graph</strong></span>
+      </div>
+
+      <div class="frame-card">
+        <div class="frame-header">
+          <span class="cmd">$ MATCH (V)-[R]-(V2) RETURN V,R,V2</span>
+          <span>⤢ ∧ ✕</span>
+        </div>
+        <div class="frame-body">
+          [ Graph Visualization / Table Results ]
+        </div>
+      </div>
+    </div>
+
+    <div class="right-panel">
+      <strong>CURRENT GRAPH</strong><br>
+      test_graph<br><br>
+      <strong>NODE LABELS</strong><br>
+      *(0)<br><br>
+      <strong>EDGE LABELS</strong><br>
+      *(0)<br><br>
+      <strong>PROPERTIES</strong><br>
+      <em style="color: #a8a8a8;">No properties available</em>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

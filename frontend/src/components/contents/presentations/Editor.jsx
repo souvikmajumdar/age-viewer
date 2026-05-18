@@ -164,7 +164,6 @@ const Editor = ({
                 className="frame-head-button btn btn-link"
                 type="button"
                 onClick={() => onClick()}
-                title="Run Query"
                 aria-label="Run Query"
               >
                 <IconPlay />
@@ -185,7 +184,7 @@ const Editor = ({
                   } */
                 }}
                 title={(isActive) ? 'Hide' : 'Show'}
-                aria-label="toggleMenu"
+                aria-label="Toggle Inspector"
               >
                 <SideBarToggle isActive={isActive} />
               </button>
@@ -193,8 +192,7 @@ const Editor = ({
                 className="frame-head-button btn btn-link"
                 type="button"
                 onClick={() => setLabel()}
-                title="Run Query"
-                aria-label="Run Query"
+                aria-label="Toggle Labels"
               >
                 {isLabel ? <ToggleOn size={24} /> : <ToggleOff size={24} />}
               </button>

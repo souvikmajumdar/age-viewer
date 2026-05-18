@@ -82,14 +82,13 @@ const EdgeThicknessSettingModal = ({
   };
 
   return (
-    <div style={{ width: '370px' }}>
+    <div style={{ width: '320px', padding: '0.75rem' }}>
       <p className={style.title}>Apply Edge Weight</p>
       <select
         className={`${standardEdge === '' ? style.default : style.select}`}
         defaultValue={null}
         value={standardEdge}
         onChange={(e) => setStdEdge(e.target.value)}
-        style={{ width: '95%' }}
       >
         <option className={`${style.option}`} value="">Select Edge</option>
         {selectionEdge()}
@@ -99,7 +98,6 @@ const EdgeThicknessSettingModal = ({
         defaultValue={null}
         value={standardProperty}
         onChange={(e) => setStdProperty(e.target.value)}
-        style={{ width: '95%' }}
       >
         <option className={`${style.option}`} value="">Select Property</option>
         {selectionPropertie()}
