@@ -216,6 +216,16 @@
 - [x] Add E2E CI workflow (separate file, PRs to `development` only)
 - [x] Smoke test placeholder
 
+#### 4f-prerequisite: PostgreSQL Version Support (PG 16-18)
+> Discovered during E2E testing: app only has SQL for PG 11-15, but `apache/age:latest` ships PG 18.
+> See [pg-version-support-plan.md](pg-version-support-plan.md) for full analysis.
+- [ ] Add `sql/16/`, `sql/17/`, `sql/18/` directories (copy from `sql/15/`)
+- [ ] Verify SQL works against PG 18 with AGE extension
+- [ ] Remove `sql/11/`, `sql/12/`, `sql/13/` (EOL versions)
+- [ ] Update `SQLFlavorManager.js` — version validation, clear error for unsupported versions
+- [ ] Update README — document supported PG versions (14-18)
+- [ ] Verify E2E runs successfully with `apache/age:latest` (PG 18)
+
 #### 4f-ii: E2E Test Scenarios
 - [ ] Flow 1: Connect to database → verify status frame
 - [ ] Flow 2: Execute Cypher query → verify graph visualization
