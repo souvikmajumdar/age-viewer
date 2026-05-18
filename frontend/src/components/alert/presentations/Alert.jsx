@@ -19,24 +19,15 @@
 
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { PlayFilledAlt } from '@carbon/icons-react';
 import { InlineNotification } from '@carbon/react';
 
 const SingleAlert = ({
   alertKey,
   alertName,
   errorMessage,
-  setCommand,
   removeAlert,
 }) => {
   const dispatch = useDispatch();
-
-  const setAlertConnect = (e, command) => {
-    e.preventDefault();
-    dispatch(() => {
-      setCommand(command);
-    });
-  };
 
   const clearAlert = () => {
     dispatch(() => {
@@ -56,20 +47,7 @@ const SingleAlert = ({
       <InlineNotification
         kind="warning"
         title="Database Disconnected"
-        subtitle={(
-          <p>
-            Database is Disconnected. You may use
-            {' '}
-            <button type="button" className="badge badge-light" onClick={(e) => setAlertConnect(e, ':server connect')}>
-
-              <PlayFilledAlt size={20} />
-              :server connect
-            </button>
-            {' '}
-            to
-            establish connection. There&apos;s a graph waiting for you.
-          </p>
-        )}
+        subtitle="Database is Disconnected. Use ':server connect' to establish connection. There's a graph waiting for you."
         onClose={() => { clearAlert(); return false; }}
       />
     );
@@ -79,19 +57,7 @@ const SingleAlert = ({
       <InlineNotification
         kind="success"
         title="Database Connected"
-        subtitle={(
-          <p>
-            Successfully database is connected. You may use
-            {' '}
-            <a href="/#" className="badge badge-light" onClick={(e) => setAlertConnect(e, ':server status')}>
-              <PlayFilledAlt size={20} />
-              :server status
-            </a>
-            {' '}
-            to
-            confirm connected database information.
-          </p>
-        )}
+        subtitle="Successfully connected to the database. Use ':server status' to confirm connected database information."
         onClose={() => { clearAlert(); return false; }}
       />
     );
@@ -101,14 +67,7 @@ const SingleAlert = ({
       <InlineNotification
         kind="error"
         title="Database Connection Failed"
-        subtitle={(
-          <>
-            <p>
-              Failed to connect to the database. Are you sure the database is running on the server?
-            </p>
-            {errorMessage}
-          </>
-        )}
+        subtitle={`Failed to connect to the database. Are you sure the database is running on the server? ${errorMessage || ''}`}
         onClose={() => { clearAlert(); return false; }}
       />
     );
@@ -118,22 +77,7 @@ const SingleAlert = ({
       <InlineNotification
         kind="error"
         title="No Database Connected"
-        subtitle={(
-          <>
-            <p>
-              You haven&apos;t set database connection. You may use
-              {' '}
-              <a href="/#" className="badge badge-light" onClick={(e) => setAlertConnect(e, ':server connect')}>
-                <PlayFilledAlt size={20} />
-                :server connect
-              </a>
-              {' '}
-              to
-              establish connection. There&apos;s a graph waiting for you.
-            </p>
-            {errorMessage}
-          </>
-        )}
+        subtitle={`You haven't set a database connection. Use ':server connect' to establish connection. There's a graph waiting for you. ${errorMessage || ''}`}
         onClose={() => { clearAlert(); return false; }}
       />
     );
@@ -143,11 +87,7 @@ const SingleAlert = ({
       <InlineNotification
         kind="error"
         title="Metadata Load Error"
-        subtitle={(
-          <p>
-            Unexpectedly error occurred while getting metadata.
-          </p>
-        )}
+        subtitle="An unexpected error occurred while getting metadata."
         onClose={() => { clearAlert(); return false; }}
       />
     );
@@ -157,11 +97,7 @@ const SingleAlert = ({
       <InlineNotification
         kind="error"
         title="Query Error"
-        subtitle={(
-          <p>
-            Your query was not executed properly. Refer the below error message.
-          </p>
-        )}
+        subtitle="Your query was not executed properly. Refer to the error message below."
         onClose={() => { clearAlert(); return false; }}
       />
     );
@@ -171,13 +107,7 @@ const SingleAlert = ({
       <InlineNotification
         kind="error"
         title="Failed to Load Play Target"
-        subtitle={(
-          <p>
-            &apos;
-            {errorMessage}
-            &apos; does not exists.
-          </p>
-        )}
+        subtitle={`'${errorMessage}' does not exist.`}
         onClose={() => { clearAlert(); return false; }}
       />
     );
@@ -187,22 +117,7 @@ const SingleAlert = ({
       <InlineNotification
         kind="info"
         title="Already Connected to Database"
-        subtitle={(
-          <p>
-            You are currently connected to a database.
-            If you want to access to another database, you may execute
-            <a
-              href="/#"
-              className="badge badge-light"
-              onClick={(e) => setAlertConnect(e, ':server disconnect')}
-            >
-              <PlayFilledAlt size={20} />
-              :server disconnect
-            </a>
-            {' '}
-            to disconnect from current database first.
-          </p>
-        )}
+        subtitle="You are currently connected to a database. If you want to access another database, execute ':server disconnect' to disconnect from the current database first."
         onClose={() => { clearAlert(); return false; }}
       />
     );

@@ -108,7 +108,7 @@ jobs:
           done
 
       - name: Serve frontend build
-        run: cd frontend && npx serve -s build -l 3000 &
+        run: cd frontend && npx vite preview --port 3000 &
 
       - name: Wait for frontend
         run: |
