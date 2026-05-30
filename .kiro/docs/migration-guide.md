@@ -52,7 +52,7 @@ Copy **both** files to the new laptop (AirDrop, USB, or secure transfer).
 
 ### 1. Install prerequisites
 - **Node.js >= 24.0.0** — https://nodejs.org/ (or `nvm install 24 && nvm use 24`)
-- **Docker** or **Podman** — for the PostgreSQL + Apache AGE database
+- **Podman** (preferred) or **Docker** — for the PostgreSQL + Apache AGE database
 - **git**
 
 Verify:
@@ -60,7 +60,7 @@ Verify:
 node -v   # >= v24.0.0
 npm -v
 git --version
-docker --version   # or: podman --version
+podman --version   # or: docker --version
 ```
 
 ### 2. Unzip the project
@@ -100,6 +100,32 @@ npm run setup
 Installs root, backend, and frontend dependencies from the lockfiles.
 
 ### 6. Set up the database
+
+Pick the engine you use. **Podman** is preferred; Docker steps follow.
+
+<details open>
+<summary><strong>Using Podman</strong></summary>
+
+```bash
+podman pull docker.io/apache/age:latest
+podman run -d --name age-viewer-db -p 5455:5432 \
+  -e POSTGRES_USER=ageviewer -e POSTGRES_PASSWORD=ageviewer_pw \
+  -e POSTGRES_DB=ageviewer docker.io/apache/age:latest
+podman exec age-viewer-db pg_isready -U ageviewer -d ageviewer
+podman exec age-viewer-db psql -U ageviewer -d ageviewer -c "CREATE EXTENSION IF NOT EXISTS age;"
+podman exec age-viewer-db psql -U ageviewer -d ageviewer -c "LOAD 'age';"
+```
+
+To stop and remove later:
+```bash
+podman stop age-viewer-db && podman rm age-viewer-db
+```
+
+</details>
+
+<details>
+<summary><strong>Using Docker</strong></summary>
+
 ```bash
 docker pull apache/age:latest
 docker run -d --name age-viewer-db -p 5455:5432 \
@@ -107,8 +133,15 @@ docker run -d --name age-viewer-db -p 5455:5432 \
   -e POSTGRES_DB=ageviewer apache/age:latest
 docker exec age-viewer-db pg_isready -U ageviewer -d ageviewer
 docker exec age-viewer-db psql -U ageviewer -d ageviewer -c "CREATE EXTENSION IF NOT EXISTS age;"
+docker exec age-viewer-db psql -U ageviewer -d ageviewer -c "LOAD 'age';"
 ```
-(Use `podman` equivalents if you prefer Podman — see `README.md`.)
+
+To stop and remove later:
+```bash
+docker stop age-viewer-db && docker rm age-viewer-db
+```
+
+</details>
 
 ### 7. (Only if running E2E tests) recreate `.env`
 ```bash

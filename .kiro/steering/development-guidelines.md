@@ -14,6 +14,7 @@ description: Technical stack decisions, git workflow, and project context for AG
 - **Design system:** IBM Carbon (`@carbon/react`) — migration in progress, currently antd 4
 - **Backend:** Express 4.x with native ESM (no Babel, no build step)
 - **TypeScript:** Future goal (incremental adoption)
+- **Container engine:** Podman (preferred). Docker is supported as an alternative. Always provide both Podman and Docker commands in docs, with Podman first.
 
 ## Git Workflow
 
