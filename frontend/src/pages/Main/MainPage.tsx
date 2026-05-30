@@ -18,17 +18,8 @@
  */
 
 import React from 'react';
-import { createRoot } from 'react-dom/client';
+import DefaultTemplate from '../../components/template/DefaultTemplate.js';
 
-import { Provider } from 'react-redux';
-import store from './app/store';
+const MainPage = (): React.ReactElement => <DefaultTemplate />;
 
-import App from './App';
-import './index.css';
-
-const root = createRoot(document.getElementById('root'));
-root.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
-);
+export default MainPage;

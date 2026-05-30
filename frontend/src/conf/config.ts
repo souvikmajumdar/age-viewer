@@ -17,19 +17,34 @@
  * under the License.
  */
 
-import React from 'react';
-import './styles/carbon.scss';
-import './static/utilities.css';
-import './static/style.css';
-import { NotificationProvider } from './hooks/useNotification';
-import MainPage from './pages/Main/MainPage';
+export interface AboutConfig {
+  releaseDate: string;
+  version: string;
+  license: string;
+}
 
-const App = () => (
-  <React.StrictMode>
-    <NotificationProvider>
-      <MainPage />
-    </NotificationProvider>
-  </React.StrictMode>
-);
+export interface AppSetting {
+  theme: string;
+  maxNumOfFrames: number;
+  maxNumOfHistories: number;
+  maxDataOfGraph: number;
+  maxDataOfTable: number;
+  connectionStatusSkip: boolean;
+  closeWhenDisconnect: boolean;
+}
 
-export default App;
+export const about: AboutConfig = {
+  releaseDate: '2020 SEP 09',
+  version: 'v0.5.0-Beta',
+  license: 'MIT License',
+};
+
+export const setting: AppSetting = {
+  theme: 'default',
+  maxNumOfFrames: 0,
+  maxNumOfHistories: 0,
+  maxDataOfGraph: 0,
+  maxDataOfTable: 0,
+  connectionStatusSkip: false,
+  closeWhenDisconnect: false,
+};

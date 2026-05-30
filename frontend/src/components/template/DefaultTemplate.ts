@@ -18,10 +18,11 @@
  */
 
 import { connect } from 'react-redux';
-import DefaultTemplate from './presentations/DefaultTemplate';
-import { changeSettings } from '../../features/setting/SettingSlice';
+import DefaultTemplate from './presentations/DefaultTemplate.js';
+import { changeSettings } from '../../features/setting/SettingSlice.js';
+import type { RootState } from '../../types/redux.js';
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: RootState) => ({
   theme: state.setting.theme,
   maxNumOfFrames: state.setting.maxNumOfFrames,
   maxNumOfHistories: state.setting.maxNumOfHistories,

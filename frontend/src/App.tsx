@@ -17,18 +17,19 @@
  * under the License.
  */
 
-export const about = {
-  releaseDate: '2020 SEP 09',
-  version: 'v0.5.0-Beta',
-  license: 'MIT License',
-};
+import React from 'react';
+import './styles/carbon.scss';
+import './static/utilities.css';
+import './static/style.css';
+import { NotificationProvider } from './hooks/useNotification.js';
+import MainPage from './pages/Main/MainPage.js';
 
-export const setting = {
-  theme: 'default',
-  maxNumOfFrames: 0,
-  maxNumOfHistories: 0,
-  maxDataOfGraph: 0,
-  maxDataOfTable: 0,
-  connectionStatusSkip: false,
-  closeWhenDisconnect: false,
-};
+const App = (): React.ReactElement => (
+  <React.StrictMode>
+    <NotificationProvider>
+      <MainPage />
+    </NotificationProvider>
+  </React.StrictMode>
+);
+
+export default App;

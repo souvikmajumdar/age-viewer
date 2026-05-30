@@ -18,22 +18,42 @@
  */
 
 import React, {
-  createContext, useCallback, useContext, useState,
+  createContext, useCallback, useContext, useState, ReactNode,
 } from 'react';
 import { ToastNotification } from '@carbon/react';
 
-const NotificationContext = createContext(null);
+type NotificationKind = 'success' | 'error' | 'warning' | 'info';
+
+interface Notification {
+  id: string;
+  kind: NotificationKind;
+  title: string;
+  subtitle: string;
+}
+
+interface NotifyMethods {
+  success: (msg: string) => void;
+  error: (msg: string) => void;
+  warning: (msg: string) => void;
+  info: (msg: string) => void;
+}
+
+interface NotificationProviderProps {
+  children: ReactNode;
+}
+
+const NotificationContext = createContext<NotifyMethods | null>(null);
 
 const NOTIFICATION_TIMEOUT = 5000;
 
-export function NotificationProvider({ children }) {
-  const [notifications, setNotifications] = useState([]);
+export function NotificationProvider({ children }: NotificationProviderProps): React.ReactElement {
+  const [notifications, setNotifications] = useState<Notification[]>([]);
 
-  const removeNotification = useCallback((id) => {
+  const removeNotification = useCallback((id: string) => {
     setNotifications((prev) => prev.filter((n) => n.id !== id));
   }, []);
 
-  const addNotification = useCallback((kind, title, subtitle = '') => {
+  const addNotification = useCallback((kind: NotificationKind, title: string, subtitle = '') => {
     const id = `notification-${Date.now()}-${Math.random()}`;
     setNotifications((prev) => [...prev, {
       id, kind, title, subtitle,
@@ -41,11 +61,11 @@ export function NotificationProvider({ children }) {
     setTimeout(() => removeNotification(id), NOTIFICATION_TIMEOUT);
   }, [removeNotification]);
 
-  const notify = {
-    success: (msg) => addNotification('success', 'Success', msg),
-    error: (msg) => addNotification('error', 'Error', msg),
-    warning: (msg) => addNotification('warning', 'Warning', msg),
-    info: (msg) => addNotification('info', 'Info', msg),
+  const notify: NotifyMethods = {
+    success: (msg: string) => addNotification('success', 'Success', msg),
+    error: (msg: string) => addNotification('error', 'Error', msg),
+    warning: (msg: string) => addNotification('warning', 'Warning', msg),
+    info: (msg: string) => addNotification('info', 'Info', msg),
   };
 
   return (
@@ -77,7 +97,7 @@ export function NotificationProvider({ children }) {
   );
 }
 
-export function useNotification() {
+export function useNotification(): NotifyMethods {
   const context = useContext(NotificationContext);
   if (!context) {
     throw new Error('useNotification must be used within a NotificationProvider');

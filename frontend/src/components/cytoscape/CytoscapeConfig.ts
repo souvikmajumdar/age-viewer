@@ -17,24 +17,46 @@
  * under the License.
  */
 
-export default {
-  // Viewport Options
+interface CytoscapeConfig {
+  zoom: number;
+  minZoom: number;
+  maxZoom: number;
+  zoomingEnabled: boolean;
+  userZoomingEnabled: boolean;
+  panningEnabled: boolean;
+  userPanningEnabled: boolean;
+  boxSelectionEnabled: boolean;
+  selectionType: string;
+  touchTapThreshold: number;
+  desktopTapThreshold: number;
+  autolock: boolean;
+  autoungrabify: boolean;
+  autounselectify: boolean;
+  headless: boolean;
+  styleEnabled: boolean;
+  hideEdgesOnViewport: boolean;
+  textureOnViewport: boolean;
+  motionBlur: boolean;
+  motionBlurOpacity: number;
+  wheelSensitivity: number;
+  pixelRatio: string;
+}
+
+const cytoscapeConfig: CytoscapeConfig = {
   zoom: 1,
-  // Interaction Options
   minZoom: 0.5,
   maxZoom: 2,
-  zoomingEnabled: false, // true
-  userZoomingEnabled: false, // true
+  zoomingEnabled: false,
+  userZoomingEnabled: false,
   panningEnabled: true,
   userPanningEnabled: true,
-  boxSelectionEnabled: false, // true
+  boxSelectionEnabled: false,
   selectionType: 'single',
   touchTapThreshold: 8,
   desktopTapThreshold: 4,
   autolock: false,
   autoungrabify: false,
   autounselectify: false,
-  // Rendering Options
   headless: false,
   styleEnabled: true,
   hideEdgesOnViewport: false,
@@ -44,3 +66,5 @@ export default {
   wheelSensitivity: 0.5,
   pixelRatio: 'auto',
 };
+
+export default cytoscapeConfig;
