@@ -20,11 +20,37 @@ A web-based graph visualization tool for PostgreSQL databases with the [Apache A
 ## Prerequisites
 
 - **Node.js** >= 24.0.0 ([download](https://nodejs.org/))
-- **Docker** or **Podman** (for the PostgreSQL + AGE database)
+- **Podman** (preferred) or **Docker** (for the PostgreSQL + AGE database)
 
 ## Quick Start
 
 ### 1. Set up the database
+
+<details open>
+<summary><strong>Using Podman</strong></summary>
+
+```bash
+# Pull the Apache AGE image
+podman pull docker.io/apache/age:latest
+
+# Start the container
+podman run -d \
+  --name age-viewer-db \
+  -p 5455:5432 \
+  -e POSTGRES_USER=ageviewer \
+  -e POSTGRES_PASSWORD=ageviewer_pw \
+  -e POSTGRES_DB=ageviewer \
+  docker.io/apache/age:latest
+
+# Wait for it to be ready
+podman exec age-viewer-db pg_isready -U ageviewer -d ageviewer
+
+# Initialize the AGE extension
+podman exec age-viewer-db psql -U ageviewer -d ageviewer -c "CREATE EXTENSION IF NOT EXISTS age;"
+podman exec age-viewer-db psql -U ageviewer -d ageviewer -c "LOAD 'age';"
+```
+
+</details>
 
 <details>
 <summary><strong>Using Docker</strong></summary>
@@ -48,32 +74,6 @@ docker exec age-viewer-db pg_isready -U ageviewer -d ageviewer
 # Initialize the AGE extension
 docker exec age-viewer-db psql -U ageviewer -d ageviewer -c "CREATE EXTENSION IF NOT EXISTS age;"
 docker exec age-viewer-db psql -U ageviewer -d ageviewer -c "LOAD 'age';"
-```
-
-</details>
-
-<details>
-<summary><strong>Using Podman</strong></summary>
-
-```bash
-# Pull the Apache AGE image
-podman pull docker.io/apache/age:latest
-
-# Start the container
-podman run -d \
-  --name age-viewer-db \
-  -p 5455:5432 \
-  -e POSTGRES_USER=ageviewer \
-  -e POSTGRES_PASSWORD=ageviewer_pw \
-  -e POSTGRES_DB=ageviewer \
-  docker.io/apache/age:latest
-
-# Wait for it to be ready
-podman exec age-viewer-db pg_isready -U ageviewer -d ageviewer
-
-# Initialize the AGE extension
-podman exec age-viewer-db psql -U ageviewer -d ageviewer -c "CREATE EXTENSION IF NOT EXISTS age;"
-podman exec age-viewer-db psql -U ageviewer -d ageviewer -c "LOAD 'age';"
 ```
 
 </details>
@@ -131,7 +131,7 @@ cd backend && npm test
 # Frontend unit tests
 cd frontend && npm test
 
-# E2E tests (requires Docker/Podman)
+# E2E tests (requires Podman/Docker)
 export E2E_DB_PASSWORD=your_test_password
 npm run e2e
 ```
@@ -221,11 +221,11 @@ SELECT * FROM cypher('my_graph', $$ MATCH (a)-[r]->(b) RETURN a, r, b $$) as (a 
 ## Stopping the database
 
 ```bash
-# Docker
-docker stop age-viewer-db && docker rm age-viewer-db
-
 # Podman
 podman stop age-viewer-db && podman rm age-viewer-db
+
+# Docker
+docker stop age-viewer-db && docker rm age-viewer-db
 ```
 
 ## License

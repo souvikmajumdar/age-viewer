@@ -25,7 +25,7 @@ description: Technical stack decisions, git workflow, and project context for AG
 - **Commits:** Meaningful commit messages. Stage specific files, not `git add .`
 - **Never push directly to `main` or `development`** — always go through feature branch → PR.
 - **Documentation:** Update backlog and relevant docs in the same commit as code changes. Do not create separate PRs for doc updates.
-- **Testing approach:** Always validate locally first (with Docker/Podman), then adapt for CI. Never push CI-only changes without local verification.
+- **Testing approach:** Always validate locally first (with Podman/Docker), then adapt for CI. Never push CI-only changes without local verification.
 
 ## Project Context
 
