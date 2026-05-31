@@ -1,8 +1,9 @@
 # Phase 5: TypeScript Migration Plan
 
-**Date:** May 18, 2026  
-**Scope:** 137 source files (27 backend + 110 frontend), ~13,600 lines of code  
+**Date:** May 18, 2026 (updated May 30, 2026)
+**Scope:** 137 source files (27 backend + 110 frontend), ~13,600 lines of code
 **Strategy:** Incremental migration — file by file, strictness ratcheted up progressively
+**Status:** 6a-6d complete. 6e (frontend components) in progress. ~14 files done, ~50 remaining.
 
 ---
 
@@ -94,138 +95,152 @@ Phase 5f: Strict mode + cleanup
 
 ## Sub-phases
 
-### 5a: TypeScript Infrastructure Setup
-- [ ] Install TypeScript 5.x, `tsx` (for running .ts directly in Node)
-- [ ] Create `backend/tsconfig.json` (ESM, Node 24, strict: false initially)
-- [ ] Create `frontend/tsconfig.json` (JSX, Vite integration)
-- [ ] Create `tsconfig.base.json` at root (shared compiler options)
-- [ ] Install `@types/*` packages for all dependencies
-- [ ] Configure Vite to handle `.ts`/`.tsx` files (already supported via plugin-react)
-- [ ] Configure Vitest to handle TypeScript test files
-- [ ] Update ESLint config for TypeScript (`@typescript-eslint/parser`)
-- [ ] Add `tsc --noEmit` type-check command to CI
-- [ ] Verify existing JS files still work with `allowJs: true`
+### 5a: TypeScript Infrastructure Setup ✅ COMPLETE (Phase 6a, PR #34)
+- [x] Install TypeScript 5.x, `tsx` (for running .ts directly in Node)
+- [x] Create `backend/tsconfig.json` (ESM, Node 24, strict: false initially)
+- [x] Create `frontend/tsconfig.json` (JSX, Vite integration)
+- [x] Create `tsconfig.base.json` at root (shared compiler options)
+- [x] Install `@types/*` packages for all dependencies
+- [x] Configure Vite to handle `.ts`/`.tsx` files (already supported via plugin-react)
+- [x] Configure Vitest to handle TypeScript test files
+- [x] Update ESLint config for TypeScript (`@typescript-eslint/parser`)
+- [x] Add `tsc --noEmit` type-check command to CI
+- [x] Verify existing JS files still work with `allowJs: true`
 
-### 5b: Shared Type Definitions
-- [ ] Create `backend/src/types/` directory
-  - [ ] `database.ts` — connection info, graph metadata, query results
-  - [ ] `api.ts` — request/response shapes for all endpoints
-  - [ ] `age.ts` — AGE-specific types (vertex, edge, path, agtype)
-- [ ] Create `frontend/src/types/` directory
-  - [ ] `api.ts` — API response types (shared with backend)
-  - [ ] `redux.ts` — RootState, AppDispatch, typed hooks
-  - [ ] `graph.ts` — cytoscape element types, legend data, layout options
-  - [ ] `components.ts` — common prop interfaces
-- [ ] Create typed Redux hooks (`useAppDispatch`, `useAppSelector`)
+### 5b: Shared Type Definitions ✅ COMPLETE (Phase 6b, PR #35)
+- [x] Create `backend/src/types/` directory
+  - [x] `database.ts` — connection info, graph metadata, query results
+  - [x] `api.ts` — request/response shapes for all endpoints
+  - [x] `age.ts` — AGE-specific types (vertex, edge, path, agtype)
+- [x] Create `frontend/src/types/` directory
+  - [x] `api.ts` — API response types (shared with backend)
+  - [x] `redux.ts` — RootState, AppDispatch, typed hooks
+  - [x] `graph.ts` — cytoscape element types, legend data, layout options
+- [x] Create typed Redux hooks (`useAppDispatch`, `useAppSelector`)
 
-### 5c: Backend Migration (27 files → .ts)
+### 5c: Backend Migration (27 files → .ts) ✅ COMPLETE (Phase 6c, PR #36)
 **Order: bottom-up (dependencies first)**
 
-- [ ] **Wave 1 — Pure utilities (no deps)**
-  - [ ] `src/util/ObjectExtras.js` → `.ts`
-  - [ ] `src/util/JsonBuilder.js` → `.ts`
-  - [ ] `src/common/Routes.js` → `.ts`
-  - [ ] `src/config/Pg.js` → `.ts`
-  - [ ] `src/config/Flavors.js` → `.ts`
-  - [ ] `src/config/winston.js` → `.ts`
+- [x] **Wave 1 — Pure utilities (no deps)**
+  - [x] `src/util/ObjectExtras.js` → `.ts`
+  - [x] `src/util/JsonBuilder.js` → `.ts`
+  - [x] `src/common/Routes.js` → `.ts`
+  - [x] `src/config/Pg.js` → `.ts`
+  - [x] `src/config/Flavors.js` → `.ts`
+  - [x] `src/config/winston.js` → `.ts`
 
-- [ ] **Wave 2 — Models**
-  - [ ] `src/models/QueryBuilder.js` → `.ts`
-  - [ ] `src/models/GraphRepository.js` → `.ts`
-  - [ ] `src/models/GraphCreator.js` → `.ts`
+- [x] **Wave 2 — Models**
+  - [x] `src/models/QueryBuilder.js` → `.ts`
+  - [x] `src/models/GraphRepository.js` → `.ts`
+  - [x] `src/models/GraphCreator.js` → `.ts`
 
-- [ ] **Wave 3 — Services**
-  - [ ] `src/services/sessionService.js` → `.ts`
-  - [ ] `src/services/cypherService.js` → `.ts`
-  - [ ] `src/services/databaseService.js` → `.ts`
-  - [ ] `src/services/queryList.js` → `.ts`
+- [x] **Wave 3 — Services**
+  - [x] `src/services/sessionService.js` → `.ts`
+  - [x] `src/services/cypherService.js` → `.ts`
+  - [x] `src/services/databaseService.js` → `.ts`
+  - [x] `src/services/queryList.js` → `.ts`
 
-- [ ] **Wave 4 — Controllers & Routes**
-  - [ ] `src/controllers/cypherController.js` → `.ts`
-  - [ ] `src/controllers/databaseController.js` → `.ts`
-  - [ ] `src/routes/cypherRouter.js` → `.ts`
-  - [ ] `src/routes/databaseRouter.js` → `.ts`
-  - [ ] `src/routes/miscellaneous.js` → `.ts`
-  - [ ] `src/routes/sessionRouter.js` → `.ts`
+- [x] **Wave 4 — Controllers & Routes**
+  - [x] `src/controllers/cypherController.js` → `.ts`
+  - [x] `src/controllers/databaseController.js` → `.ts`
+  - [x] `src/routes/cypherRouter.js` → `.ts`
+  - [x] `src/routes/databaseRouter.js` → `.ts`
+  - [x] `src/routes/miscellaneous.js` → `.ts`
+  - [x] `src/routes/sessionRouter.js` → `.ts`
 
-- [ ] **Wave 5 — Entry point & tools**
-  - [ ] `src/app.js` → `.ts`
-  - [ ] `src/bin/www.js` → `.ts`
-  - [ ] `src/tools/SQLFlavorManager.js` → `.ts`
-  - [ ] `src/tools/AGEParser.js` → `.ts`
-  - [ ] `src/tools/CustomAgTypeListener.js` → `.ts` (or `.d.ts` declaration)
+- [x] **Wave 5 — Entry point & tools**
+  - [x] `src/app.js` → `.ts`
+  - [x] `src/bin/www.js` → `.ts`
+  - [x] `src/tools/SQLFlavorManager.js` → `.ts`
+  - [x] `src/tools/AGEParser.js` → `.ts`
+  - [x] `src/tools/CustomAgTypeListener.js` → `.ts`
 
-- [ ] **Skip:** `AgtypeLexer.js`, `AgtypeParser.js`, `AgtypeListener.js` (ANTLR generated)
+- [x] **Skip:** `AgtypeLexer.js`, `AgtypeParser.js`, `AgtypeListener.js` (ANTLR generated)
 
-### 5d: Frontend Utilities & Redux
-- [ ] **Redux store setup**
-  - [ ] `src/app/store.js` → `.ts` (typed store)
-  - [ ] `src/app/reducers.js` → `.ts`
-  - [ ] Create `src/app/hooks.ts` (useAppDispatch, useAppSelector)
+### 5d: Frontend Utilities & Redux ✅ COMPLETE (Phase 6d, PR #37)
+- [x] **Redux store setup**
+  - [x] `src/app/store.js` → `.ts` (typed store)
+  - [x] `src/app/reducers.js` → `.ts`
+  - [x] Create `src/app/hooks.ts` (useAppDispatch, useAppSelector)
 
-- [ ] **Redux slices** (10 files)
-  - [ ] `features/alert/AlertSlice.js` → `.ts`
-  - [ ] `features/editor/EditorSlice.js` → `.ts`
-  - [ ] `features/frame/FrameSlice.js` → `.ts`
-  - [ ] `features/layout/LayoutSlice.js` → `.ts`
-  - [ ] `features/menu/MenuSlice.js` → `.ts`
-  - [ ] `features/modal/ModalSlice.js` → `.ts`
-  - [ ] `features/setting/SettingSlice.js` → `.ts`
-  - [ ] `features/database/DatabaseSlice.js` → `.ts`
-  - [ ] `features/database/MetadataSlice.js` → `.ts`
-  - [ ] `features/cypher/CypherSlice.js` → `.ts`
+- [x] **Redux slices** (10 files)
+  - [x] `features/alert/AlertSlice.js` → `.ts`
+  - [x] `features/editor/EditorSlice.js` → `.ts`
+  - [x] `features/frame/FrameSlice.js` → `.ts`
+  - [x] `features/layout/LayoutSlice.js` → `.ts`
+  - [x] `features/menu/MenuSlice.js` → `.ts`
+  - [x] `features/modal/ModalSlice.js` → `.ts`
+  - [x] `features/setting/SettingSlice.js` → `.ts`
+  - [x] `features/database/DatabaseSlice.js` → `.ts`
+  - [x] `features/database/MetadataSlice.js` → `.ts`
+  - [x] `features/cypher/CypherSlice.js` → `.ts`
 
-- [ ] **Utilities & hooks**
-  - [ ] `features/cookie/CookieUtil.js` → `.ts`
-  - [ ] `features/cypher/CypherUtil.js` → `.ts`
-  - [ ] `features/query_builder/KeyWordFinder.js` → `.ts`
-  - [ ] `hooks/useNotification.jsx` → `.tsx`
+- [x] **Utilities & hooks**
+  - [x] `features/cookie/CookieUtil.js` → `.ts`
+  - [x] `features/cypher/CypherUtil.js` → `.ts`
+  - [x] `features/query_builder/KeyWordFinder.js` → `.ts`
+  - [x] `hooks/useNotification.jsx` → `.tsx`
 
-### 5e: Frontend Components
+### 5e: Frontend Components 🔄 IN PROGRESS (Phase 6e)
+> Branch: `feature/phase-6e-frontend-components-ts`
 **Order: leaf components first, then containers**
 
+- [x] **Converted so far (~14 files)**
+  - [x] `App.tsx`, `index.tsx`, `pages/Main/MainPage.tsx`
+  - [x] Icons (5 files): EdgeWeight, IconFilter, IconGraph, IconPlay, IconSearchCancel → `.tsx`
+  - [x] `hooks/useNotification.jsx` → `.tsx`
+  - [x] `components/cytoscape/CytoscapeConfig.ts`, `CytoscapeLayouts.ts`, `CytoscapeStyleSheet.ts`
+  - [x] `components/template/DefaultTemplate.ts`
+  - [x] `conf/config.ts`
+
 - [ ] **Wave 1 — Simple/leaf components**
-  - [ ] Icons (5 files) → `.tsx`
-  - [ ] `Alert.jsx` → `.tsx`
-  - [ ] `NavigatorItem.jsx` → `.tsx`
-  - [ ] `SidebarMeunuToggle.jsx` → `.tsx`
-  - [ ] `CypherResultTab.jsx` → `.tsx` (refactor from class to function)
-  - [ ] `CypherResultMeta.jsx` → `.tsx`
+  - [ ] `components/alert/presentations/Alert.jsx` → `.tsx`
+  - [ ] `components/cytoscape/CypherResultTab.jsx` → `.tsx` (refactor class → function)
+  - [ ] `components/cytoscape/CypherResultCytoscapeFooter.jsx` → `.tsx`
+  - [ ] `components/cytoscape/CypherResultCytoscapeLegend.jsx` → `.tsx` (refactor class → function)
+  - [ ] `components/cypherresult/presentations/CypherResultMeta.jsx` → `.tsx`
+  - [ ] `components/cypherresult/presentations/CypherResultText.jsx` → `.tsx`
+  - [ ] `components/inspector/InspectorPanel.jsx` → `.tsx`
 
 - [ ] **Wave 2 — Form/modal components**
-  - [ ] `ServerConnectFrame.jsx` → `.tsx`
-  - [ ] `ServerDisconnectFrame.jsx` → `.tsx`
-  - [ ] `ServerStatusFrame.jsx` → `.tsx`
-  - [ ] `GraphFilterModal.jsx` → `.tsx`
-  - [ ] `EdgeThicknessMenu.jsx` → `.tsx`
-  - [ ] `GraphInitializer.jsx` → `.tsx`
-  - [ ] `BuilderContainer.jsx` → `.tsx`
-  - [ ] `BuilderSelection.jsx` → `.tsx`
+  - [ ] `components/frame/presentations/ServerConnectFrame.jsx` → `.tsx`
+  - [ ] `components/frame/presentations/ServerDisconnectFrame.jsx` → `.tsx`
+  - [ ] `components/frame/presentations/ServerStatusFrame.jsx` → `.tsx`
+  - [ ] `components/cypherresult/components/GraphFilterModal.jsx` → `.tsx`
+  - [ ] `components/cypherresult/components/EdgeThicknessMenu.jsx` → `.tsx`
+  - [ ] `components/initializer/presentation/GraphInitializer.jsx` → `.tsx`
+  - [ ] `components/query_builder/BuilderContainer.jsx` → `.tsx`
+  - [ ] `components/query_builder/BuilderSelection.jsx` → `.tsx`
+  - [ ] `components/csv/index.jsx` → `.tsx`
   - [ ] Modal components (5 files) → `.tsx`
 
 - [ ] **Wave 3 — Complex components**
-  - [ ] `Frame.jsx` → `.tsx`
-  - [ ] `CypherResultTable.jsx` → `.tsx`
-  - [ ] `CypherGraphResultFrame.jsx` → `.tsx`
-  - [ ] `CypherResultCytoscapeFooter.jsx` → `.tsx`
-  - [ ] `CypherResultCytoscapeLegend.jsx` → `.tsx` (refactor from class)
-  - [ ] `CypherResultCytoscapeChart.jsx` → `.tsx`
-  - [ ] `SidebarHome.jsx` → `.tsx`
-  - [ ] `Editor.jsx` → `.tsx`
-  - [ ] `Frames.jsx` → `.tsx`
-  - [ ] `DefaultTemplate.jsx` → `.tsx`
+  - [ ] `components/frame/Frame.jsx` → `.tsx`
+  - [ ] `components/frame/presentations/` (ContentsFrame, CypherGraphResultFrame, CypherResultFrame) → `.tsx`
+  - [ ] `components/cypherresult/presentations/CypherResultTable.jsx` → `.tsx`
+  - [ ] `components/cypherresult/presentations/CypherResultCytoscape.jsx` → `.tsx`
+  - [ ] `components/cytoscape/CypherResultCytoscapeChart.jsx` → `.tsx`
+  - [ ] `components/cytoscape/MetadataCytoscapeChart.jsx` → `.tsx`
+  - [ ] `components/contents/presentations/` (Contents, Editor, Frames) → `.tsx`
+  - [ ] `components/editor/presentations/CodeMirrorWrapper.jsx` → `.tsx`
+  - [ ] `components/sidebar/presentations/SidebarSetting.jsx` → `.tsx`
+  - [ ] `components/template/presentations/DefaultTemplate.jsx` → `.tsx`
 
-- [ ] **Wave 4 — Container components (22 files)**
-  - [ ] Refactor `connect()` → `useSelector`/`useDispatch` hooks
-  - [ ] Convert all container files to `.tsx`
-  - [ ] Remove container/presentation split where it adds no value
+- [ ] **Wave 4 — Container components (refactor connect() → hooks)**
+  - [ ] `components/alert/containers/AlertContainers.js` → `.ts`
+  - [ ] `components/contents/containers/` (Contents, Editor, Frames) → `.ts`
+  - [ ] `components/cypherresult/containers/` (4 files) → `.ts`
+  - [ ] `components/editor/containers/CodeMirrorWapperContainer.js` → `.ts`
+  - [ ] `components/frame/containers/` (6 files) → `.ts`
+  - [ ] `components/modal/containers/` (Modal, Tutorial) → `.ts`
+  - [ ] `components/sidebar/containers/SidebarSetting.js` → `.ts`
 
-- [ ] **Wave 5 — Pages & App**
-  - [ ] `App.jsx` → `.tsx`
-  - [ ] `index.jsx` → `.tsx`
-  - [ ] `MainPage.jsx` → `.tsx`
+- [ ] **Tests** (update after components done)
+  - [ ] `test/` (11 test files) → `.ts`/`.tsx`
 
-### 5f: Strict Mode & Cleanup
+- [x] **Skip:** `lib/cytoscape-cxtmenu/` (vendored third-party, add .d.ts declaration instead)
+
+### 5f: Strict Mode & Cleanup 🔲 PENDING (Phase 6f — after 6e complete)
 - [ ] Enable `strict: true` in both tsconfigs
 - [ ] Enable `noImplicitAny: true`
 - [ ] Enable `strictNullChecks: true`

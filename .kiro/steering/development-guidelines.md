@@ -11,9 +11,9 @@ description: Technical stack decisions, git workflow, and project context for AG
 - **Frontend framework:** React 19.1 (`createRoot` API, no class components)
 - **State management:** Redux Toolkit 2.x + React-Redux 9.x
 - **Build tool:** Vite 6.x (not Next.js — this is a client-side SPA/dashboard)
-- **Design system:** IBM Carbon (`@carbon/react`) — migration in progress, currently antd 4
-- **Backend:** Express 4.x with native ESM (no Babel, no build step)
-- **TypeScript:** Future goal (incremental adoption)
+- **Design system:** IBM Carbon (`@carbon/react`) — fully migrated (antd + Bootstrap removed)
+- **Backend:** Express 4.x with native ESM (no Babel, no build step) — fully migrated to TypeScript
+- **TypeScript:** Active migration (Phase 6, in progress). Backend 100% TS. Frontend Redux/utilities 100% TS. Frontend components in progress (Phase 6e).
 - **Container engine:** Podman (preferred). Docker is supported as an alternative. Always provide both Podman and Docker commands in docs, with Podman first.
 
 ## Git Workflow
@@ -30,10 +30,14 @@ description: Technical stack decisions, git workflow, and project context for AG
 ## Project Context
 
 - Apache AGE Viewer — a graph visualization tool for PostgreSQL with AGE extension
-- Modernization complete (Phases 1-3 done, v1.0.0 released)
-- IBM-aligned: Carbon design system, enterprise standards
-- Current: Phase 4 (Testing & Quality)
-- Next: Phase 5 (TypeScript)
+- Modernization releases: v0.5.0 (Phase 1), v0.6.0 (Phase 2), v1.0.0 (Phases 3-4), v1.0.1 (hotfix)
+- IBM-aligned: Carbon design system (fully migrated), enterprise standards
+- **Current: Phase 6e — frontend component TypeScript migration (in progress)**
+  - Branch: `feature/phase-6e-frontend-components-ts`
+  - Done: App, pages, icons, hooks, cytoscape config, template, conf (~14 files)
+  - Remaining: ~50 JSX/JS component files in `components/` and `test/`
+- **Completed phases:** 1 (Node 24), 2 (ESM), 3 (Vite/React 19/Carbon), 4 (Testing), 5 (CSS layout), 6a (TS infra), 6b (type defs), 6c (backend TS), 6d (frontend Redux TS)
+- **Next after 6e:** Phase 6f — strict mode, remove allowJs, update tests to TS
 
 ## Documentation & Diagrams
 

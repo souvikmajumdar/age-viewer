@@ -1,6 +1,6 @@
 # Modernization Backlog
 
-**Last updated:** May 16, 2026
+**Last updated:** May 30, 2026
 
 ---
 
@@ -54,7 +54,7 @@
 
 ---
 
-## Phase 3: Frontend Modernization 🔄 IN PROGRESS
+## Phase 3: Frontend Modernization ✅ COMPLETE
 
 ### 3a: CRA → Vite ✅ COMPLETE
 
@@ -245,80 +245,132 @@
 
 ---
 
-## Phase 5: CSS/Layout Fix — Carbon Grid Implementation 🔲 BLOCKING
+## Phase 5: CSS/Layout Fix — Carbon Grid Implementation ✅ COMPLETE
 
-> **Critical:** App layout is broken after Bootstrap removal. Text wraps character-by-character, no horizontal layouts, sidebar/content structure collapsed. App is unusable.
->
-> Root cause: Bootstrap utility classes (`d-flex`, `col-sm-*`, `badge`, `content-row`) were removed but the custom SCSS and component layouts still depend on them. Carbon Grid was added to some components but the overall page layout and custom styles weren't updated.
+> Layout was broken after Bootstrap removal. Text wrapped character-by-character, no horizontal layouts, sidebar/content structure collapsed.
+> Fixed with a full panel-based UI redesign and dead code cleanup.
+> Merged via PRs #32 (layout fix) and #33 (dead code cleanup).
 
-### 5a: Audit & Plan
-- [ ] Identify all remaining Bootstrap class references in SCSS and JSX
-- [ ] Map each to Carbon equivalent or custom CSS
-- [ ] Identify the page layout structure (sidebar + main content + frames)
+### 5a: Audit & Plan ✅
+### 5b: Page Layout & Structure ✅
+- [x] Redesign main page layout with panel-based UI
+- [x] Fix sidebar, editor, and content area layout
+- [x] Fix connection form layout
 
-### 5b: Page Layout & Structure
-- [ ] Fix main page layout (sidebar + editor + content area)
-- [ ] Fix the sidebar component layout (vertical sections, buttons)
-- [ ] Fix the editor/frame area (horizontal flow)
-- [ ] Fix the connection form layout (side-by-side columns)
+### 5c: Component-Level Fixes ✅
+- [x] Fix Frame component layout
+- [x] Fix graph visualization footer/legend areas
+- [x] Fix modal layouts
 
-### 5c: Component-Level Fixes
-- [ ] Fix Frame component layout (header buttons, body)
-- [ ] Fix SidebarHome (node/edge/property sections)
-- [ ] Fix Settings/Configuration panel
-- [ ] Fix graph visualization footer/legend areas
-- [ ] Fix modal layouts
-
-### 5d: Cleanup & Verification
-- [ ] Remove all dead Bootstrap class references from SCSS
-- [ ] Verify all pages render correctly
-- [ ] Test responsive behavior
-- [ ] Update E2E tests if selectors changed
+### 5d: Cleanup & Verification ✅
+- [x] Remove all dead Bootstrap class references and pre-redesign dead code
+- [x] Verify all pages render correctly
 
 ---
 
-## Phase 6: TypeScript Migration 🔲 PENDING
+## Phase 6: TypeScript Migration 🔄 IN PROGRESS
 
 > See [typescript-migration-plan.md](typescript-migration-plan.md) for full details.
-> Scope: 137 source files, ~13,600 LOC. Estimated: 14-20 days.
+> Scope: 137 source files, ~13,600 LOC. Strategy: incremental, loose → strict.
 
-### 6a: TypeScript Infrastructure Setup
-- [ ] Install TypeScript 5.x, tsx, @types/* packages
-- [ ] Create tsconfig.base.json, backend/tsconfig.json, frontend/tsconfig.json
-- [ ] Configure Vite, Vitest, ESLint for TypeScript
-- [ ] Add `tsc --noEmit` type-check to CI
-- [ ] Verify existing JS works with allowJs: true
+### 6a: TypeScript Infrastructure Setup ✅ COMPLETE
+> Merged via PR #34
+- [x] Install TypeScript 5.x, tsx, @types/* packages
+- [x] Create tsconfig.base.json, backend/tsconfig.json, frontend/tsconfig.json
+- [x] Configure Vite, Vitest, ESLint for TypeScript
+- [x] Add `tsc --noEmit` type-check to CI
+- [x] Verify existing JS works with allowJs: true
 
-### 5b: Shared Type Definitions
-- [ ] Create backend/src/types/ (database, api, age types)
-- [ ] Create frontend/src/types/ (api, redux, graph, components)
-- [ ] Create typed Redux hooks (useAppDispatch, useAppSelector)
+### 6b: Shared Type Definitions ✅ COMPLETE
+> Merged via PR #35
+- [x] Create backend/src/types/ (database, api, age types)
+- [x] Create frontend/src/types/ (api, redux, graph types)
+- [x] Create typed Redux hooks (useAppDispatch, useAppSelector)
 
-### 5c: Backend Migration (22 files → .ts)
-- [ ] Wave 1: Pure utilities (6 files)
-- [ ] Wave 2: Models (3 files)
-- [ ] Wave 3: Services (4 files)
-- [ ] Wave 4: Controllers & Routes (6 files)
-- [ ] Wave 5: Entry point & tools (5 files)
+### 6c: Backend Migration (22 files → .ts) ✅ COMPLETE
+> Merged via PR #36
+- [x] Wave 1: Pure utilities (ObjectExtras, JsonBuilder, Routes, Pg, Flavors, winston)
+- [x] Wave 2: Models (QueryBuilder, GraphRepository, GraphCreator)
+- [x] Wave 3: Services (sessionService, cypherService, databaseService, queryList)
+- [x] Wave 4: Controllers & Routes (all 6 files)
+- [x] Wave 5: Entry point & tools (app.ts, www.ts, SQLFlavorManager.ts, AGEParser.ts)
+- [x] Skip: ANTLR generated files (AgtypeLexer, AgtypeParser, AgtypeListener)
 
-### 5d: Frontend Utilities & Redux (15 files)
-- [ ] Redux store setup (store.ts, reducers.ts, hooks.ts)
-- [ ] All 10 Redux slices → .ts
-- [ ] Utilities & hooks → .ts/.tsx
+### 6d: Frontend Utilities & Redux (15 files → .ts) ✅ COMPLETE
+> Merged via PR #37
+- [x] Redux store setup (store.ts, reducers.ts, hooks.ts)
+- [x] All 10 Redux slices → .ts (AlertSlice, CypherSlice, DatabaseSlice, EditorSlice, FrameSlice, LayoutSlice, MenuSlice, MetadataSlice, ModalSlice, SettingSlice)
+- [x] Utilities & hooks → .ts (CookieUtil, CypherUtil, KeyWordFinder, Capture)
+- [x] useNotification hook → .tsx
 
-### 5e: Frontend Components (~70 files)
-- [ ] Wave 1: Simple/leaf components
-- [ ] Wave 2: Form/modal components
-- [ ] Wave 3: Complex components (graph visualization)
-- [ ] Wave 4: Container components (refactor connect() → hooks)
-- [ ] Wave 5: Pages & App
+### 6e: Frontend Components (~70 files) 🔄 IN PROGRESS
+> Branch: `feature/phase-6e-frontend-components-ts`
 
-### 5f: Strict Mode & Cleanup
-- [ ] Enable strict: true
-- [ ] Fix all type errors
-- [ ] Remove allowJs, remove any types
+**Converted so far (~14 files):**
+- [x] `App.tsx`, `index.tsx`, `pages/Main/MainPage.tsx`
+- [x] Icons: EdgeWeight, IconFilter, IconGraph, IconPlay, IconSearchCancel (5 files)
+- [x] `hooks/useNotification.tsx`
+- [x] `components/cytoscape/CytoscapeConfig.ts`, `CytoscapeLayouts.ts`, `CytoscapeStyleSheet.ts`
+- [x] `components/template/DefaultTemplate.ts`
+- [x] `conf/config.ts`
+
+**Remaining (~50 files):**
+- [ ] **Wave 1 — Simple/leaf components**
+  - [ ] `components/alert/presentations/Alert.jsx`
+  - [ ] `components/cytoscape/CypherResultTab.jsx` (refactor class → function)
+  - [ ] `components/cytoscape/CypherResultCytoscapeFooter.jsx`
+  - [ ] `components/cytoscape/CypherResultCytoscapeLegend.jsx` (refactor class → function)
+  - [ ] `components/cypherresult/presentations/CypherResultMeta.jsx`
+  - [ ] `components/cypherresult/presentations/CypherResultText.jsx`
+  - [ ] `components/inspector/InspectorPanel.jsx`
+
+- [ ] **Wave 2 — Form/modal components**
+  - [ ] `components/frame/presentations/ServerConnectFrame.jsx`
+  - [ ] `components/frame/presentations/ServerDisconnectFrame.jsx`
+  - [ ] `components/frame/presentations/ServerStatusFrame.jsx`
+  - [ ] `components/cypherresult/components/GraphFilterModal.jsx`
+  - [ ] `components/cypherresult/components/EdgeThicknessMenu.jsx`
+  - [ ] `components/initializer/presentation/GraphInitializer.jsx`
+  - [ ] `components/query_builder/BuilderContainer.jsx`
+  - [ ] `components/query_builder/BuilderSelection.jsx`
+  - [ ] `components/csv/index.jsx`
+  - [ ] `components/modal/presentations/` (5 files: ModalDialog, TutorialDialog, TutorialHeader, TutorialBody, TutorialFooter)
+
+- [ ] **Wave 3 — Complex components**
+  - [ ] `components/frame/Frame.jsx`
+  - [ ] `components/frame/presentations/` (ContentsFrame, CypherGraphResultFrame, CypherResultFrame)
+  - [ ] `components/cypherresult/presentations/CypherResultTable.jsx`
+  - [ ] `components/cypherresult/presentations/CypherResultCytoscape.jsx`
+  - [ ] `components/cytoscape/CypherResultCytoscapeChart.jsx`
+  - [ ] `components/cytoscape/MetadataCytoscapeChart.jsx`
+  - [ ] `components/contents/presentations/` (Contents, Editor, Frames)
+  - [ ] `components/editor/presentations/CodeMirrorWrapper.jsx`
+  - [ ] `components/sidebar/presentations/SidebarSetting.jsx`
+  - [ ] `components/template/presentations/DefaultTemplate.jsx`
+
+- [ ] **Wave 4 — Container components (refactor connect() → hooks)**
+  - [ ] `components/alert/containers/AlertContainers.js`
+  - [ ] `components/contents/containers/` (Contents, Editor, Frames)
+  - [ ] `components/cypherresult/containers/` (4 files)
+  - [ ] `components/editor/containers/CodeMirrorWapperContainer.js`
+  - [ ] `components/frame/containers/` (6 files)
+  - [ ] `components/modal/containers/` (Modal, Tutorial)
+  - [ ] `components/sidebar/containers/SidebarSetting.js`
+
+- [ ] **Tests** (update to TypeScript after components done)
+  - [ ] `test/` (11 test files: Alert, AlertSlice, BuilderContainer, CookieUtil, DatabaseSlice, Frame, FrameSlice, ServerConnectFrame, smoke, test-utils, useNotification)
+
+- [ ] **Skip:** `lib/cytoscape-cxtmenu/` (vendored third-party, add .d.ts declaration instead)
+
+### 6f: Strict Mode & Cleanup 🔲 PENDING
+- [ ] Enable `strict: true` in both tsconfigs
+- [ ] Enable `noImplicitAny: true`, `strictNullChecks: true`
+- [ ] Fix all resulting type errors
+- [ ] Remove `// @ts-ignore` and `any` types where possible
+- [ ] Add return types to all exported functions
+- [ ] Update CI to fail on type errors (`tsc --noEmit`)
+- [ ] Remove `allowJs: true` (all files converted)
 - [ ] Update tests to TypeScript
-- [ ] CI fails on type errors
 
 ---
 
