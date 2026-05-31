@@ -22,7 +22,7 @@ cd "$ROOT"
 
 PROJECT_NAME="$(basename "$ROOT")"
 STAMP="$(date +%Y%m%d-%H%M%S)"
-OUT_DIR="${TMPDIR:-/tmp}/age-viewer-migration-${STAMP}"
+OUT_DIR="${HOME}/Desktop/age-viewer-migration-${STAMP}"
 BUNDLE="${OUT_DIR}/${PROJECT_NAME}.bundle"
 ZIP="${OUT_DIR}/${PROJECT_NAME}-${STAMP}.zip"
 SESSION_DEST="${ROOT}/.kiro/old_session_history"
