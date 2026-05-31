@@ -176,3 +176,6 @@ frontend/package-lock.json
 
 # Migration guide — contains machine-specific paths, kept local only
 .kiro/docs/migration-guide.md
+
+# Kiro session history — machine-specific, local only
+**/*session_history

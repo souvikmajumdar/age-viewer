@@ -5,11 +5,12 @@
 #
 # What it does:
 #   1. Commits any in-progress (WIP) work on the current branch so nothing is lost.
-#   2. Creates a git bundle (full history + all branches) as a portable backup.
-#   3. Produces a clean zip of the working tree, EXCLUDING regenerable artifacts
+#   2. Copies Kiro session history (chat conversations) into .kiro/old_session_history/
+#      so it travels inside the project zip automatically.
+#   3. Creates a git bundle (full history + all branches) as a portable backup.
+#   4. Produces a clean zip of the working tree, EXCLUDING regenerable artifacts
 #      (node_modules, build output, coverage, logs, test reports).
-#   4. Copies Kiro session history (chat conversations) into the zip as an archive
-#      under kiro-sessions/ so the context from past sessions is preserved.
+#      .kiro/old_session_history/ IS included so sessions travel with the zip.
 #
 # Usage:  ./scripts/migrate-package.sh
 #
@@ -24,7 +25,7 @@ STAMP="$(date +%Y%m%d-%H%M%S)"
 OUT_DIR="${TMPDIR:-/tmp}/age-viewer-migration-${STAMP}"
 BUNDLE="${OUT_DIR}/${PROJECT_NAME}.bundle"
 ZIP="${OUT_DIR}/${PROJECT_NAME}-${STAMP}.zip"
-SESSIONS_STAGING="${OUT_DIR}/kiro-sessions"
+SESSION_DEST="${ROOT}/.kiro/old_session_history"
 
 mkdir -p "$OUT_DIR"
 
@@ -32,26 +33,8 @@ echo "==> Repo: $ROOT"
 echo "==> Current branch: $(git rev-parse --abbrev-ref HEAD)"
 
 # ---------------------------------------------------------------------------
-# 1. Commit WIP if anything is uncommitted.
-# ---------------------------------------------------------------------------
-if [[ -n "$(git status --porcelain)" ]]; then
-  echo "==> Uncommitted changes detected. Creating a WIP checkpoint commit..."
-  git add -A
-  git commit -m "chore: WIP checkpoint before laptop migration (${STAMP})"
-  echo "    Committed. (You can soft-reset this later with: git reset --soft HEAD~1)"
-else
-  echo "==> Working tree clean. No WIP commit needed."
-fi
-
-# ---------------------------------------------------------------------------
-# 2. Create a portable git bundle with full history and all branches.
-# ---------------------------------------------------------------------------
-echo "==> Creating git bundle (full history, all branches)..."
-git bundle create "$BUNDLE" --all
-echo "    Bundle: $BUNDLE"
-
-# ---------------------------------------------------------------------------
-# 3. Copy Kiro session history for this workspace into a staging folder.
+# 1. Copy Kiro session history into .kiro/old_session_history/ BEFORE
+#    committing, so it's present in the working tree for the zip.
 #    Sessions are stored under a base64-encoded workspace path. We find the
 #    folder whose decoded name matches this repo's path.
 # ---------------------------------------------------------------------------
@@ -63,17 +46,17 @@ SESSIONS_FOUND=0
 if [[ -d "$KIRO_SESSIONS_ROOT" ]]; then
   for folder in "$KIRO_SESSIONS_ROOT"/*/; do
     folder_name="$(basename "$folder")"
-    # Decode the base64 folder name (pad to multiple of 4, replace _ with /)
+    # Decode the base64 folder name (pad to multiple of 4, swap URL-safe chars back)
     padded="${folder_name}==="
     decoded="$(echo "$padded" | tr '_-' '/+' | base64 -d 2>/dev/null || true)"
-    # Strip trailing ? or garbage characters from decoded path
+    # Strip trailing ? or garbage bytes from decoded path
     decoded_clean="${decoded%%\?*}"
     if [[ "$decoded_clean" == "$ROOT" ]]; then
       echo "    Found session folder: $folder_name"
-      echo "    Decoded path: $decoded_clean"
-      mkdir -p "$SESSIONS_STAGING"
-      cp -r "$folder" "$SESSIONS_STAGING/"
-      # Also copy the sessions index
+      rm -rf "$SESSION_DEST"
+      mkdir -p "$SESSION_DEST"
+      cp -r "$folder"* "$SESSION_DEST/"
+      echo "    Copied to: $SESSION_DEST"
       SESSIONS_FOUND=1
       break
     fi
@@ -86,8 +69,27 @@ if [[ $SESSIONS_FOUND -eq 0 ]]; then
 fi
 
 # ---------------------------------------------------------------------------
+# 2. Commit WIP (and the session history if copied) so nothing is loose.
+# ---------------------------------------------------------------------------
+if [[ -n "$(git status --porcelain)" ]]; then
+  echo "==> Uncommitted changes detected. Creating a WIP checkpoint commit..."
+  git add -A
+  git commit -m "chore: WIP checkpoint before laptop migration (${STAMP})"
+  echo "    Committed. (You can soft-reset this later with: git reset --soft HEAD~1)"
+else
+  echo "==> Working tree clean. No WIP commit needed."
+fi
+
+# ---------------------------------------------------------------------------
+# 3. Create a portable git bundle with full history and all branches.
+# ---------------------------------------------------------------------------
+echo "==> Creating git bundle (full history, all branches)..."
+git bundle create "$BUNDLE" --all
+echo "    Bundle: $BUNDLE"
+
+# ---------------------------------------------------------------------------
 # 4. Zip the working tree, excluding regenerable / runtime artifacts.
-#    .git IS included so the new machine has full history + working tree.
+#    .git and .kiro/old_session_history/ ARE included.
 # ---------------------------------------------------------------------------
 echo "==> Creating project zip (excluding node_modules, build, coverage, logs)..."
 cd "$ROOT/.."
@@ -103,20 +105,14 @@ zip -r -q "$ZIP" "$PROJECT_NAME" \
   -x "${PROJECT_NAME}/frontend/src/conf/config.js" \
   -x "*.DS_Store"
 
-# Add Kiro sessions into the zip under kiro-sessions/ if we found them.
-if [[ $SESSIONS_FOUND -eq 1 ]]; then
-  echo "==> Adding Kiro session history to zip..."
-  cd "$OUT_DIR"
-  zip -r -q "$ZIP" kiro-sessions/ -x "*.DS_Store"
-  echo "    Sessions added under kiro-sessions/ in the zip."
-fi
-
 echo ""
 echo "============================================================"
 echo " Packaging complete."
 echo "   Zip:    $ZIP"
 echo "   Bundle: $BUNDLE"
+if [[ $SESSIONS_FOUND -eq 1 ]]; then
+echo "   Sessions: included at .kiro/old_session_history/ in the zip"
+fi
 echo ""
-echo " Copy BOTH files to your new laptop, then follow"
-echo " .kiro/docs/migration-guide.md"
+echo " Copy BOTH files to your new laptop."
 echo "============================================================"
