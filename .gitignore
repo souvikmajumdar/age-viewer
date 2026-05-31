@@ -173,3 +173,6 @@ backend/package-lock.json
 frontend/package-lock.json
 # VS Code Configuration
 .vscode/launch.json
+
+# Migration guide — contains machine-specific paths, kept local only
+.kiro/docs/migration-guide.md
