@@ -22,20 +22,10 @@ cd "$ROOT"
 
 PROJECT_NAME="$(basename "$ROOT")"
 STAMP="$(date +%Y%m%d-%H%M%S)"
-SESSION_DEST="${ROOT}/.kiro/old_session_history"
-
-# ---------------------------------------------------------------------------
-# Prompt for output directory
-# ---------------------------------------------------------------------------
-DEFAULT_OUT="${HOME}/Desktop"
-echo ""
-echo "Where do you want the migration files saved?"
-echo "  Press Enter to use the default: ${DEFAULT_OUT}"
-read -r -p "  Output directory: " USER_OUT
-OUT_DIR="${USER_OUT:-$DEFAULT_OUT}/age-viewer-migration-${STAMP}"
-BUNDLE="${OUT_DIR}/${PROJECT_NAME}.bundle"
+OUT_DIR="/Users/souvikmajumdar/ibm/kiro/exports"
+BUNDLE="${OUT_DIR}/${PROJECT_NAME}-${STAMP}.bundle"
 ZIP="${OUT_DIR}/${PROJECT_NAME}-${STAMP}.zip"
-echo "==> Output directory: ${OUT_DIR}"
+SESSION_DEST="${ROOT}/.kiro/old_session_history"
 
 mkdir -p "$OUT_DIR"
 
